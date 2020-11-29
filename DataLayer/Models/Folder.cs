@@ -2,7 +2,7 @@
 
 namespace DataLayer
 {
-    public class Folder
+    public class Folder: IBaseModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

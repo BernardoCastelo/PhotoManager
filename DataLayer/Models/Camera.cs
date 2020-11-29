@@ -2,7 +2,7 @@
 
 namespace DataLayer
 {
-    public class Camera
+    public class Camera: IBaseModel
     {
         public int Id { get; set; }
         public string Maker { get; set; }

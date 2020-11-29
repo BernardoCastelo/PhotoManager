@@ -2,7 +2,7 @@
 
 namespace DataLayer
 {
-    public class Category
+    public class Category: IBaseModel
     {
         public int Id { get; set; }
         public int? ParentId { get; set; }

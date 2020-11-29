@@ -2,7 +2,7 @@
 
 namespace DataLayer
 {
-    public class Photo
+    public class Photo: IBaseModel
     {
         public int Id { get; set; }
         public DateTimeOffset DateTaken { get; set; }
