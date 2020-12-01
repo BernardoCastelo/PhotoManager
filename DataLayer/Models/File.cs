@@ -9,7 +9,7 @@ namespace DataLayer
         public string Fullpath { get; set; }
         public int FolderId { get; set; }
         public int FileTypeId { get; set; }
-        public int SizeKB { get; set; }
-        public DateTimeOffset Created { get; set; }
+        public int? SizeKB { get; set; }
+        public DateTimeOffset? Created { get; set; }
     }
 }
