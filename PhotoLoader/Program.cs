@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using MetaDataFileInfo.Classes;
+using BusinessLayer;
 
 namespace PhotoLoader
 {
@@ -11,9 +11,11 @@ namespace PhotoLoader
     {
         static List<FileType> FileTypes;
         static int order;
+        static Photos photos;
         static void Main(string[] args)
         {
             var container = new DbConnector();
+            photos = new Photos(container.Container);
             FileTypes = container.Container.GetAll<FileType>().ToList();
             int count;
             try
@@ -30,9 +32,6 @@ namespace PhotoLoader
 
         private static DataLayer.File GetFile(FileInfo f, int folderId, int typeId)
         {
-            var metaF = new MetaFileInfo(f).ToList();
-            
-
             return new DataLayer.File()
             {
                 FolderId = folderId,
@@ -43,20 +42,6 @@ namespace PhotoLoader
                 SizeKB = (int?)(f.Length / 1024)
             };
         }
-
-        //private static Photo GetPhoto(FileInfo f, int cameraId, int fileId)
-        //{
-        //    var asd = f.Attributes
-        //    return new Photo()
-        //    {
-        //        CameraId = cameraId,
-        //        CategoryId = null,
-        //        Name = f.Name,
-        //        Order = ++order,
-        //        FileId = fileId,
-        //        Height = 
-        //    };
-        //}
 
 
         private static int RecursiveLoader(DbContainer container, DirectoryInfo origin, int? parentId = null)
@@ -84,6 +69,7 @@ namespace PhotoLoader
                             var file = GetFile(folderFile, folder.Id, typeId.Id);
                             container.Add(file);
                             container.SaveChanges();
+                            var photo = photos.Get(file.Fullpath);
                         }
                     }
                     foreach (var subFolder in item.EnumerateDirectories())

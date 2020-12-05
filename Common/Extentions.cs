@@ -10,6 +10,5 @@
                 .GetMethod
                 .Invoke(obj, parameters);
         }
-
     }
 }
