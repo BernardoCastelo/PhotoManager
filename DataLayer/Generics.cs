@@ -1,16 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Common;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataLayer
 {
     public static class Generics
     {
-        public static DbSet<T> GetProperty<T>(object o) where T : class
+        public static DbSet<T> GetDbSet<T>(object obj) where T : class
         {
-            return (DbSet<T>)o
-                .GetType()
-                .GetProperty($"{nameof(T)}Set")
-                .GetMethod
-                .Invoke(o, null);
+            return (DbSet<T>)Extentions.GetProperty(obj, $"{typeof(T).Name}Set");
         }
     }
 }

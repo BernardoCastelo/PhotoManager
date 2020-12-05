@@ -1,10 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DataLayer
 {
 
-    class DbContainer : DbContext, IDbContainer
+    public class DbContainer : DbContext, IDbContainer
     {
         public DbSet<Photo> PhotoSet { get; set; }
         public DbSet<Folder> FolderSet { get; set; }
@@ -16,22 +20,90 @@ namespace DataLayer
         {
         }
 
+        public T Select<T>(int id) where T : class
+        {
+            try
+            {
+                var dbset = Generics.GetDbSet<T>(this);
+                return Select<T>("Id", id);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public T Select<T>(string property, int number) where T : class
+        {
+            try
+            {
+                var dbset = Generics.GetDbSet<T>(this);
+                return dbset.Where(t => (int)t.GetProperty(property, null) == number).FirstOrDefault();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public T Select<T, T2>(string property, T2 value)
+            where T : class 
+            where T2 : class
+        {
+            try
+            {
+                var dbset = Generics.GetDbSet<T>(this);
+                return dbset.Where(t => (T2)t.GetProperty(property, null) == value).FirstOrDefault();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public IEnumerable<T> GetAll<T>() where T : class
+        {
+            try
+            {
+                var dbset = Generics.GetDbSet<T>(this);
+                return dbset.Select(t => t).ToList();
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
+
         public override EntityEntry<T> Add<T>(T entity) where T : class
         {
-            var dbset = Generics.GetProperty<T>(this);
-            dbset.Add(entity);
-            var entry = Entry(entity);
-            entry.State = EntityState.Added;
-            return entry;
+            try
+            {
+                var dbset = Generics.GetDbSet<T>(this);
+                dbset.Add(entity);
+                var entry = Entry(entity);
+                entry.State = EntityState.Added;
+                return entry;
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
         }
 
         public override EntityEntry<T> Update<T>(T entity) where T : class
         {
-            var dbset = Generics.GetProperty<T>(this);
-            dbset.Attach(entity);
-            var entry = Entry(entity);
-            entry.State = EntityState.Modified;
-            return entry;
+            try
+            {
+                var dbset = Generics.GetDbSet<T>(this);
+                dbset.Attach(entity);
+                var entry = Entry(entity);
+                entry.State = EntityState.Modified;
+                return entry;
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

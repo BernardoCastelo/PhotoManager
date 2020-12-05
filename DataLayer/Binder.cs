@@ -16,7 +16,7 @@ namespace DataLayer
         public void Bind()
         {
             modelBuilder.Entity<T>()
-                .ToTable(nameof(T))
+                .ToTable(typeof(T).Name)
                 .HasKey(key => key.Id);
         }
     }
