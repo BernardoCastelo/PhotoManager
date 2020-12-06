@@ -1,4 +1,4 @@
-﻿namespace BusinessLayer.Models
+﻿namespace DataLayer
 {
     public enum FileTypeEnum
     {

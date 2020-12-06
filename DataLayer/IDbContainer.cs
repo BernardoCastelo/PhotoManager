@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DataLayer
 {
-    interface IDbContainer
+    public interface IDbContainer
     {
         DbSet<Camera> CameraSet { get; set; }
         DbSet<Category> CategorySet { get; set; }
@@ -16,11 +16,13 @@ namespace DataLayer
         int SaveChanges();
         EntityEntry<T> Add<T>(T entity) where T : class;
         EntityEntry<T> Update<T>(T entity) where T : class;
-        IEnumerable<T> GetAll<T>() where T : class;
+        IEnumerable<T> SelectAll<T>() where T : class;
         T Select<T>(string property, int number) where T : class;
         T Select<T, T2>(string property, T2 value)
             where T : class
             where T2 : class;
         T Select<T>(int id) where T : class;
+        IEnumerable<T> Select<T>(int skip, int take) where T : class;
+        EntityEntry<T> Remove<T>(T entity) where T : class;
     }
 }

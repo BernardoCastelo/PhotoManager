@@ -24,7 +24,7 @@ namespace DataLayer
         {
             try
             {
-                var dbset = Generics.GetDbSet<T>(this);
+                var dbset = Helper.GetDbSet<T>(this);
                 return Select<T>("Id", id);
             }
             catch (Exception)
@@ -37,7 +37,7 @@ namespace DataLayer
         {
             try
             {
-                var dbset = Generics.GetDbSet<T>(this);
+                var dbset = Helper.GetDbSet<T>(this);
                 return dbset.Where(t => (int)t.GetProperty(property, null) == number).FirstOrDefault();
             }
             catch (Exception)
@@ -52,7 +52,7 @@ namespace DataLayer
         {
             try
             {
-                var dbset = Generics.GetDbSet<T>(this);
+                var dbset = Helper.GetDbSet<T>(this);
                 return dbset.Where(t => (T2)t.GetProperty(property, null) == value).FirstOrDefault();
             }
             catch (Exception)
@@ -61,12 +61,25 @@ namespace DataLayer
             }
         }
 
-        public IEnumerable<T> GetAll<T>() where T : class
+        public IEnumerable<T> SelectAll<T>() where T : class
         {
             try
             {
-                var dbset = Generics.GetDbSet<T>(this);
+                var dbset = Helper.GetDbSet<T>(this);
                 return dbset.Select(t => t).ToList();
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
+
+        public IEnumerable<T> Select<T>(int skip, int take) where T : class
+        {
+            try
+            {
+                var dbset = Helper.GetDbSet<T>(this);
+                return dbset.Select(t => t).Skip(skip).Take(take).ToList();
             }
             catch (System.Exception)
             {
@@ -78,7 +91,7 @@ namespace DataLayer
         {
             try
             {
-                var dbset = Generics.GetDbSet<T>(this);
+                var dbset = Helper.GetDbSet<T>(this);
                 dbset.Add(entity);
                 var entry = Entry(entity);
                 entry.State = EntityState.Added;
@@ -94,10 +107,26 @@ namespace DataLayer
         {
             try
             {
-                var dbset = Generics.GetDbSet<T>(this);
+                var dbset = Helper.GetDbSet<T>(this);
                 dbset.Attach(entity);
                 var entry = Entry(entity);
                 entry.State = EntityState.Modified;
+                return entry;
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
+
+        public override EntityEntry<T> Remove<T>(T entity) where T : class
+        {
+            try
+            {
+                var dbset = Helper.GetDbSet<T>(this);
+                dbset.Attach(entity);
+                var entry = Entry(entity);
+                entry.State = EntityState.Deleted;
                 return entry;
             }
             catch (System.Exception)

@@ -8,7 +8,7 @@
         CREATE TABLE [dbo].[Photo]
         (
 			[Id] [int] IDENTITY(1,1) NOT NULL,
-            [DateTaken] Datetimeoffset NOT NULL,
+            [DateTaken] Datetimeoffset NULL,
             [CameraId] [int] NULL FOREIGN KEY REFERENCES Camera(Id),
             [CategoryId] [int] NULL FOREIGN KEY REFERENCES Category(Id),
             [FileId] [int] NULL FOREIGN KEY REFERENCES [File](Id),

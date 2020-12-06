@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BusinessLayer
+namespace DataLayer.Exceptions
 {
     public class InvalidTypeException : Exception
     {

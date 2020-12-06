@@ -11,12 +11,17 @@ namespace PhotoLoader
     {
         static List<FileType> FileTypes;
         static int order;
+        static PhotoRepository photoRep;
         static Photos photos;
+        static CameraRepository cameraRep;
         static void Main(string[] args)
         {
             var container = new DbConnector();
-            photos = new Photos(container.Container);
-            FileTypes = container.Container.GetAll<FileType>().ToList();
+            photoRep = new PhotoRepository(container.Container);
+            cameraRep = new CameraRepository(container.Container);
+            photos = new Photos(photoRep, cameraRep, new FileRepository(container.Container));
+            
+            FileTypes = container.Container.SelectAll<FileType>().ToList();
             int count;
             try
             {
@@ -69,7 +74,11 @@ namespace PhotoLoader
                             var file = GetFile(folderFile, folder.Id, typeId.Id);
                             container.Add(file);
                             container.SaveChanges();
-                            var photo = photos.Get(file.Fullpath);
+                            //var camera = cameraRep
+                            var photo = photos.Load(file.Fullpath);
+                            photo.FileId = file.Id;
+                            photo = photo.Id == 0 ? photoRep.Insert(photo) : photoRep.Update(photo);
+                            
                         }
                     }
                     foreach (var subFolder in item.EnumerateDirectories())
