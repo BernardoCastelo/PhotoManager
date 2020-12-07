@@ -17,7 +17,6 @@ namespace DataLayer
         EntityEntry<T> Add<T>(T entity) where T : class;
         EntityEntry<T> Update<T>(T entity) where T : class;
         IEnumerable<T> SelectAll<T>() where T : class;
-        T Select<T>(string property, int number) where T : class;
         T Select<T, T2>(string property, T2 value)
             where T : class
             where T2 : class;

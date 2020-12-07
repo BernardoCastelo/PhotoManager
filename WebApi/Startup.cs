@@ -1,16 +1,12 @@
+using DataLayer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using BusinessLayer;
 
 namespace WebApi
 {
@@ -26,6 +22,38 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            #region Configuration 
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false)
+                .Build();
+            services.AddSingleton<IConfiguration>(configuration);
+            #endregion
+
+            #region Database
+            string connectionString = Configuration.GetConnectionString("PhotoManager");
+            services.AddDbContext<DbContainer>(options => options.UseSqlServer(connectionString));
+            #endregion
+
+            #region DataLayer
+            services.AddTransient(typeof(IDbContainer), typeof(DbContainer));
+            services.AddTransient(typeof(ICameraRepository), typeof(CameraRepository));
+            services.AddTransient(typeof(IFileRepository), typeof(FileRepository));
+            services.AddTransient(typeof(IPhotoRepository), typeof(PhotoRepository));
+            #endregion
+
+            #region BusinessLayer
+            services.AddTransient(typeof(IPhotos), typeof(Photos));
+            #endregion
+
+            /* ToDo */
+            #region Logging
+            #endregion
+
+            /* ToDo */
+            #region Authentication
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //    .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAdB2C"));
+            #endregion
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

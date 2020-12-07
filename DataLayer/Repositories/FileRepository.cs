@@ -5,12 +5,12 @@ namespace DataLayer
 {
     public class FileRepository : BaseGenericRepository<File>, IFileRepository
     {
-        public FileRepository(DbContainer dbContainer) : base(dbContainer)
+        public FileRepository(IDbContainer dbContainer) : base(dbContainer)
         {
             this.dbContainer = dbContainer ?? throw new ArgumentNullException(nameof(dbContainer));
         }
 
-        public File Get(string fullpath)
+        public File Select(string fullpath)
         {
             try
             {

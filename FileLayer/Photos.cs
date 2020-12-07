@@ -3,14 +3,15 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Common;
+using System.IO;
 
 namespace BusinessLayer
 {
-    public class Photos
+    public class Photos : IPhotos
     {
-        private IPhotoRepository photoRepository;
-        private ICameraRepository cameraRepository;
-        private IFileRepository fileRepository;
+        private readonly IPhotoRepository photoRepository;
+        private readonly ICameraRepository cameraRepository;
+        private readonly IFileRepository fileRepository;
         public Photos(IPhotoRepository photoRepository, ICameraRepository cameraRepository, IFileRepository fileRepository)
         {
             this.photoRepository = photoRepository ?? throw new ArgumentNullException(nameof(photoRepository));
@@ -42,11 +43,11 @@ namespace BusinessLayer
                 var ISO = ExifSubIFD.FirstOrDefault(t => t.Name == "ISO Speed Ratings")?.Description;
                 var exposure = ExifSubIFD.FirstOrDefault(t => t.Name == "Exposure Time")?.Description;
                 var dateTaken = ExifSubIFD.FirstOrDefault(t => t.Name == "Date/Time Original")?.Description; //2020:08:30 09:53:10
-                var focalLength = ExifSubIFD.FirstOrDefault(t => t.Name == "Focal Length")?.Description?.RemoveUntilSpace(); 
+                var focalLength = ExifSubIFD.FirstOrDefault(t => t.Name == "Focal Length")?.Description?.RemoveUntilSpace();
 
 
                 var camera = cameraRepository.Get(cameraMaker, cameraModel).FirstOrDefault();
-                if(camera == null)
+                if (camera == null)
                 {
                     camera = new Camera()
                     {
@@ -56,7 +57,7 @@ namespace BusinessLayer
                     cameraRepository.Insert(camera);
                 }
 
-                var file = fileRepository.Get(filepath); // File add is too complex to be included here, it is assumed the file already exists;
+                var file = fileRepository.Select(filepath); // File add is too complex to be included here, it is assumed the file already exists;
 
                 var photo = new Photo()
                 {
@@ -68,7 +69,7 @@ namespace BusinessLayer
                     DateTaken = dateTaken.ParseIntoDateTime(),
                     FStop = fStop,
                     Exposure = exposure,
-                    Height = string.IsNullOrWhiteSpace(imageH)? null : int.Parse(imageH),
+                    Height = string.IsNullOrWhiteSpace(imageH) ? null : int.Parse(imageH),
                     Width = string.IsNullOrWhiteSpace(imageW) ? null : int.Parse(imageW),
                     Iso = string.IsNullOrWhiteSpace(ISO) ? null : int.Parse(ISO),
                     FocalLength = string.IsNullOrWhiteSpace(focalLength) ? null : int.Parse(focalLength)
@@ -80,6 +81,29 @@ namespace BusinessLayer
 
                 throw;
             }
+        }
+
+        public string GetBytes(int id)
+        {
+            var photo = Get(id);
+            if(photo == null)
+            {
+                throw new NullReferenceException(nameof(photo));
+            }
+
+            if (!photo.FileId.HasValue)
+            {
+                throw new FileNotFoundException($"PhotoId:'{photo.Id}'; PhotoName:'{photo.Name}'");
+            }
+
+            var file = fileRepository.Select(photo.FileId.Value);
+            if (file == null)
+            {
+                throw new NullReferenceException(nameof(file));
+            }
+
+            var bytes = System.IO.File.ReadAllBytes(file.Fullpath);
+            return Convert.ToBase64String(bytes);
         }
 
         public Photo Get(int id)

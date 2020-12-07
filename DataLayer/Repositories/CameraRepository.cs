@@ -6,7 +6,7 @@ namespace DataLayer
 {
     public class CameraRepository : BaseGenericRepository<Camera>, ICameraRepository
     {
-        public CameraRepository(DbContainer dbContainer) : base(dbContainer)
+        public CameraRepository(IDbContainer dbContainer) : base(dbContainer)
         {
             this.dbContainer = dbContainer ?? throw new ArgumentNullException(nameof(dbContainer));
         }

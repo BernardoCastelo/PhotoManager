@@ -25,20 +25,7 @@ namespace DataLayer
             try
             {
                 var dbset = Helper.GetDbSet<T>(this);
-                return Select<T>("Id", id);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public T Select<T>(string property, int number) where T : class
-        {
-            try
-            {
-                var dbset = Helper.GetDbSet<T>(this);
-                return dbset.Where(t => (int)t.GetProperty(property, null) == number).FirstOrDefault();
+                return dbset.Find(id);
             }
             catch (Exception)
             {
