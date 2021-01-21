@@ -1,3 +1,11 @@
 .App {
   text-align: center;
 }
+
+Header{
+  margin-bottom: 10px;
+}
+
+ul{
+  margin: 0 !important;
+}
