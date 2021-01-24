@@ -20,8 +20,8 @@ namespace DataLayer
 
         public static FileTypeEnum GetType(string filepath)
         {
-            var extension = new FileInfo(filepath).Extension.Substring(1).ToUpper();
-            if (!Enum.TryParse(typeof(FileTypeEnum), new FileInfo(filepath).Extension.Substring(1).ToUpper(), out object oType))
+            var extension = new FileInfo(filepath).Extension[1..].ToUpper();
+            if (!Enum.TryParse(typeof(FileTypeEnum), new FileInfo(filepath).Extension[1..].ToUpper(), out object oType))
             {
                 throw new InvalidTypeException(extension);
             }
@@ -31,21 +31,13 @@ namespace DataLayer
         public static IEnumerable<MetadataExtractor.Directory> GetFileMetaData(string fullpath)
         {
             var type = GetType(fullpath);
-            IEnumerable<MetadataExtractor.Directory> data;
-            switch (type)
+            IEnumerable<MetadataExtractor.Directory> data = type switch
             {
-                case FileTypeEnum.JPG:
-                    data = JpegMetadataReader.ReadMetadata(fullpath);
-                    break;
-                case FileTypeEnum.CR2:
-                    data = TiffMetadataReader.ReadMetadata(fullpath);
-                    break;
-                case FileTypeEnum.PNG:
-                    data = PngMetadataReader.ReadMetadata(fullpath);
-                    break;
-                default:
-                    throw new Exception(); // is unreachable
-            }
+                FileTypeEnum.JPG => JpegMetadataReader.ReadMetadata(fullpath),
+                FileTypeEnum.CR2 => TiffMetadataReader.ReadMetadata(fullpath),
+                FileTypeEnum.PNG => PngMetadataReader.ReadMetadata(fullpath),
+                _ => throw new Exception(),// is unreachable
+            };
             return data.ToList();
         }
     }

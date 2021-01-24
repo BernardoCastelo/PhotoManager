@@ -8,7 +8,7 @@ const TRANSFORM = { vertical: 'center', horizontal: 'center' };
 
 const useStyles = makeStyles({
   media: {
-    maxHeight: "100%",
+    height: 180,
     maxWidth: "100%",
     borderRadius: '3%',
   }
@@ -21,9 +21,10 @@ const PhotoCard = (props) => {
   const handlePopoverOpen = (event) => setAnchorEl(event.currentTarget);
   const handlePopoverClose = () => setAnchorEl(null);
 
+  //onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose} />
   return (
     <div>
-      <img className={classes.media} src={props.file} alt={props.file} onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose} />
+      <img className={classes.media} src={props.file} alt={props.file}/> 
       <Popover id="mouse-over-popover" open={open} anchorEl={anchorEl} onClose={handlePopoverClose} disableRestoreFocus>
         <Icon type="Map" />
         <Icon type="Camera" />

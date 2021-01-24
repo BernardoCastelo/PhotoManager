@@ -18,18 +18,21 @@ namespace Common
         {
             if (string.IsNullOrWhiteSpace(datetime))
                 return null;
-            return DateTimeOffset.ParseExact(
-                datetime, 
-                new string[] {"yyyy:MM:dd HH:mm:ss"},
+            DateTimeOffset.TryParseExact(
+                datetime,
+                new string[] { "yyyy:MM:dd HH:mm:ss" },
                 CultureInfo.InvariantCulture.DateTimeFormat,
-                DateTimeStyles.AllowWhiteSpaces);
+                DateTimeStyles.AllowWhiteSpaces,
+                out DateTimeOffset date);
+            return date;
         }
 
         public static string RemoveUntilSpace(this string text)
         {
             if (string.IsNullOrWhiteSpace(text))
                 return null;
-            return text.Substring(0, text.IndexOf(" "));
+            var index = text.IndexOf(" ");
+            return index > 0 ? text.Substring(0, text.IndexOf(" ")) : text;
         }
     }
 }

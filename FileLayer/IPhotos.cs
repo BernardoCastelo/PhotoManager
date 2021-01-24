@@ -8,6 +8,7 @@ namespace BusinessLayer
         Photo Get(int id);
         IEnumerable<Photo> Get(int skip, int take);
         string GetBytes(int id);
+        string GetFullPath(int id);
         Photo Load(string filepath);
     }
 }
