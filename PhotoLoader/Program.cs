@@ -34,9 +34,9 @@ namespace PhotoLoader
                 timeTaken = LoadFiles(container.Container, new DirectoryInfo(@"D:\Photos"));
                 Console.WriteLine($"LoadFiles: {timeTaken}ms");
 
-                var jpg = container.Container.FileTypeSet.First(f => f.Name == "JPG");
-                timeTaken = await CreateThumbnails(container.Container, @"C:\PhotoThumbnails", jpg);
-                Console.WriteLine($"CreateThumbnails: {timeTaken}ms");
+                //var jpg = container.Container.FileTypeSet.First(f => f.Name == "JPG");
+                //timeTaken = await CreateThumbnails(container.Container, @"C:\PhotoThumbnails", jpg);
+                //Console.WriteLine($"CreateThumbnails: {timeTaken}ms");
             }
             catch (Exception e)
             {
@@ -71,6 +71,8 @@ namespace PhotoLoader
                 var skipped = 0;
                 foreach (var folderFile in origin.EnumerateFiles())
                 {
+                    Console.WriteLine($"[ONGOING] Added: {folderFile.FullName} executionTime: {sw.ElapsedMilliseconds} ");
+
                     var type = FileTypes.Find(type => type.Name == folderFile.Extension[1..].ToUpper());
                     if (type == null)
                     {
@@ -91,7 +93,14 @@ namespace PhotoLoader
                         photo = photos.Load(file.Fullpath);
                         if (photo != null)
                         {
-                            photo.FileId = file.Id;
+                            if (type.Name != FileTypeEnum.CR2.ToString())
+                            {
+                                var image = Image.FromFile(file.Fullpath);
+                                var thumb = image.GetThumbnailImage(Constants.ImageProperties.ThumbWidth, Constants.ImageProperties.ThumbHeight, () => false, IntPtr.Zero);
+                                photo.Thumbnail = new ImageConverter().ConvertTo(thumb, typeof(byte[])) as byte[];
+                                image.Dispose();
+                                thumb.Dispose();
+                            }
                             photoRep.Insert(photo);
                         }
                     }
@@ -101,7 +110,7 @@ namespace PhotoLoader
                     }
                 }
                 container.SaveChanges();
-                Console.WriteLine($"Added: {added}; Skipped: {skipped}; executionTime: {sw.ElapsedMilliseconds} ");
+                Console.WriteLine($"[] Added: {added}; Skipped: {skipped}; executionTime: {sw.ElapsedMilliseconds} ");
 
                 var dirs = origin.EnumerateDirectories();
                 foreach (var folder in dirs)

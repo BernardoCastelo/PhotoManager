@@ -17,5 +17,6 @@ namespace DataLayer
         public string Exposure { get; set; }
         public string FStop { get; set; }
         public string Name { get; set; }
+        public byte[] Thumbnail { get; set; }
     }
 }

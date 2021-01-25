@@ -13,6 +13,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-icons": "^4.1.0",
+    "react-infinite-scroll-component": "^5.1.0",
     "react-scripts": "4.0.1",
     "request": "^2.88.2",
     "web-vitals": "^0.2.4"
@@ -41,13 +42,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": {
-    "/Photo": {
-      "target": "https://localhost:44353",
-      "pathRewrite": {
-        "^/Photo": ""
-      },
-      "secure": false
-    }
-  }
+  "proxy": "https://localhost:44353"
 }

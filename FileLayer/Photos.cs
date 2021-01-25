@@ -57,7 +57,7 @@ namespace BusinessLayer
 
             var file = fileRepository.Select(filepath);
 
-            double? fLength = double.Parse(focalLength);
+            double? fLength = focalLength != null ? double.Parse(focalLength) : null;
             fLength = fLength == 0 ? null : fLength;
 
             var photo = new Photo()
@@ -117,15 +117,7 @@ namespace BusinessLayer
         {
             try
             {
-                var photos = photoRepository.Select(skip, take).ToList();
-                photos.ForEach(photo =>
-                    {
-                        if (photo.FileId is int validId)
-                        {
-                            photo.Name = fileRepository.Select(validId).Fullpath;
-                        }
-                    });
-                return photos;
+                return photoRepository.Select(skip, take).ToList();
             }
             catch (Exception)
             {
