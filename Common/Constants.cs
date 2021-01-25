@@ -2,6 +2,11 @@
 {
     public static class Constants
     {
+        public static class Folders
+        {
+            public static readonly string Main = @"D:\Photos";
+            public static readonly string Thumbnails = @"C:\PhotoThumbnails";
+        }
         public static class ImageProperties
         {
             public static readonly string ImageHeight = "Image Height";

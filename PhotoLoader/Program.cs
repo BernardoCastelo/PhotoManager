@@ -16,27 +16,25 @@ namespace PhotoLoader
         static List<FileType> FileTypes;
         static PhotoRepository photoRep;
         static Photos photos;
-        static CameraRepository cameraRep;
         static async Task Main()
         {
             var container = new DbConnector();
             photoRep = new PhotoRepository(container.Container);
-            cameraRep = new CameraRepository(container.Container);
-            photos = new Photos(photoRep, cameraRep, new FileRepository(container.Container));
+            photos = new Photos(photoRep, new CameraRepository(container.Container), new FileRepository(container.Container));
 
             FileTypes = container.Container.SelectAll<FileType>().ToList();
             try
             {
                 long timeTaken = 0;
-                timeTaken = LoadFolders(container.Container, new DirectoryInfo(@"D:\Photos"));
-                Console.WriteLine($"LoadFolders: {timeTaken}ms");
+                timeTaken = LoadFolders(container.Container, new DirectoryInfo(Constants.Folders.Main));
+                Console.WriteLine($"{nameof(LoadFolders)}: {timeTaken}ms");
 
-                timeTaken = LoadFiles(container.Container, new DirectoryInfo(@"D:\Photos"));
-                Console.WriteLine($"LoadFiles: {timeTaken}ms");
+                timeTaken = LoadFiles(container.Container, new DirectoryInfo(Constants.Folders.Main));
+                Console.WriteLine($"{nameof(LoadFiles)}: {timeTaken}ms");
 
-                //var jpg = container.Container.FileTypeSet.First(f => f.Name == "JPG");
-                //timeTaken = await CreateThumbnails(container.Container, @"C:\PhotoThumbnails", jpg);
-                //Console.WriteLine($"CreateThumbnails: {timeTaken}ms");
+                var jpg = container.Container.FileTypeSet.First(f => f.Name == FileTypeEnum.JPG.ToString());
+                timeTaken = await CreateThumbnails(container.Container, Constants.Folders.Thumbnails, jpg);
+                Console.WriteLine($"{nameof(CreateThumbnails)}: {timeTaken}ms");
             }
             catch (Exception e)
             {
@@ -71,7 +69,7 @@ namespace PhotoLoader
                 var skipped = 0;
                 foreach (var folderFile in origin.EnumerateFiles())
                 {
-                    Console.WriteLine($"[ONGOING] Added: {folderFile.FullName} executionTime: {sw.ElapsedMilliseconds} ");
+                    Console.WriteLine($"[ONGOING] {folderFile.FullName} executionTime: {sw.ElapsedMilliseconds} ");
 
                     var type = FileTypes.Find(type => type.Name == folderFile.Extension[1..].ToUpper());
                     if (type == null)
@@ -110,7 +108,7 @@ namespace PhotoLoader
                     }
                 }
                 container.SaveChanges();
-                Console.WriteLine($"[] Added: {added}; Skipped: {skipped}; executionTime: {sw.ElapsedMilliseconds} ");
+                Console.WriteLine($"Added: {added}; Skipped: {skipped}; executionTime: {sw.ElapsedMilliseconds} ");
 
                 var dirs = origin.EnumerateDirectories();
                 foreach (var folder in dirs)
