@@ -28,9 +28,9 @@ namespace DataLayer
         {
             return dbContainer.Select<T>(id);
         }
-        public IEnumerable<T> Select(int skip, int take)
+        public IEnumerable<T> Select(int skip, int take, string orderBy = null, bool orderByDescending = false)
         {
-            return dbContainer.Select<T>(skip, take);
+            return dbContainer.Select<T>(skip, take, orderBy, orderByDescending);
         }
         public IEnumerable<T> SelectAll()
         {

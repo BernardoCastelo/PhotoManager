@@ -21,11 +21,11 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Photo> Get(int skip, int take)
+        public IEnumerable<Photo> Get(int skip, int take, string orderBy = null, bool orderByDescending = false)
         {
             try
             {
-                return photos.Get(skip, take);
+                return photos.Get(skip, take, orderBy, orderByDescending);
             }
             catch (Exception)
             {

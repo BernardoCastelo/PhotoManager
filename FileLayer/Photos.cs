@@ -113,11 +113,11 @@ namespace BusinessLayer
             }
         }
 
-        public IEnumerable<Photo> Get(int skip, int take)
+        public IEnumerable<Photo> Get(int skip, int take, string orderBy = null, bool orderByDescending = false)
         {
             try
             {
-                return photoRepository.Select(skip, take).ToList();
+                return photoRepository.Select(skip, take, orderBy, orderByDescending).ToList();
             }
             catch (Exception)
             {

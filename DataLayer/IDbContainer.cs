@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Common;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Collections.Generic;
 
@@ -21,7 +22,7 @@ namespace DataLayer
             where T : class
             where T2 : class;
         T Select<T>(int id) where T : class;
-        IEnumerable<T> Select<T>(int skip, int take) where T : class;
+        IEnumerable<T> Select<T>(int skip, int take, string orderByPropName = Constants.DbConstants.Id, bool descending = false) where T : class;
         EntityEntry<T> Remove<T>(T entity) where T : class;
     }
 }

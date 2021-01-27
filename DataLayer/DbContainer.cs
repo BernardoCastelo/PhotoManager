@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace DataLayer
 {
@@ -34,7 +35,7 @@ namespace DataLayer
         }
 
         public T Select<T, T2>(string property, T2 value)
-            where T : class 
+            where T : class
             where T2 : class
         {
             try
@@ -55,20 +56,29 @@ namespace DataLayer
                 var dbset = Helper.GetDbSet<T>(this);
                 return dbset.Select(t => t).ToList();
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 throw;
             }
         }
 
-        public IEnumerable<T> Select<T>(int skip, int take) where T : class
+        public IEnumerable<T> Select<T>(int skip, int take, string orderByPropName, bool descending = false) where T : class
         {
             try
             {
-                var dbset = Helper.GetDbSet<T>(this);
-                return dbset.Select(t => t).Skip(skip).Take(take).ToList();
+                var queriable = Helper.GetDbSet<T>(this).Select(t => t);
+
+                var param = Expression.Parameter(typeof(T), "item");
+
+                var prop = Expression.Property(param, orderByPropName ?? Constants.DbConstants.Id);
+
+                var sortExpression = Expression.Lambda<Func<T, object>>(Expression.Convert(prop, typeof(object)), param);
+
+                queriable = descending ? queriable.OrderByDescending(sortExpression) : queriable.OrderBy(sortExpression);
+
+                return queriable.Skip(skip).Take(take).ToList();
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 throw;
             }
@@ -84,7 +94,7 @@ namespace DataLayer
                 entry.State = EntityState.Added;
                 return entry;
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 throw;
             }
