@@ -11,7 +11,7 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "98.Database", "Database\98.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "99.PhotoLoader", "PhotoLoader\99.PhotoLoader.csproj", "{1DFE6D3C-979C-4A49-B980-2BFBBC666F6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01.BusinessLayer", "FileLayer\01.BusinessLayer.csproj", "{B668286E-877D-4B27-97D7-788398D0B108}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01.BusinessLayer", "BusinessLayer\01.BusinessLayer.csproj", "{B668286E-877D-4B27-97D7-788398D0B108}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{A2D0A203-AC6A-401C-8096-F632DAEAC3FD}"
 EndProject
