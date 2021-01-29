@@ -9,12 +9,14 @@ export default class HttpService {
     });
   };
 
-  async GetImages(skip, take) {
+  async GetImages(skip, take, orderBy) {
     try {
       return this.instance.get('/Photo/Get/', {
         params: {
           skip: skip,
-          take: take
+          take: take,
+          orderBy: orderBy,
+          orderByDescending: true
         }
       });
     } catch (error) {

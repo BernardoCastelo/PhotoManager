@@ -68,15 +68,11 @@ namespace DataLayer
             {
                 var queriable = Helper.GetDbSet<T>(this).Select(t => t);
 
-                var param = Expression.Parameter(typeof(T), "item");
-
-                var prop = Expression.Property(param, orderByPropName ?? Constants.DbConstants.Id);
-
-                var sortExpression = Expression.Lambda<Func<T, object>>(Expression.Convert(prop, typeof(object)), param);
+                var sortExpression = orderByPropName.GetKeySelected<T>();
 
                 queriable = descending ? queriable.OrderByDescending(sortExpression) : queriable.OrderBy(sortExpression);
 
-                return queriable.Skip(skip).Take(take).ToList();
+                return queriable.Skip(skip).Take(take);
             }
             catch (Exception)
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq.Expressions;
 
 namespace Common
 {
@@ -14,7 +15,14 @@ namespace Common
                 .Invoke(obj, parameters);
         }
 
+        public static Expression<Func<T, object>> GetKeySelected<T>(this string orderByPropName) where T : class 
+        {
+            var param = Expression.Parameter(typeof(T), "item");
 
+            var prop = Expression.Property(param, orderByPropName ?? Constants.DbConstants.Id);
+
+            return Expression.Lambda<Func<T, object>>(Expression.Convert(prop, typeof(object)), param);
+        }
 
         public static DateTimeOffset? ParseIntoDateTime(this string datetime)
         {

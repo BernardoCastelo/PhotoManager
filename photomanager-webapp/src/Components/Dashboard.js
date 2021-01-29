@@ -10,6 +10,8 @@ import './Dashboard.css';
 
 const TAKE = 250;
 
+const ORDERBY = 'dateTaken';
+
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -62,7 +64,7 @@ class Dashboard extends Component {
     this.setState({
       isLoading: true
     });
-    const newFiles = await this.httpService.GetImages(this.skip, TAKE);
+    const newFiles = await this.httpService.GetImages(this.skip, TAKE, ORDERBY);
     this.skip += TAKE;
     return newFiles;
   }

@@ -117,7 +117,7 @@ namespace BusinessLayer
         {
             try
             {
-                return photoRepository.Select(skip, take, orderBy, orderByDescending).ToList();
+                return photoRepository.SelectThumbnails(skip, take, orderBy, orderByDescending);
             }
             catch (Exception)
             {
