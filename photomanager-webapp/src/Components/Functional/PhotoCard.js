@@ -4,7 +4,6 @@ import React from 'react';
 const useStyles = makeStyles({
   media: {
     height: 120,
-    maxWidth: '100%',
     borderRadius: '3%',
     '&:hover': {
       cursor: 'pointer'

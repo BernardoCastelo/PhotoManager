@@ -29,7 +29,7 @@ namespace PhotoLoader
                 timeTaken = LoadFolders(container.Container, new DirectoryInfo(Constants.Folders.Main));
                 Console.WriteLine($"{nameof(LoadFolders)}: {timeTaken}ms");
 
-                timeTaken = LoadFiles(container.Container, new DirectoryInfo(Constants.Folders.Main));
+                timeTaken = LoadFiles(container.Container, new DirectoryInfo(Constants.Folders.Main), true);
                 Console.WriteLine($"{nameof(LoadFiles)}: {timeTaken}ms");
 
                 var jpg = container.Container.FileTypeSet.First(f => f.Name == FileTypeEnum.JPG.ToString());
@@ -56,7 +56,7 @@ namespace PhotoLoader
             };
         }
 
-        private static long LoadFiles(DbContainer container, DirectoryInfo origin, int? parentId = null)
+        private static long LoadFiles(DbContainer container, DirectoryInfo origin, bool update, int? parentId = null)
         {
             Console.WriteLine($"Loading Files on folder [{origin.FullName}].");
             var sw = new Stopwatch();
@@ -66,7 +66,7 @@ namespace PhotoLoader
             if (originFolder != null)
             {
                 var added = 0;
-                var skipped = 0;
+                var updated = 0;
                 foreach (var folderFile in origin.EnumerateFiles())
                 {
                     Console.WriteLine($"[ONGOING] {folderFile.FullName} executionTime: {sw.ElapsedMilliseconds} ");
@@ -85,7 +85,7 @@ namespace PhotoLoader
                     }
 
                     var photo = container.PhotoSet.FirstOrDefault(f => f.FileId == file.Id);
-                    if (photo == null)
+                    if (photo == null && !update)
                     {
                         added++;
                         photo = photos.Load(file.Fullpath);
@@ -108,16 +108,25 @@ namespace PhotoLoader
                     }
                     else
                     {
-                        skipped++;
+                        var newPhoto = photos.Load(file.Fullpath);
+                        photo.Iso = newPhoto.Iso;
+                        photo.Height = newPhoto.Height;
+                        photo.Width = newPhoto.Width;
+                        photo.FocalLength = newPhoto.FocalLength;
+                        photo.FStop = newPhoto.FStop;
+                        photo.DateTaken = newPhoto.DateTaken;
+
+                        photoRep.Update(photo);
+                        updated++;
                     }
                 }
                 container.SaveChanges();
-                Console.WriteLine($"Added: {added}; Skipped: {skipped}; executionTime: {sw.ElapsedMilliseconds} ");
+                Console.WriteLine($"Added: {added}; updated/skipped: {updated}; executionTime: {sw.ElapsedMilliseconds} ");
 
                 var dirs = origin.EnumerateDirectories();
                 foreach (var folder in dirs)
                 {
-                    LoadFiles(container, folder, originFolder.Id);
+                    LoadFiles(container, folder, true, originFolder.Id);
                 }
             }
 

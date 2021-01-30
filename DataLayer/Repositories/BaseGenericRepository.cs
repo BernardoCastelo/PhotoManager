@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 
 namespace DataLayer
@@ -22,9 +23,10 @@ namespace DataLayer
 
         public T Insert(T entity)
         {
-            var newEntity = dbContainer.Add(entity).Entity;
+            var newEntity = dbContainer.Add(entity);
             dbContainer.SaveChanges();
-            return newEntity;
+            newEntity.State = EntityState.Detached;
+            return newEntity.Entity;
         }
 
         public T Select(int id)
@@ -44,9 +46,10 @@ namespace DataLayer
 
         public T Update(T entity)
         {
-            var newEntity = dbContainer.Update(entity).Entity;
+            var newEntity = dbContainer.Update(entity);
             dbContainer.SaveChanges();
-            return newEntity;
+            newEntity.State = EntityState.Detached;
+            return newEntity.Entity;
 
         }
     }

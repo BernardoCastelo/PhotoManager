@@ -18,7 +18,7 @@
             public const string CameraMake = "Make";
             public const string CameraModel = "Model";
             public const string FNumber = "F-Number";
-            public const string ISO = "ISO Speed Rating";
+            public const string ISO = "ISO Speed Ratings";
             public const string Exposure = "Exposure Time";
             public const string DateTIme = "Date/Time Original";
             public const string FocalLength = "Focal Length";

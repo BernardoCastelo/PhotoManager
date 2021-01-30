@@ -1,39 +1,47 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
+import InfoCard from './InfoCard';
 
 const useStyles = makeStyles({
-  media: {
+  image: {
     maxHeight: '90vh',
     maxWidth: '100%',
     display: 'block',
-    margin: 'auto'
+    margin: 'auto',
+    border: '2px solid white',
+    borderRadius: '0.5%',
+    boxShadow: '20px 50px 100px #000'
+  },
+  infoCard: {
+    marginTop: '-5vh',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    display: 'block',
+    maxWidth: 'max-content'
   }
 });
 
 const PhotoPopup = (props) => {
 
-  console.log(props.file);
-
   const classes = useStyles();
+
   return (
     <div>
+      {/* <div className={classes.infoCard} style={{ marginTop: '7vh' }}>
+          <InfoCard label={props.file.name}/>
+        </div> */}
       <img
-        className={classes.media}
+        className={classes.image}
         src={`data:image/jpeg;base64,${props.fullResolutionData}`}
         alt={props.file.name} />
-      {props.file.id}
-      {props.file.dateTaken}
-      {props.file.cameraId}
-      {props.file.categoryId}
-      {props.file.fileId}
-      {props.file.focalLength}
-      {props.file.height}
-      {props.file.iso}
-      {props.file.order}
-      {props.file.width}
-      {props.file.exposure}
-      {props.file.fStop}
-      {props.file.name}
+      <div className={classes.infoCard}>
+        <InfoCard label={"Date:" + props.file.dateTaken} />
+        <InfoCard label={"FLength:" + props.file.focalLength} />
+        <InfoCard label={"Size:" + props.file.height + "; " + props.file.width} />
+        <InfoCard label={"ISO:" + props.file.iso} />
+        <InfoCard label={"Exposure:" + props.file.exposure} />
+        <InfoCard label={"FStop:" + props.file.fStop} />
+      </div>
     </div>
   );
 };

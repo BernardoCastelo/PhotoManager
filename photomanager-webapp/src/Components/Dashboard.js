@@ -30,7 +30,7 @@ class Dashboard extends Component {
       loadedFIle: ''
     };
     this.FetchData();
-    TAKE = 50;
+    TAKE = 100;
   }
 
   render() {

@@ -106,7 +106,7 @@ namespace DataLayer
                 entry.State = EntityState.Modified;
                 return entry;
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 throw;
             }
@@ -122,7 +122,7 @@ namespace DataLayer
                 entry.State = EntityState.Deleted;
                 return entry;
             }
-            catch (System.Exception)
+            catch (Exception)
             {
                 throw;
             }
