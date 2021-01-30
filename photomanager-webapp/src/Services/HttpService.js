@@ -4,7 +4,7 @@ export default class HttpService {
   constructor() {
     this.instance = axios.create({
       baseURL: '',
-      timeout: 5000,
+      timeout: 30000,
       headers: { 'accept': 'text/plain' }
     });
   };
@@ -17,6 +17,19 @@ export default class HttpService {
           take: take,
           orderBy: orderBy,
           orderByDescending: true
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  async GetFullResolutution(id) {
+    try {
+      return this.instance.get('/Photo/GetBytes/', {
+        params: {
+          id: id
         }
       });
     } catch (error) {

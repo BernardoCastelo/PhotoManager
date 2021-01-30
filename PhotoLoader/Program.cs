@@ -94,7 +94,11 @@ namespace PhotoLoader
                             if (type.Name != FileTypeEnum.CR2.ToString())
                             {
                                 var image = Image.FromFile(file.Fullpath);
-                                var thumb = image.GetThumbnailImage(Constants.ImageProperties.ThumbWidth, Constants.ImageProperties.ThumbHeight, () => false, IntPtr.Zero);
+
+                                var thumb = image.Width > 0 && image.Height > 0 ?
+                                    image.GetThumbnailImage(image.Width / Constants.ImageProperties.ThumbMultiplier, image.Height / Constants.ImageProperties.ThumbMultiplier, () => false, IntPtr.Zero) :
+                                    image.GetThumbnailImage(Constants.ImageProperties.ThumbWidth, Constants.ImageProperties.ThumbHeight, () => false, IntPtr.Zero);
+                                
                                 photo.Thumbnail = new ImageConverter().ConvertTo(thumb, typeof(byte[])) as byte[];
                                 image.Dispose();
                                 thumb.Dispose();

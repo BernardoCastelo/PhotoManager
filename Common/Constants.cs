@@ -23,8 +23,9 @@
             public const string DateTIme = "Date/Time Original";
             public const string FocalLength = "Focal Length";
 
-            public const int ThumbWidth = 120;
-            public const int ThumbHeight = 90;
+            public const int ThumbWidth = 240;
+            public const int ThumbHeight = 180;
+            public const int ThumbMultiplier = 20;
         }
     }
 }

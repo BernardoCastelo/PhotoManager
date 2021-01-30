@@ -1,15 +1,20 @@
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Fade from '@material-ui/core/Fade';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
+import Popper from '@material-ui/core/Popper';
 import React, { Component } from 'react';
 import HttpService from '../Services/HttpService';
-import PhotoCard from './PhotoComponent/PhotoCard';
-import TopDrawer from './TopDrawerComponent/TopDrawerComponent';
 import './Dashboard.css';
+import PhotoCard from './Functional/PhotoCard';
+import PhotoPopup from './Functional/PhotoPopup';
+import TopDrawer from './Functional/TopDrawerComponent';
 
-
-const TAKE = 250;
-
+const DIMMED = { filter: 'brightness(25%)' };
+const DIMMED_DEFAULT = { filter: 'brightness(100%)' }
+const SPINNER = <CircularProgress className="CustomCircularProgress" />;
+let TAKE = 250;
+const DEFAULTIMAGERATIO = 1.5;
 const ORDERBY = 'dateTaken';
 
 class Dashboard extends Component {
@@ -19,45 +24,126 @@ class Dashboard extends Component {
 
     this.state = {
       photos: [],
-      isLoading: false
+      isLoading: false,
+      isPoppedUp: false,
+      loadedFullRes: '',
+      loadedFIle: ''
     };
     this.FetchData();
-  }
-
-  handleScroll = (e) => {
-    const bottom = e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight;
-    console.log(bottom);
-    if (bottom) {
-      this.FetchData()
-    }
+    TAKE = 50;
   }
 
   render() {
     let jsx = null;
-    let spinner = null;
     const photos = this.state.photos;
-    this.dimmer = {filter: 'brightness(100%)'};
-    if (this.state.isLoading) {
-      this.dimmer = {filter: 'brightness(25%)'};
-      spinner = <CircularProgress className="CustomCircularProgress" />;
-    }
 
-    if (photos != null && photos.length > 0) {
+    if (photos != null && photos.some(p => p)) {
+      const dimmer = this.state.isLoading ? DIMMED : DIMMED_DEFAULT;
       jsx = (
-        <div id="di" onScroll={this.handleScroll} className="OverflowingDiv">
+        <div id="di" onScroll={this.ScrollHandler} className="OverflowingDiv">
+          {/* Top Drawer */}
           <TopDrawer />
-          {spinner}
-          <GridList cellHeight={120} cols={24} style={this.dimmer}>
+
+          {/* Loading Spinner */}
+          {this.state.isLoading ? SPINNER : null}
+
+          {/* Full resolution image popup */}
+          <Popper
+            id='popper'
+            open={this.state.isPoppedUp}
+            transition
+            style={{ position: 'absolute', bottom: '50%', right: '50%', width: '90vw' }}
+            anchorEl={document.getElementById('di')}
+            onClick={this.PopperClickHandler}>
+            {({ TransitionProps }) => (
+              <Fade {...TransitionProps} timeout={350}>
+                <PhotoPopup fullResolutionData={this.state.loadedFullRes} file={this.state.loadedFIle} />
+              </Fade>
+            )}
+          </Popper>
+
+          {/* Image Tiles */}
+          <GridList cellHeight={120} cols={24} style={dimmer}>
             {photos.map((image) => (
-              <GridListTile key={image.id} cols={2}>
-                <PhotoCard file={image} />;
+              <GridListTile key={image.id} cols={this.GetImageColumnSize(image)}>
+                <PhotoCard
+                  file={image}
+                  clicked={() => this.PhotoClickHandler(image.id)}
+                />
               </GridListTile>
             ))}
           </GridList>
+
         </div>
       );
     }
+
     return jsx;
+  }
+
+  //#region Generic Methods
+
+  GetImageColumnSize(image) {
+    const ratio = image.width / image.height;
+    if (ratio <= DEFAULTIMAGERATIO) {
+      return 2;
+    }
+    return Math.round((ratio / DEFAULTIMAGERATIO) + 1.5);
+  }
+
+  //#endregion
+
+  //#region handlers
+
+  PopperClickHandler = () => {
+    this.setState({
+      loadedFullRes: '',
+      isLoading: false,
+      isPoppedUp: false,
+      loadedFIle: ''
+    });
+  }
+
+  ScrollHandler = element => {
+    if (!this.state.isLoading) {
+      const bottom = element.target.scrollHeight - element.target.scrollTop === element.target.clientHeight;
+      if (bottom) {
+        this.FetchData()
+      }
+    }
+  }
+
+  async PhotoClickHandler(id) {
+
+    this.setState({
+      loadedFullRes: '',
+      isLoading: true,
+      isPoppedUp: false,
+      loadedFIle: ''
+    });
+
+    this.httpService
+      .GetFullResolutution(id)
+      .then(response => {
+        const img = this.state.photos.find(p => p.id = id);
+
+        this.setState({
+          loadedFullRes: response.data,
+          isLoading: false,
+          isPoppedUp: true,
+          loadedFIle: img
+        });
+      });
+  }
+
+  //#endregion
+
+
+  //#region WebMethods
+
+  async ResetList() {
+    this.skip = 0;
+    this.FetchFreshData();
   }
 
   async FetchFreshData() {
@@ -82,9 +168,14 @@ class Dashboard extends Component {
     });
   }
 
+  //#endRegion WebMethods
+
+  //#region Vars
+
   httpService = null;
   skip = 0;
-  dimmer = {filter: 'brightness(100%)'};
+
+  //#endRegion Vars
 }
 
 export default Dashboard;
