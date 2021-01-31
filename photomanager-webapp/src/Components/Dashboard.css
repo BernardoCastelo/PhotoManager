@@ -8,5 +8,5 @@
 }
 
 .OverflowingDiv{
-  overflow: scroll;
+  overflow-y: scroll;
 }

@@ -125,7 +125,7 @@ class Dashboard extends Component {
     this.httpService
       .GetFullResolutution(id)
       .then(response => {
-        const img = this.state.photos.find(p => p.id = id);
+        const img = this.state.photos.find(p => p.id === id);
 
         this.setState({
           loadedFullRes: response.data,

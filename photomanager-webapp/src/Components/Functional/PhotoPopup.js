@@ -10,10 +10,18 @@ const useStyles = makeStyles({
     margin: 'auto',
     border: '2px solid white',
     borderRadius: '0.5%',
-    boxShadow: '20px 50px 100px #000'
+    boxShadow: '20px 50px 100px #000',
+    marginTop: '-5vh',
   },
   infoCard: {
     marginTop: '-5vh',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    display: 'block',
+    maxWidth: 'max-content'
+  },
+  nameCard: {
+    marginTop: '5vh',
     marginLeft: 'auto',
     marginRight: 'auto',
     display: 'block',
@@ -27,9 +35,9 @@ const PhotoPopup = (props) => {
 
   return (
     <div>
-      {/* <div className={classes.infoCard} style={{ marginTop: '7vh' }}>
+      <div className={classes.nameCard}>
           <InfoCard label={props.file.name}/>
-        </div> */}
+        </div>
       <img
         className={classes.image}
         src={`data:image/jpeg;base64,${props.fullResolutionData}`}

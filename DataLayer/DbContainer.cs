@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 
 namespace DataLayer
 {
@@ -21,11 +20,11 @@ namespace DataLayer
         {
         }
 
-        public T Select<T>(int id) where T : class
+        public TTable Select<TTable>(int id) where TTable : class
         {
             try
             {
-                var dbset = Helper.GetDbSet<T>(this);
+                var dbset = Helper.GetDbSet<TTable>(this);
                 return dbset.Find(id);
             }
             catch (Exception)
@@ -34,14 +33,16 @@ namespace DataLayer
             }
         }
 
-        public T Select<T, T2>(string property, T2 value)
-            where T : class
-            where T2 : class
+
+        // Select with Filter
+        public IEnumerable<TTable> Select<TTable, TProp>(string property, TProp value)
+            where TTable : class
+            where TProp : class
         {
             try
             {
-                var dbset = Helper.GetDbSet<T>(this);
-                return dbset.Where(t => (T2)t.GetProperty(property, null) == value).FirstOrDefault();
+                var dbset = Helper.GetDbSet<TTable>(this);
+                return dbset.Where(t => (TProp)t.GetProperty(property, null) == value);
             }
             catch (Exception)
             {
@@ -49,26 +50,14 @@ namespace DataLayer
             }
         }
 
-        public IEnumerable<T> SelectAll<T>() where T : class
+        // Select with OrderBy
+        public IEnumerable<TTable> Select<TTable>(int skip, int take, string orderByPropName, bool descending = false) where TTable : class
         {
             try
             {
-                var dbset = Helper.GetDbSet<T>(this);
-                return dbset.Select(t => t).ToList();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+                var queriable = Helper.GetDbSet<TTable>(this).Select(t => t);
 
-        public IEnumerable<T> Select<T>(int skip, int take, string orderByPropName, bool descending = false) where T : class
-        {
-            try
-            {
-                var queriable = Helper.GetDbSet<T>(this).Select(t => t);
-
-                var sortExpression = orderByPropName.GetKeySelected<T>();
+                var sortExpression = orderByPropName.GetKeySelected<TTable>();
 
                 queriable = descending ? queriable.OrderByDescending(sortExpression) : queriable.OrderBy(sortExpression);
 
@@ -80,11 +69,45 @@ namespace DataLayer
             }
         }
 
-        public override EntityEntry<T> Add<T>(T entity) where T : class
+        // Select with OrderBy
+        public IEnumerable<TTable> Select<TTable, TProp>(int skip, int take, string filterPropertyName, TProp value, string orderByPropName = Constants.DbConstants.Id, bool descending = false)
+            where TTable : class
+            where TProp : class
         {
             try
             {
-                var dbset = Helper.GetDbSet<T>(this);
+                var queriable = Select<TTable, TProp>(filterPropertyName, value).AsQueryable();
+
+                var sortExpression = orderByPropName.GetKeySelected<TTable>();
+
+                queriable = descending ? queriable.OrderByDescending(sortExpression) : queriable.OrderBy(sortExpression);
+
+                return queriable.Skip(skip).Take(take);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public IEnumerable<TTable> SelectAll<TTable>() where TTable : class
+        {
+            try
+            {
+                var dbset = Helper.GetDbSet<TTable>(this);
+                return dbset.Select(t => t).ToList();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public override EntityEntry<TTable> Add<TTable>(TTable entity) where TTable : class
+        {
+            try
+            {
+                var dbset = Helper.GetDbSet<TTable>(this);
                 dbset.Add(entity);
                 var entry = Entry(entity);
                 entry.State = EntityState.Added;
@@ -96,11 +119,11 @@ namespace DataLayer
             }
         }
 
-        public override EntityEntry<T> Update<T>(T entity) where T : class
+        public override EntityEntry<TTable> Update<TTable>(TTable entity) where TTable : class
         {
             try
             {
-                var dbset = Helper.GetDbSet<T>(this);
+                var dbset = Helper.GetDbSet<TTable>(this);
                 dbset.Attach(entity);
                 var entry = Entry(entity);
                 entry.State = EntityState.Modified;
@@ -112,11 +135,11 @@ namespace DataLayer
             }
         }
 
-        public override EntityEntry<T> Remove<T>(T entity) where T : class
+        public override EntityEntry<TTable> Remove<TTable>(TTable entity) where TTable : class
         {
             try
             {
-                var dbset = Helper.GetDbSet<T>(this);
+                var dbset = Helper.GetDbSet<TTable>(this);
                 dbset.Attach(entity);
                 var entry = Entry(entity);
                 entry.State = EntityState.Deleted;
