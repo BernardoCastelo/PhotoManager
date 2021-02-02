@@ -8,14 +8,14 @@ import HttpService from '../Services/HttpService';
 import './Dashboard.css';
 import PhotoCard from './Functional/PhotoCard';
 import PhotoPopup from './Functional/PhotoPopup';
-import TopDrawer from './Functional/TopDrawerComponent';
+import SideDrawer from './Functional/SideDrawer';
 
 const DIMMED = { filter: 'brightness(25%)' };
 const DIMMED_DEFAULT = { filter: 'brightness(100%)' }
 const SPINNER = <CircularProgress className="CustomCircularProgress" />;
 let TAKE = 250;
 const DEFAULTIMAGERATIO = 1.5;
-const ORDERBY = 'dateTaken';
+const ORDERBY = 'exposure';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -42,7 +42,7 @@ class Dashboard extends Component {
       jsx = (
         <div id="di" onScroll={this.ScrollHandler} className="OverflowingDiv">
           {/* Top Drawer */}
-          <TopDrawer />
+          <SideDrawer />
 
           {/* Loading Spinner */}
           {this.state.isLoading ? SPINNER : null}

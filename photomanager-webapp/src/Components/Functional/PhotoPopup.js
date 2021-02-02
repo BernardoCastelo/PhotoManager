@@ -43,12 +43,12 @@ const PhotoPopup = (props) => {
         src={`data:image/jpeg;base64,${props.fullResolutionData}`}
         alt={props.file.name} />
       <div className={classes.infoCard}>
-        <InfoCard label={"Date:" + props.file.dateTaken} />
-        <InfoCard label={"FLength:" + props.file.focalLength} />
-        <InfoCard label={"Size:" + props.file.height + "; " + props.file.width} />
-        <InfoCard label={"ISO:" + props.file.iso} />
-        <InfoCard label={"Exposure:" + props.file.exposure} />
-        <InfoCard label={"FStop:" + props.file.fStop} />
+        <InfoCard label={"Date: " + props.file.dateTaken} />
+        <InfoCard label={"FLength: " + props.file.focalLength} />
+        <InfoCard label={"Size: " + props.file.width + ":" + props.file.height} />
+        <InfoCard label={"ISO: " + props.file.iso} />
+        <InfoCard label={"Exposure: " + props.file.exposure} />
+        <InfoCard label={"FStop: " + props.file.fStop} />
       </div>
     </div>
   );
