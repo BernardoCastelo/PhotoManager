@@ -5,8 +5,21 @@ import TextField from '@material-ui/core/TextField';
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import React from 'react';
 import SearchIcon from '@material-ui/icons/Search';
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles({
+  nameDivs: {
+    fontSize: 'large',
+    color: 'primary',
+    marginBottom: '25px'
+  },
+  divider: {
+    marginTop: '50px'
+  },
+  paper: {
+    marginRight: '10px',
+    padding: '20px',
+  },
   fab: {
     position: 'absolute',
     top: '1.2%',
@@ -21,7 +34,7 @@ const useStyles = makeStyles({
   },
   sideDrawer: {
     padding: '5%',
-    width: 350
+    width: 500
   },
   container: {
     display: 'flex',
@@ -30,13 +43,12 @@ const useStyles = makeStyles({
   textField: {
     marginLeft: '5%',
     marginRight: '5%',
-    width: 200,
+    width: 150,
   },
   root: {
     '& > *': {
       fontSize: 'medium',
-      marginRight: '5%',
-      marginBottom: '50px'
+      marginRight: '5%'
     },
   },
 });
@@ -74,28 +86,41 @@ const SideDrawer = () => {
       </Fab>
       <Drawer anchor={'right'} open={state['right']} onClose={toggleDrawer('right', false)}>
         <div className={classes.sideDrawer}>
-          <form className={[classes.container, classes.root]} noValidate>
-            <TextField
-              id="date"
-              label="From"
-              type="date"
-              className={[classes.textField, classes.root]}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-          </form>
-          <form className={[classes.container, classes.root]} noValidate>
-            <TextField
-              id="date"
-              label="From"
-              type="date"
-              className={[classes.textField, classes.root]}
-              InputLabelProps={{
-                shrink: true,
-              }}
-            />
-          </form>
+          <Paper className={classes.paper} elevation={3}>
+            <div className={classes.nameDivs}>Filters</div>
+            <div style={{ display: 'ruby' }}>
+              <form className={[classes.container, classes.root]} noValidate>
+                <TextField
+                  id="date"
+                  label="From"
+                  type="date"
+                  className={[classes.textField, classes.root]}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </form>
+              <form className={[classes.container, classes.root]} noValidate>
+                <TextField
+                  id="date"
+                  label="To"
+                  type="date"
+                  className={[classes.textField, classes.root]}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </form>
+            </div>
+            <div className={classes.divider}>
+              <form className={[classes.container, classes.root]} noValidate autoComplete="off">
+                <TextField className={[classes.textField, classes.root]} id="standard-basic" label="Exposure" type="number" InputLabelProps={{ shrink: true, }}  />
+                <TextField className={[classes.textField, classes.root]} id="standard-basic" label="Apperture" type="number" InputLabelProps={{ shrink: true, }}  />
+                <TextField className={[classes.textField, classes.root]} id="standard-basic" label="Focal Length" type="number" InputLabelProps={{ shrink: true, }} />
+                <TextField className={[classes.textField, classes.root]} id="standard-basic" label="ISO" type="number" InputLabelProps={{ shrink: true, }} />
+              </form>
+            </div>
+          </Paper>
           <Fab
             className={classes.bottomFab}
             color="primary"
