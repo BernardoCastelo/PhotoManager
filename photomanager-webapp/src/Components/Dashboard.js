@@ -3,6 +3,7 @@ import Fade from '@material-ui/core/Fade';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import Popper from '@material-ui/core/Popper';
+import { findAllByDisplayValue } from '@testing-library/react';
 import React, { Component } from 'react';
 import HttpService from '../Services/HttpService';
 import './Dashboard.css';
@@ -16,6 +17,7 @@ const SPINNER = <CircularProgress className="CustomCircularProgress" />;
 let TAKE = 250;
 const DEFAULTIMAGERATIO = 1.5;
 const ORDERBY = 'exposure';
+const ORDERBYDESCENDING = false;
 
 class Dashboard extends Component {
   constructor(props) {
@@ -41,8 +43,8 @@ class Dashboard extends Component {
       const dimmer = this.state.isLoading ? DIMMED : DIMMED_DEFAULT;
       jsx = (
         <div id="di" onScroll={this.ScrollHandler} className="OverflowingDiv">
-          {/* Top Drawer */}
-          <SideDrawer />
+          {/* Side Drawer */}
+          <SideDrawer searchClick={this.SearchClickHandler}/>
 
           {/* Loading Spinner */}
           {this.state.isLoading ? SPINNER : null}
@@ -113,6 +115,13 @@ class Dashboard extends Component {
     }
   }
 
+  SearchClickHandler = prop => {
+    this.orderByDescending = prop.orderByDescending;
+    this.orderByField = prop.filter;
+    console.log(prop);
+    this.ResetList();
+  }
+
   async PhotoClickHandler(id) {
 
     this.setState({
@@ -143,14 +152,22 @@ class Dashboard extends Component {
 
   async ResetList() {
     this.skip = 0;
-    this.FetchFreshData();
+    this.FetchFreshData().then((response) => {
+      const freshData = response.data;
+      if (freshData) {
+        this.setState({
+          photos: freshData,
+          isLoading: false
+        });
+      }
+    });
   }
 
   async FetchFreshData() {
     this.setState({
       isLoading: true
     });
-    const newFiles = await this.httpService.GetImages(this.skip, TAKE, ORDERBY);
+    const newFiles = await this.httpService.GetImages(this.skip, TAKE, this.orderByField,  this.orderByDescending);
     this.skip += TAKE;
     return newFiles;
   }
@@ -174,6 +191,8 @@ class Dashboard extends Component {
 
   httpService = null;
   skip = 0;
+  orderByField = ORDERBY;
+  orderByDescending = ORDERBYDESCENDING
 
   //#endRegion Vars
 }
