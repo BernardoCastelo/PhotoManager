@@ -18,6 +18,8 @@
             [Order] [int] NULL,
             [Width] [int] NULL,
             [Exposure] NVARCHAR(1024) NULL,
+            [ExposureAsNumber] NUMERIC(9, 4) NULL,
+            [FStopAsNumber] NUMERIC(5, 2) NULL,
             [FStop] NVARCHAR(1024) NULL,
             [Name] NVARCHAR(1024) NOT NULL,
             [Thumbnail] VARBINARY(MAX) NULL,

@@ -25,16 +25,19 @@ namespace PhotoLoader
             FileTypes = container.Container.SelectAll<FileType>().ToList();
             try
             {
-                long timeTaken = 0;
-                timeTaken = LoadFolders(container.Container, new DirectoryInfo(Constants.Folders.Main));
-                Console.WriteLine($"{nameof(LoadFolders)}: {timeTaken}ms");
 
-                timeTaken = LoadFiles(container.Container, new DirectoryInfo(Constants.Folders.Main), true);
-                Console.WriteLine($"{nameof(LoadFiles)}: {timeTaken}ms");
+                UpdateExposureAndFNumberValues(container.Container);
 
-                var jpg = container.Container.FileTypeSet.First(f => f.Name == FileTypeEnum.JPG.ToString());
-                timeTaken = await CreateThumbnails(container.Container, Constants.Folders.Thumbnails, jpg);
-                Console.WriteLine($"{nameof(CreateThumbnails)}: {timeTaken}ms");
+                //long timeTaken = 0;
+                //timeTaken = LoadFolders(container.Container, new DirectoryInfo(Constants.Folders.Main));
+                //Console.WriteLine($"{nameof(LoadFolders)}: {timeTaken}ms");
+
+                //timeTaken = LoadFiles(container.Container, new DirectoryInfo(Constants.Folders.Main), true);
+                //Console.WriteLine($"{nameof(LoadFiles)}: {timeTaken}ms");
+
+                //var jpg = container.Container.FileTypeSet.First(f => f.Name == FileTypeEnum.JPG.ToString());
+                //timeTaken = await CreateThumbnails(container.Container, Constants.Folders.Thumbnails, jpg);
+                //Console.WriteLine($"{nameof(CreateThumbnails)}: {timeTaken}ms");
             }
             catch (Exception e)
             {
@@ -233,6 +236,44 @@ namespace PhotoLoader
 
             sw.Stop();
             return sw.ElapsedMilliseconds;
+        }
+
+        private static void UpdateExposureAndFNumberValues(DbContainer container)
+        {
+            var photos = container.SelectAll<Photo>();
+            foreach (var photo in photos)
+            {
+                var exposureString = photo.Exposure;
+                if (!string.IsNullOrEmpty(exposureString))
+                {
+                    photo.ExposureAsNumber = GetFromFraction(exposureString.Substring(0, exposureString.IndexOf('s')));
+                }
+
+                var fStopString = photo.FStop;
+                if (!string.IsNullOrEmpty(fStopString))
+                {
+                    photo.FStopAsNumber = double.Parse(fStopString[2..]);
+                }
+
+                var entity = container.Attach(photo);
+                entity.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                container.PhotoSet.Update(photo);
+                container.SaveChanges();
+            }
+        }
+
+        private static double GetFromFraction(string fraction)
+        {
+            // 312312/327819312
+            int slashIndex = fraction.IndexOf('/');
+            if(slashIndex <= 0)
+            {
+                return double.Parse(fraction);
+            }
+            double left = double.Parse(fraction.Substring(0, slashIndex));
+            double right = double.Parse(fraction[(slashIndex + 1)..]);
+
+            return left / right;
         }
     }
 }

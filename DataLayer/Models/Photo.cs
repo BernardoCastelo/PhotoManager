@@ -14,8 +14,10 @@ namespace DataLayer
         public int? Iso { get; set; }
         public int? Order { get; set; }
         public int? Width { get; set; }
+        public double? ExposureAsNumber { get; set; }
         public string Exposure { get; set; }
         public string FStop { get; set; }
+        public double? FStopAsNumber { get; set; }
         public string Name { get; set; }
         public byte[] Thumbnail { get; set; }
     }
