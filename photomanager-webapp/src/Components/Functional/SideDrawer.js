@@ -71,21 +71,24 @@ const IconButtonWrapper = styled.div`
 const SideDrawer = (props) => {
   const classes = useStyles();
 
-  const searchBtnHandler = () => {
-    toggleDrawer('right', false);
+  const searchBtnHandler = (event) => {
+    toggleDrawer(false)(event);
     props.searchClick(OrderByState);
   }
 
   /* Drawer */
   const [drawerState, setDrawerState] = React.useState({
-    right: false,
+    drawer: false,
   });
 
-  const toggleDrawer = (anchor, open) => (event) => {
+  const toggleDrawer = (open) => (event) => {
+    console.log(drawerState);
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
-    setDrawerState({ ...drawerState, [anchor]: open });
+    setDrawerState({ ...drawerState, 'drawer': open });
+    
+    console.log(drawerState);
   };
 
   /* OrderBy Select */
@@ -101,7 +104,6 @@ const SideDrawer = (props) => {
       ...OrderByState,
       [name]: event.target.value,
     });
-    console.log(event.target);
   };
 
   const handleOrderByDirectionChange = () => {
@@ -118,10 +120,10 @@ const SideDrawer = (props) => {
         className={classes.fab}
         color="primary"
         aria-label="add"
-        onClick={toggleDrawer('right', true)}>
+        onClick={toggleDrawer(true)}>
         <ArrowBackIosRoundedIcon fontSize="large"/>
       </Fab>
-      <Drawer anchor={'right'} open={drawerState['right']} onClose={toggleDrawer('right', false)}>
+      <Drawer anchor={'right'} open={drawerState['drawer']} onClose={toggleDrawer(false)}>
         <div className={classes.sideDrawer}>
 
           <Paper className={classes.paper} elevation={3}>

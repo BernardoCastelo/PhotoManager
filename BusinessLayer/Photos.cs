@@ -117,6 +117,18 @@ namespace BusinessLayer
         {
             try
             {
+                if (!string.IsNullOrEmpty(orderBy))
+                {
+                    if(orderBy.ToLower() == nameof(Photo.Exposure).ToLower())
+                    {
+                        orderBy = nameof(Photo.ExposureAsNumber);
+                    }
+                    if (orderBy.ToLower() == nameof(Photo.FStop).ToLower())
+                    {
+                        orderBy = nameof(Photo.FStopAsNumber);
+                    }
+                }
+
                 return photoRepository.SelectThumbnails(skip, take, orderBy, orderByDescending);
             }
             catch (Exception)
