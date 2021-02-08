@@ -119,11 +119,12 @@ namespace BusinessLayer
             {
                 if (!string.IsNullOrEmpty(orderBy))
                 {
-                    if(orderBy.ToLower() == nameof(Photo.Exposure).ToLower())
+                    var lowered = orderBy.ToLower();
+                    if (lowered == nameof(Photo.Exposure).ToLower())
                     {
                         orderBy = nameof(Photo.ExposureAsNumber);
                     }
-                    if (orderBy.ToLower() == nameof(Photo.FStop).ToLower())
+                    else if (lowered == nameof(Photo.FStop).ToLower())
                     {
                         orderBy = nameof(Photo.FStopAsNumber);
                     }

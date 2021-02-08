@@ -21,28 +21,30 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Photo> Get(int skip, int take, string orderBy = null, bool orderByDescending = false)
+        public ActionResult<IEnumerable<Photo>> Get(int skip, int take, string orderBy = null, bool orderByDescending = false)
         {
             try
             {
-                return photos.Get(skip, take, orderBy, orderByDescending);
+                return Ok(photos.Get(skip, take, orderBy, orderByDescending));
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                throw;
+                logger.LogError(exception.Message);
+                return StatusCode(500);
             }
         }
 
         [HttpGet]
-        public string GetBytes(int id)
+        public ActionResult<string> GetBytes(int id)
         {
             try
             {
-                return photos.GetBytes(id);
+                return Ok(photos.GetBytes(id));
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                throw;
+                logger.LogError(exception.Message);
+                return StatusCode(500);
             }
         }
     }
