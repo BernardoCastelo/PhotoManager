@@ -10,6 +10,22 @@ import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
 import styled from "styled-components";
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import Typography from '@material-ui/core/Typography';
+import Slider from '@material-ui/core/Slider';
+
+const MINISO = 100;
+const MAXISO = 25600;
+let isoMarks = [
+  { value: MINISO, label: MINISO },
+  { value: 200, label: 200 },
+  { value: 400, label: 400 },
+  { value: 800, label: 800 },
+  { value: 1600, label: 1600 },
+  { value: 3200, label: 3200 },
+  { value: 6400, label: 6400 },
+  { value: 12800, label: 12800 },
+  { value: MAXISO, label: MAXISO }
+];
 
 const useStyles = makeStyles({
   nameDivs: {
@@ -50,8 +66,8 @@ const useStyles = makeStyles({
     marginRight: '5%',
     width: 150,
   },
-  'MuiFab-root':{
-    boxShadow:'none'
+  'MuiFab-root': {
+    boxShadow: 'none'
   },
   root: {
     '& > *': {
@@ -70,33 +86,26 @@ const IconButtonWrapper = styled.div`
 
 const SideDrawer = (props) => {
   const classes = useStyles();
+  
+  const [isoValue, setIsoValue] = React.useState([MINISO, MAXISO]);
+  const [drawerState, setDrawerState] = React.useState({ drawer: false });
+  const [OrderByState, setOrderByState] = React.useState({ orderByDescending: false, filter: '', name: 'hai' });
 
-  const searchBtnHandler = (event) => {
+  const handleIsoSliderChange = (event, newValue) => {
+    setIsoValue(newValue);
+  };
+
+  const handleSearchBtnClick = (event) => {
     toggleDrawer(false)(event);
     props.searchClick(OrderByState);
   }
 
-  /* Drawer */
-  const [drawerState, setDrawerState] = React.useState({
-    drawer: false,
-  });
-
   const toggleDrawer = (open) => (event) => {
-    console.log(drawerState);
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
     setDrawerState({ ...drawerState, 'drawer': open });
-    
-    console.log(drawerState);
   };
-
-  /* OrderBy Select */
-  const [OrderByState, setOrderByState] = React.useState({
-    orderByDescending: false,
-    filter: '',
-    name: 'hai',
-  });
 
   const handleOrderByChange = (event) => {
     const name = event.target.name;
@@ -111,7 +120,6 @@ const SideDrawer = (props) => {
       ...OrderByState,
       'orderByDescending': !OrderByState.orderByDescending,
     });
-    console.log(OrderByState);
   };
 
   return (
@@ -121,7 +129,7 @@ const SideDrawer = (props) => {
         color="primary"
         aria-label="add"
         onClick={toggleDrawer(true)}>
-        <ArrowBackIosRoundedIcon fontSize="large"/>
+        <ArrowBackIosRoundedIcon fontSize="large" />
       </Fab>
       <Drawer anchor={'right'} open={drawerState['drawer']} onClose={toggleDrawer(false)}>
         <div className={classes.sideDrawer}>
@@ -153,7 +161,7 @@ const SideDrawer = (props) => {
                   color="primary"
                   size="small"
                   onClick={handleOrderByDirectionChange}>
-                  <ExpandLessIcon fontSize="large"/>
+                  <ExpandLessIcon fontSize="large" />
                 </Fab>
               </IconButtonWrapper>
             </div>
@@ -190,16 +198,26 @@ const SideDrawer = (props) => {
                 <TextField className={classes.textField + ' ' + classes.root} id="standard-basic" label="Exposure" type="number" InputLabelProps={{ shrink: true, }} />
                 <TextField className={classes.textField + ' ' + classes.root} id="standard-basic" label="Apperture" type="number" InputLabelProps={{ shrink: true, }} />
                 <TextField className={classes.textField + ' ' + classes.root} id="standard-basic" label="Focal Length" type="number" InputLabelProps={{ shrink: true, }} />
-                <TextField className={classes.textField + ' ' + classes.root} id="standard-basic" label="ISO" type="number" InputLabelProps={{ shrink: true, }} />
               </form>
+              <Typography id="iso-slider" gutterBottom>ISO</Typography>
+              <Slider
+                value={isoValue}
+                onChange={handleIsoSliderChange}
+                valueLabelDisplay="on"
+                step={null}
+                marks={isoMarks}
+                max={MAXISO}
+                aria-labelledby="iso-slider"
+              />
             </div>
           </Paper>
+
           <Fab
             className={classes.bottomFab}
             color="primary"
             aria-label="add"
-            onClick={searchBtnHandler}>
-            <SearchIcon fontSize="large"/>
+            onClick={handleSearchBtnClick}>
+            <SearchIcon fontSize="large" />
           </Fab>
         </div>
       </Drawer>
