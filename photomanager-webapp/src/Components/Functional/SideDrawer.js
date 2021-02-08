@@ -16,15 +16,15 @@ import Slider from '@material-ui/core/Slider';
 const MINISO = 100;
 const MAXISO = 25600;
 let isoMarks = [
-  { value: MINISO, label: MINISO },
-  { value: 200, label: 200 },
-  { value: 400, label: 400 },
-  { value: 800, label: 800 },
-  { value: 1600, label: 1600 },
-  { value: 3200, label: 3200 },
-  { value: 6400, label: 6400 },
-  { value: 12800, label: 12800 },
-  { value: MAXISO, label: MAXISO }
+  { value: 1, label: MINISO },
+  { value: 2, label: 200 },
+  { value: 3, label: 400 },
+  { value: 4, label: 800 },
+  { value: 5, label: 1600 },
+  { value: 6, label: 3200 },
+  { value: 7, label: 6400 },
+  { value: 8, label: 12800 },
+  { value: 9, label: MAXISO }
 ];
 
 const useStyles = makeStyles({
@@ -87,9 +87,14 @@ const IconButtonWrapper = styled.div`
 const SideDrawer = (props) => {
   const classes = useStyles();
   
-  const [isoValue, setIsoValue] = React.useState([MINISO, MAXISO]);
+  const [isoValue, setIsoValue] = React.useState([1, 9]);
   const [drawerState, setDrawerState] = React.useState({ drawer: false });
   const [OrderByState, setOrderByState] = React.useState({ orderByDescending: false, filter: '', name: 'hai' });
+
+  
+  function valueLabelFormat(value) {
+    return isoMarks[value - 1].label;
+  }
 
   const handleIsoSliderChange = (event, newValue) => {
     setIsoValue(newValue);
@@ -203,10 +208,13 @@ const SideDrawer = (props) => {
               <Slider
                 value={isoValue}
                 onChange={handleIsoSliderChange}
-                valueLabelDisplay="on"
+                valueLabelDisplay="auto"
                 step={null}
                 marks={isoMarks}
-                max={MAXISO}
+                min={1}
+                max={9}
+                getAriaValueText={valueLabelFormat}
+                valueLabelFormat={valueLabelFormat}
                 aria-labelledby="iso-slider"
               />
             </div>
