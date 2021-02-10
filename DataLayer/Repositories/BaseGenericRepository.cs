@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DataLayer.Dtos;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 
@@ -6,48 +7,57 @@ namespace DataLayer
 {
     public abstract class BaseGenericRepository<T> : IBaseGenericRepository<T> where T : class
     {
-        public IDbContainer dbContainer { get; set; }
+        public IDbContainer DbContainer { get; set; }
 
         protected BaseGenericRepository(IDbContainer dbContainer)
         {
-            this.dbContainer = dbContainer ?? throw new ArgumentNullException(nameof(dbContainer));
+            this.DbContainer = dbContainer ?? throw new ArgumentNullException(nameof(dbContainer));
         }
 
 
         public T Delete(T entity)
         {
-            var newEntity = dbContainer.Remove(entity).Entity;
-            dbContainer.SaveChanges();
+            var newEntity = DbContainer.Remove(entity).Entity;
+            DbContainer.SaveChanges();
             return newEntity;
         }
 
         public T Insert(T entity)
         {
-            var newEntity = dbContainer.Add(entity);
-            dbContainer.SaveChanges();
+            var newEntity = DbContainer.Add(entity);
+            DbContainer.SaveChanges();
             newEntity.State = EntityState.Detached;
             return newEntity.Entity;
         }
 
         public T Select(int id)
         {
-            return dbContainer.Select<T>(id);
+            return DbContainer.Select<T>(id);
         }
 
         public IEnumerable<T> Select(int skip, int take, string orderBy = null, bool orderByDescending = false)
         {
-            return dbContainer.Select<T>(skip, take, orderBy, orderByDescending);
+            return DbContainer.Select<T>(skip, take, orderBy, orderByDescending);
+        }
+
+        public IEnumerable<T> Select(int skip, int take, string orderBy = null, bool orderByDescending = false, IEnumerable<Filter> filters = null)
+        {
+            if(filters != null)
+            {
+                return DbContainer.Select<T>(skip, take, orderBy, orderByDescending, filters);
+            }
+            return DbContainer.Select<T>(skip, take, orderBy, orderByDescending);
         }
 
         public IEnumerable<T> SelectAll()
         {
-            return dbContainer.SelectAll<T>();
+            return DbContainer.SelectAll<T>();
         }
 
         public T Update(T entity)
         {
-            var newEntity = dbContainer.Update(entity);
-            dbContainer.SaveChanges();
+            var newEntity = DbContainer.Update(entity);
+            DbContainer.SaveChanges();
             newEntity.State = EntityState.Detached;
             return newEntity.Entity;
 

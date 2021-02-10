@@ -1,4 +1,5 @@
 ﻿using Common;
+using DataLayer.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
@@ -77,6 +78,43 @@ namespace DataLayer
             try
             {
                 var queriable = Select<TTable, TProp>(filterPropertyName, value).AsQueryable();
+
+                var sortExpression = orderByPropName.GetKeySelected<TTable>();
+
+                queriable = descending ? queriable.OrderByDescending(sortExpression) : queriable.OrderBy(sortExpression);
+
+                return queriable.Skip(skip).Take(take);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        // Select with OrderBy and filters
+        public IEnumerable<TTable> Select<TTable>(int skip, int take, string orderByPropName, bool descending, IEnumerable<Filter> filters) where TTable : class
+        {
+            try
+            {
+                var queriable = Helper.GetDbSet<TTable>(this).Select(t => t);
+
+                foreach (var filter in filters)
+                {
+                    if (filter.LowerValue != null)
+                    {
+                        var exp = filter.FieldName.GetLessThanExpression<TTable>(filter.LowerValue);
+                        queriable = queriable.Where(exp);
+                    }
+                    if (filter.Value != null)
+                    {
+                        queriable = queriable.Where(item => item.GetProperty(filter.FieldName, null) == filter.Value);
+                    }
+                    if (filter.UpperValue != null)
+                    {
+                        var comparable = (IComparable)filter.UpperValue;
+                        queriable = queriable.Where(item => comparable.CompareTo(item.GetProperty(filter.FieldName, null)) < 0);
+                    }
+                }
 
                 var sortExpression = orderByPropName.GetKeySelected<TTable>();
 

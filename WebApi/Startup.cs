@@ -54,7 +54,7 @@ namespace WebApi
             //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             //    .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAdB2C"));
             #endregion
-
+            services.AddControllers().AddNewtonsoftJson();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

@@ -178,7 +178,7 @@ namespace PhotoLoader
             for (int i = 0; i < numThreads; i++)
             {
                 var skip = i * partial;
-                var partialPhotos = photoRep.Select(skip, partial).ToList();
+                var partialPhotos = photoRep.Select(skip, partial, null, false).ToList();
                 var files = container.FileSet.Select(a => a).ToList();
 
                 var task = new Task<long>(() => ThumbTask(partialPhotos, files, outputFolder, typeFilter, i));
@@ -252,7 +252,7 @@ namespace PhotoLoader
                 var fStopString = photo.FStop;
                 if (!string.IsNullOrEmpty(fStopString))
                 {
-                    photo.FStopAsNumber = double.Parse(fStopString[2..]);
+                    photo.FStopAsNumber = decimal.Parse(fStopString[2..]);
                 }
 
                 var entity = container.Attach(photo);
@@ -262,16 +262,16 @@ namespace PhotoLoader
             }
         }
 
-        private static double GetFromFraction(string fraction)
+        private static decimal GetFromFraction(string fraction)
         {
             // 312312/327819312
             int slashIndex = fraction.IndexOf('/');
             if(slashIndex <= 0)
             {
-                return double.Parse(fraction);
+                return decimal.Parse(fraction);
             }
-            double left = double.Parse(fraction.Substring(0, slashIndex));
-            double right = double.Parse(fraction[(slashIndex + 1)..]);
+            decimal left = decimal.Parse(fraction.Substring(0, slashIndex));
+            decimal right = decimal.Parse(fraction[(slashIndex + 1)..]);
 
             return left / right;
         }

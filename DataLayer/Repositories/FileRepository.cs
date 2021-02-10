@@ -7,14 +7,14 @@ namespace DataLayer
     {
         public FileRepository(IDbContainer dbContainer) : base(dbContainer)
         {
-            this.dbContainer = dbContainer ?? throw new ArgumentNullException(nameof(dbContainer));
+            this.DbContainer = dbContainer ?? throw new ArgumentNullException(nameof(dbContainer));
         }
 
         public File Select(string fullpath)
         {
             try
             {
-                return dbContainer.FileSet.Where(file => file.Fullpath == fullpath).FirstOrDefault();
+                return DbContainer.FileSet.Where(file => file.Fullpath == fullpath).FirstOrDefault();
             }
             catch (Exception)
             {

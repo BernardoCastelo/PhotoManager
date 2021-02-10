@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BusinessLayer;
+using DataLayer;
+using DataLayer.Dtos;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using BusinessLayer;
-using DataLayer;
 
 namespace WebApi.Controllers
 {
@@ -26,6 +27,20 @@ namespace WebApi.Controllers
             try
             {
                 return Ok(photos.Get(skip, take, orderBy, orderByDescending));
+            }
+            catch (Exception exception)
+            {
+                logger.LogError(exception.Message);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult<IEnumerable<Photo>> Get([FromBody] IEnumerable<Filter> filters, int skip, int take, string orderBy = null, bool orderByDescending = false)
+        {
+            try
+            {
+                return Ok(photos.Get(skip, take, orderBy, orderByDescending, filters));
             }
             catch (Exception exception)
             {

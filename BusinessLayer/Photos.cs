@@ -1,5 +1,6 @@
 ﻿using Common;
 using DataLayer;
+using DataLayer.Dtos;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -117,20 +118,19 @@ namespace BusinessLayer
         {
             try
             {
-                if (!string.IsNullOrEmpty(orderBy))
-                {
-                    var lowered = orderBy.ToLower();
-                    if (lowered == nameof(Photo.Exposure).ToLower())
-                    {
-                        orderBy = nameof(Photo.ExposureAsNumber);
-                    }
-                    else if (lowered == nameof(Photo.FStop).ToLower())
-                    {
-                        orderBy = nameof(Photo.FStopAsNumber);
-                    }
-                }
+                return photoRepository.SelectThumbnails(skip, take, GetOrderBy(orderBy), orderByDescending);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
-                return photoRepository.SelectThumbnails(skip, take, orderBy, orderByDescending);
+        public IEnumerable<Photo> Get(int skip, int take, string orderBy = null, bool orderByDescending = false, IEnumerable<Filter> filters = null)
+        {
+            try
+            {
+                return photoRepository.Select(skip, take, GetOrderBy(orderBy), orderByDescending, filters);
             }
             catch (Exception)
             {
@@ -153,6 +153,24 @@ namespace BusinessLayer
             {
                 throw;
             }
+        }
+
+
+        private static string GetOrderBy(string orderBy)
+        {
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                var lowered = orderBy.ToLower();
+                if (lowered == nameof(Photo.Exposure).ToLower())
+                {
+                    return nameof(Photo.ExposureAsNumber);
+                }
+                else if (lowered == nameof(Photo.FStop).ToLower())
+                {
+                    return nameof(Photo.FStopAsNumber);
+                }
+            }
+            return orderBy;
         }
     }
 }

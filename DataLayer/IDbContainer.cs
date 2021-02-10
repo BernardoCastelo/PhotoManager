@@ -1,4 +1,5 @@
 ﻿using Common;
+using DataLayer.Dtos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Collections.Generic;
@@ -30,6 +31,7 @@ namespace DataLayer
 
         IEnumerable<TTable> SelectAll<TTable>() where TTable : class;
         IEnumerable<TTable> Select<TTable>(int skip, int take, string orderByPropName = Constants.DbConstants.Id, bool descending = false) where TTable : class;
+        IEnumerable<TTable> Select<TTable>(int skip, int take, string orderByPropName = Constants.DbConstants.Id, bool descending = false, IEnumerable<Filter> filters = null) where TTable : class;
         IEnumerable<TTable> Select<TTable, TProp>(int skip, int take, string filterPropertyName, TProp value, string orderByPropName = Constants.DbConstants.Id, bool descending = false)
             where TTable : class
             where TProp : class;

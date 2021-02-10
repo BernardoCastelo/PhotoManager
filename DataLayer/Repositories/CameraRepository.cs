@@ -8,14 +8,14 @@ namespace DataLayer
     {
         public CameraRepository(IDbContainer dbContainer) : base(dbContainer)
         {
-            this.dbContainer = dbContainer ?? throw new ArgumentNullException(nameof(dbContainer));
+            this.DbContainer = dbContainer ?? throw new ArgumentNullException(nameof(dbContainer));
         }
 
         public IEnumerable<Camera> Get(string maker, string model)
         {
             try
             {
-                return dbContainer.CameraSet.Where(camera =>
+                return DbContainer.CameraSet.Where(camera =>
                     (camera.Maker == maker || maker == null) &&
                     (camera.Model == model || model == null))
                     .ToList();

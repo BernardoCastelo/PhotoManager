@@ -9,14 +9,14 @@ namespace DataLayer
     {
         public PhotoRepository(IDbContainer dbContainer) : base(dbContainer)
         {
-            this.dbContainer = dbContainer ?? throw new ArgumentNullException(nameof(dbContainer));
+            this.DbContainer = dbContainer ?? throw new ArgumentNullException(nameof(dbContainer));
         }
 
         public IEnumerable<Photo> SelectThumbnails(int skip, int take, string orderBy = null, bool orderByDescending = false)
         {
             var expression = orderBy.GetKeySelected<Photo>();
 
-            var queriable = dbContainer.PhotoSet
+            var queriable = DbContainer.PhotoSet
                 .Select(p => p)
                 .Where(photo => photo.Thumbnail != null);
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Text.Json;
 
 namespace Common
 {
@@ -17,11 +19,39 @@ namespace Common
 
         public static Expression<Func<T, object>> GetKeySelected<T>(this string orderByPropName) where T : class 
         {
-            var param = Expression.Parameter(typeof(T), "item");
+            var param = Expression.Parameter(typeof(T));
 
             var prop = Expression.Property(param, orderByPropName ?? Constants.DbConstants.Id);
 
             return Expression.Lambda<Func<T, object>>(Expression.Convert(prop, typeof(object)), param);
+        }
+
+        public static Expression<Func<T, bool>> GetLessThanExpression<T>(this string orderByPropName, object value) where T : class
+        {
+            var param = Expression.Parameter(typeof(T));
+            var left = Expression.Property(param, orderByPropName ?? Constants.DbConstants.Id);
+
+            var lessThanExpr = Expression.LessThan(left, Expression.Constant(value));
+
+            return Expression.Lambda<Func<T, bool>>(lessThanExpr);
+        }
+
+        public static Expression<Func<bool>> GetGreaterThanExpression(this string orderByPropName, object value)
+        {
+            var param = Expression.Parameter(typeof(IComparable));
+            var left = Expression.Property(param, orderByPropName ?? Constants.DbConstants.Id);
+            var lessThanExpr = Expression.GreaterThan(left, Expression.Constant(value));
+
+            return Expression.Lambda<Func<bool>>(lessThanExpr);
+        }
+
+        public static Expression<Func<bool>> GetEqualExpression(this string orderByPropName, object value)
+        {
+            var param = Expression.Parameter(typeof(IComparable));
+            var left = Expression.Property(param, orderByPropName ?? Constants.DbConstants.Id);
+            var lessThanExpr = Expression.Equal(left, Expression.Constant(value));
+
+            return Expression.Lambda<Func<bool>>(lessThanExpr);
         }
 
         public static DateTimeOffset? ParseIntoDateTime(this string datetime)
@@ -35,6 +65,12 @@ namespace Common
                 DateTimeStyles.AllowWhiteSpaces,
                 out DateTimeOffset date);
             return date;
+        }
+
+        public static T ToObject<T>(this JsonElement element)
+        {
+            var json = element.GetRawText();
+            return JsonSerializer.Deserialize<T>(json);
         }
 
         public static string RemoveUntilSpace(this string text)
