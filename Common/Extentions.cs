@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
@@ -17,6 +18,18 @@ namespace Common
                 .Invoke(obj, parameters);
         }
 
+        public static object ChangeType(this object value, Type conversion)
+        {
+            var t = conversion;
+
+            if (t.IsGenericType && t.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+            {
+                t = Nullable.GetUnderlyingType(t);
+            }
+
+            return Convert.ChangeType(value, t);
+        }
+
         public static Expression<Func<T, object>> GetKeySelected<T>(this string orderByPropName) where T : class 
         {
             var param = Expression.Parameter(typeof(T));
@@ -28,12 +41,14 @@ namespace Common
 
         public static Expression<Func<T, bool>> GetLessThanExpression<T>(this string orderByPropName, object value) where T : class
         {
-            var param = Expression.Parameter(typeof(T));
-            var left = Expression.Property(param, orderByPropName ?? Constants.DbConstants.Id);
+            var parameter = Expression.Parameter(typeof(T));
+            var left = Expression.Property(parameter, orderByPropName ?? Constants.DbConstants.Id);
 
-            var lessThanExpr = Expression.LessThan(left, Expression.Constant(value));
+            var castedValue = Expression.Convert(Expression.Constant(value.ChangeType(left.Type)), left.Type);
 
-            return Expression.Lambda<Func<T, bool>>(lessThanExpr);
+            var lessThanExpr = Expression.LessThan(left, castedValue);
+
+            return Expression.Lambda<Func<T, bool>>(lessThanExpr, new[] { parameter });
         }
 
         public static Expression<Func<bool>> GetGreaterThanExpression(this string orderByPropName, object value)
