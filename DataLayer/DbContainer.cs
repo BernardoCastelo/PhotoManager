@@ -102,17 +102,16 @@ namespace DataLayer
                 {
                     if (filter.LowerValue != null)
                     {
-                        var exp = filter.FieldName.GetLessThanExpression<TTable>(filter.LowerValue);
-                        queriable = queriable.Where(exp);
+                        queriable = queriable.Where(filter.FieldName.GetLessThanExpression<TTable>(filter.LowerValue));
                     }
                     if (filter.Value != null)
                     {
-                        queriable = queriable.Where(item => item.GetProperty(filter.FieldName, null) == filter.Value);
+                        queriable = queriable.Where(filter.FieldName.GetEqualExpression<TTable>(filter.LowerValue));
                     }
                     if (filter.UpperValue != null)
                     {
                         var comparable = (IComparable)filter.UpperValue;
-                        queriable = queriable.Where(item => comparable.CompareTo(item.GetProperty(filter.FieldName, null)) < 0);
+                        queriable = queriable.Where(filter.FieldName.GetGreaterThanExpression<TTable>(filter.LowerValue));
                     }
                 }
 
