@@ -3,7 +3,6 @@ import Fade from '@material-ui/core/Fade';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import Popper from '@material-ui/core/Popper';
-import { findAllByDisplayValue } from '@testing-library/react';
 import React, { Component } from 'react';
 import HttpService from '../Services/HttpService';
 import './Dashboard.css';
@@ -44,7 +43,7 @@ class Dashboard extends Component {
       jsx = (
         <div id="di" onScroll={this.ScrollHandler} className="OverflowingDiv">
           {/* Side Drawer */}
-          <SideDrawer searchClick={this.SearchClickHandler}/>
+          <SideDrawer searchClick={this.SearchClickHandler} />
 
           {/* Loading Spinner */}
           {this.state.isLoading ? SPINNER : null}
@@ -118,12 +117,11 @@ class Dashboard extends Component {
   SearchClickHandler = prop => {
     this.orderByDescending = prop.orderByDescending;
     this.orderByField = prop.filter;
-    console.log(prop);
+    this.filters = prop.filters;
     this.ResetList();
   }
 
   async PhotoClickHandler(id) {
-
     this.setState({
       loadedFullRes: '',
       isLoading: true,
@@ -134,14 +132,16 @@ class Dashboard extends Component {
     this.httpService
       .GetFullResolutution(id)
       .then(response => {
-        const img = this.state.photos.find(p => p.id === id);
+        if (response) {
+          const img = this.state.photos.find(p => p.id === id);
 
-        this.setState({
-          loadedFullRes: response.data,
-          isLoading: false,
-          isPoppedUp: true,
-          loadedFIle: img
-        });
+          this.setState({
+            loadedFullRes: response.data,
+            isLoading: false,
+            isPoppedUp: true,
+            loadedFIle: img
+          });
+        }
       });
   }
 
@@ -153,12 +153,14 @@ class Dashboard extends Component {
   async ResetList() {
     this.skip = 0;
     this.FetchFreshData().then((response) => {
-      const freshData = response.data;
-      if (freshData) {
-        this.setState({
-          photos: freshData,
-          isLoading: false
-        });
+      if (response) {
+        const freshData = response.data;
+        if (freshData) {
+          this.setState({
+            photos: freshData,
+            isLoading: false
+          });
+        }
       }
     });
   }
@@ -167,20 +169,23 @@ class Dashboard extends Component {
     this.setState({
       isLoading: true
     });
-    const newFiles = await this.httpService.GetImages(this.skip, TAKE, this.orderByField,  this.orderByDescending);
+    console.log(this.filters);
+    const newFiles = await this.httpService.GetImages(this.skip, TAKE, this.orderByField, this.orderByDescending, this.filters);
     this.skip += TAKE;
     return newFiles;
   }
 
   async FetchData() {
     this.FetchFreshData().then((response) => {
-      const freshData = response.data;
-      if (freshData) {
-        const finalArr = [...this.state.photos].concat(freshData);
-        this.setState({
-          photos: finalArr,
-          isLoading: false
-        });
+      if (response) {
+        const freshData = response.data;
+        if (freshData) {
+          const finalArr = [...this.state.photos].concat(freshData);
+          this.setState({
+            photos: finalArr,
+            isLoading: false
+          });
+        }
       }
     });
   }
@@ -192,7 +197,8 @@ class Dashboard extends Component {
   httpService = null;
   skip = 0;
   orderByField = ORDERBY;
-  orderByDescending = ORDERBYDESCENDING
+  orderByDescending = ORDERBYDESCENDING;
+  filters = [];
 
   //#endRegion Vars
 }

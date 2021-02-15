@@ -36,7 +36,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult<IEnumerable<Photo>> Get([FromBody] IEnumerable<Filter> filters, int skip, int take, string orderBy = null, bool orderByDescending = false)
+        public ActionResult<IEnumerable<Photo>> Get(int skip, int take, string orderBy = null, bool orderByDescending = false, [FromBody] List<Filter> filters = null)
         {
             try
             {

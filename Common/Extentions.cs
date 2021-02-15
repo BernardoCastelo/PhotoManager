@@ -67,7 +67,7 @@ namespace Common
             var parameter = Expression.Parameter(typeof(T));
             var left = Expression.Property(parameter, orderByPropName ?? Constants.DbConstants.Id);
             var castedValue = Expression.Convert(Expression.Constant(value.ChangeType(left.Type)), left.Type);
-            var lessThanExpr = Expression.LessThan(left, castedValue);
+            var lessThanExpr = Expression.LessThanOrEqual(left, castedValue);
             return Expression.Lambda<Func<T, bool>>(lessThanExpr, new[] { parameter });
         }
 
@@ -76,7 +76,7 @@ namespace Common
             var parameter = Expression.Parameter(typeof(T));
             var left = Expression.Property(parameter, orderByPropName ?? Constants.DbConstants.Id);
             var castedValue = Expression.Convert(Expression.Constant(value.ChangeType(left.Type)), left.Type);
-            var lessThanExpr = Expression.GreaterThan(left, castedValue);
+            var lessThanExpr = Expression.GreaterThanOrEqual(left, castedValue);
             return Expression.Lambda<Func<T, bool>>(lessThanExpr, new[] { parameter });
         }
 

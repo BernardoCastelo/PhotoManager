@@ -130,7 +130,12 @@ namespace BusinessLayer
         {
             try
             {
-                return photoRepository.Select(skip, take, GetOrderBy(orderBy), orderByDescending, filters);
+                if(filters?.Any() ?? false)
+                {
+                    return photoRepository.Select(skip, take, GetOrderBy(orderBy), orderByDescending, filters);
+                }
+
+                return photoRepository.SelectThumbnails(skip, take, GetOrderBy(orderBy), orderByDescending);
             }
             catch (Exception)
             {
