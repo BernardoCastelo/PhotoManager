@@ -33,22 +33,31 @@ const PhotoPopup = (props) => {
 
   const classes = useStyles();
 
+  const datetime = new Date(props.file.dateTaken);
+
+  const datetimeCard = props.file.dateTaken ? <InfoCard label={"Date: " + datetime.toLocaleString('pt-pt')} /> : null;
+  const focalLength = props.file.focalLength ? <InfoCard label={"FLength: " + props.file.focalLength} /> : null;
+  const dimentionsCard = props.file.width && props.file.height ? <InfoCard label={"Size: " + props.file.width + ":" + props.file.height} /> : null;
+  const isoCard = props.file.iso ? <InfoCard label={"ISO: " + props.file.iso} /> : null;
+  const exposureCard = props.file.exposure ? <InfoCard label={"Exposure: " + props.file.exposure} /> : null;
+  const fstopCard = props.file.fStop ? <InfoCard label={"FStop: " + props.file.fStop} /> : null;
+
   return (
     <div>
       <div className={classes.nameCard}>
-          <InfoCard label={props.file.name}/>
-        </div>
+        <InfoCard label={props.file.name} />
+      </div>
       <img
         className={classes.image}
         src={`data:image/jpeg;base64,${props.fullResolutionData}`}
         alt={props.file.name} />
       <div className={classes.infoCard}>
-        <InfoCard label={"Date: " + props.file.dateTaken} />
-        <InfoCard label={"FLength: " + props.file.focalLength} />
-        <InfoCard label={"Size: " + props.file.width + ":" + props.file.height} />
-        <InfoCard label={"ISO: " + props.file.iso} />
-        <InfoCard label={"Exposure: " + props.file.exposure} />
-        <InfoCard label={"FStop: " + props.file.fStop} />
+        {datetimeCard}
+        {focalLength}
+        {dimentionsCard}
+        {isoCard}
+        {exposureCard}
+        {fstopCard}
       </div>
     </div>
   );
