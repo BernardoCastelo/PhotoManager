@@ -8,5 +8,6 @@ namespace DataLayer.Dtos
         public object LowerValue { get; set; }
         public object Value { get; set; }
         public object UpperValue { get; set; }
+        public bool Negate { get; set; }
     }
 }

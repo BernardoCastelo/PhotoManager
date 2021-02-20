@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text.Json;
+using static Common.Constants;
 
 namespace Common
 {
@@ -62,31 +60,39 @@ namespace Common
             return Expression.Lambda<Func<T, object>>(Expression.Convert(prop, typeof(object)), param);
         }
 
-        public static Expression<Func<T, bool>> GetLessThanExpression<T>(this string orderByPropName, object value) where T : class
+        public static Expression<Func<T, bool>> GetExpression<T>(this string orderByPropName, object value, WhereConditions type) where T : class
         {
             var parameter = Expression.Parameter(typeof(T));
-            var left = Expression.Property(parameter, orderByPropName ?? Constants.DbConstants.Id);
-            var castedValue = Expression.Convert(Expression.Constant(value.ChangeType(left.Type)), left.Type);
-            var lessThanExpr = Expression.LessThanOrEqual(left, castedValue);
-            return Expression.Lambda<Func<T, bool>>(lessThanExpr, new[] { parameter });
-        }
+            var left = Expression.Property(parameter, orderByPropName ?? DbConstants.Id);
+            var castedValue = Expression.Convert(Expression.Constant(value?.ChangeType(left.Type)), left.Type);
 
-        public static Expression<Func<T, bool>> GetGreaterThanExpression<T>(this string orderByPropName, object value) where T : class
-        {
-            var parameter = Expression.Parameter(typeof(T));
-            var left = Expression.Property(parameter, orderByPropName ?? Constants.DbConstants.Id);
-            var castedValue = Expression.Convert(Expression.Constant(value.ChangeType(left.Type)), left.Type);
-            var lessThanExpr = Expression.GreaterThanOrEqual(left, castedValue);
-            return Expression.Lambda<Func<T, bool>>(lessThanExpr, new[] { parameter });
-        }
+            Expression exp = null;
 
-        public static Expression<Func<T, bool>> GetEqualExpression<T>(this string orderByPropName, object value) where T : class
+            switch (type)
+            {
+                case WhereConditions.LessOrEqualThan:
+                    exp = Expression.LessThanOrEqual(left, castedValue);
+                    break;
+                case WhereConditions.GreaterOrEqualThan:
+                    exp = Expression.GreaterThanOrEqual(left, castedValue);
+                    break;
+                case WhereConditions.Equal:
+                    exp = Expression.Equal(left, castedValue);
+                    break;
+                case WhereConditions.NotEqual:
+                    exp = Expression.NotEqual(left, castedValue);
+                    break;
+                default:
+                    break;
+            }             
+            return Expression.Lambda<Func<T, bool>>(exp, new[] { parameter });
+        }        
+
+        public static Expression<Func<T, bool>> Or<T>(this Expression<Func<T, bool>> left, Expression<Func<T, bool>> right) where T : class
         {
             var parameter = Expression.Parameter(typeof(T));
-            var left = Expression.Property(parameter, orderByPropName ?? Constants.DbConstants.Id);
-            var castedValue = Expression.Convert(Expression.Constant(value.ChangeType(left.Type)), left.Type);
-            var lessThanExpr = Expression.Equal(left, castedValue);
-            return Expression.Lambda<Func<T, bool>>(lessThanExpr, new[] { parameter });
+            var exp = Expression.Or(left, right);
+            return Expression.Lambda<Func<T, bool>>(exp, new[] { parameter });
         }
     }
 }

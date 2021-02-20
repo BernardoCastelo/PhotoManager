@@ -37,7 +37,7 @@ namespace DataLayer
             where TProp : class;
         #endregion
 
-            #region OCM
+        #region OCM
         EntityEntry<TTable> Add<TTable>(TTable entity) where TTable : class;
         EntityEntry<TTable> Remove<TTable>(TTable entity) where TTable : class;
         EntityEntry<TTable> Update<TTable>(TTable entity) where TTable : class;

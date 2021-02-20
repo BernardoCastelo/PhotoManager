@@ -27,5 +27,13 @@
             public const int ThumbHeight = 180;
             public const int ThumbMultiplier = 20;
         }
+
+        public enum WhereConditions
+        {
+            LessOrEqualThan,
+            GreaterOrEqualThan,
+            Equal,
+            NotEqual
+        }
     }
 }

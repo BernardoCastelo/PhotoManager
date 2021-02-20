@@ -30,29 +30,17 @@ namespace DataLayer
             return newEntity.Entity;
         }
 
-        public T Select(int id)
-        {
-            return DbContainer.Select<T>(id);
-        }
+        public T Select(int id) =>
+            DbContainer.Select<T>(id);
 
-        public IEnumerable<T> Select(int skip, int take, string orderBy = null, bool orderByDescending = false)
-        {
-            return DbContainer.Select<T>(skip, take, orderBy, orderByDescending);
-        }
+        public IEnumerable<T> Select(int skip, int take, string orderBy = null, bool orderByDescending = false) =>
+            DbContainer.Select<T>(skip, take, orderBy, orderByDescending);
 
-        public IEnumerable<T> Select(int skip, int take, string orderBy = null, bool orderByDescending = false, IEnumerable<Filter> filters = null)
-        {
-            if(filters != null)
-            {
-                return DbContainer.Select<T>(skip, take, orderBy, orderByDescending, filters);
-            }
-            return DbContainer.Select<T>(skip, take, orderBy, orderByDescending);
-        }
+        public IEnumerable<T> Select(int skip, int take, string orderBy = null, bool orderByDescending = false, IEnumerable<Filter> filters = null) =>
+            DbContainer.Select<T>(skip, take, orderBy, orderByDescending, filters);
 
-        public IEnumerable<T> SelectAll()
-        {
-            return DbContainer.SelectAll<T>();
-        }
+        public IEnumerable<T> SelectAll() =>
+            DbContainer.SelectAll<T>();
 
         public T Update(T entity)
         {

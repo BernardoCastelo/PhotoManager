@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Common.Constants;
 
 namespace DataLayer
 {
@@ -100,17 +101,39 @@ namespace DataLayer
 
                 foreach (var filter in filters)
                 {
-                    if (filter.LowerValue != null)
+                    if (!filter.Negate)
                     {
-                        queriable = queriable.Where(filter.FieldName.GetGreaterThanExpression<TTable>(filter.LowerValue));
+                        queriable = queriable.Where(filter.FieldName.GetExpression<TTable>(filter.Value, WhereConditions.Equal));
+
+                        if (filter.LowerValue != null)
+                        {
+                            queriable = queriable.Where(filter.FieldName.GetExpression<TTable>(filter.LowerValue, WhereConditions.GreaterOrEqualThan));
+                        } 
+                        if (filter.UpperValue != null)
+                        {
+                            queriable = queriable.Where(filter.FieldName.GetExpression<TTable>(filter.UpperValue, WhereConditions.LessOrEqualThan));
+                        }
                     }
-                    if (filter.Value != null)
+                    else
                     {
-                        queriable = queriable.Where(filter.FieldName.GetEqualExpression<TTable>(filter.Value));
-                    }
-                    if (filter.UpperValue != null)
-                    {
-                        queriable = queriable.Where(filter.FieldName.GetLessThanExpression<TTable>(filter.UpperValue));
+                        queriable = queriable.Where(filter.FieldName.GetExpression<TTable>(filter.Value, WhereConditions.NotEqual));
+
+                        if (filter.LowerValue != null && filter.UpperValue != null)
+                        {
+                            queriable = queriable.Where(
+                                filter.FieldName.GetExpression<TTable>(filter.LowerValue, WhereConditions.LessOrEqualThan)
+                                .Or(filter.FieldName.GetExpression<TTable>(filter.UpperValue, WhereConditions.GreaterOrEqualThan)));
+                        }
+
+                        if (filter.LowerValue == null && filter.UpperValue != null)
+                        {
+                            queriable = queriable.Where(filter.FieldName.GetExpression<TTable>(filter.UpperValue, WhereConditions.GreaterOrEqualThan));
+                        }
+
+                        if (filter.LowerValue != null && filter.UpperValue == null)
+                        {
+                            queriable = queriable.Where(filter.FieldName.GetExpression<TTable>(filter.UpperValue, WhereConditions.LessOrEqualThan));
+                        }
                     }
                 }
 

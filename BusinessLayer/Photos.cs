@@ -126,12 +126,31 @@ namespace BusinessLayer
             }
         }
 
-        public IEnumerable<Photo> Get(int skip, int take, string orderBy = null, bool orderByDescending = false, IEnumerable<Filter> filters = null)
+        public IEnumerable<Photo> Get(int skip, int take, string orderBy = null, bool orderByDescending = false, List<Filter> filters = null)
         {
             try
             {
                 if(filters?.Any() ?? false)
                 {
+                    filters.Add(new Filter 
+                    {
+                        Negate = true,
+                        FieldName = nameof(Photo.Thumbnail),
+                        Value = null
+                    });
+
+                    filters.ForEach(filter =>
+                    {
+                        if(filter.FieldName.ToLower() == nameof(Photo.Exposure).ToLower())
+                        {
+                            filter.FieldName = nameof(Photo.ExposureAsNumber);
+                        }
+                        if (filter.FieldName.ToLower() == nameof(Photo.FStop).ToLower())
+                        {
+                            filter.FieldName = nameof(Photo.FStopAsNumber);
+                        }
+                    });
+
                     return photoRepository.Select(skip, take, GetOrderBy(orderBy), orderByDescending, filters);
                 }
 
