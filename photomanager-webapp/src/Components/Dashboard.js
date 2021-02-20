@@ -35,7 +35,7 @@ class Dashboard extends Component {
   }
 
   render() {
-    let jsx = null;
+    let jsx = <SideDrawer searchClick={this.SearchClickHandler} />;
     const photos = this.state.photos;
 
     if (photos != null && photos.some(p => p)) {
@@ -169,7 +169,6 @@ class Dashboard extends Component {
     this.setState({
       isLoading: true
     });
-    console.log(this.filters);
     const newFiles = await this.httpService.GetImages(this.skip, TAKE, this.orderByField, this.orderByDescending, this.filters);
     this.skip += TAKE;
     return newFiles;

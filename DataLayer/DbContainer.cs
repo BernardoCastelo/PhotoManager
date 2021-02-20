@@ -103,12 +103,14 @@ namespace DataLayer
                 {
                     if (!filter.Negate)
                     {
-                        queriable = queriable.Where(filter.FieldName.GetExpression<TTable>(filter.Value, WhereConditions.Equal));
-
+                        if (filter.LowerValue == null && filter.UpperValue == null)
+                        {
+                            queriable = queriable.Where(filter.FieldName.GetExpression<TTable>(filter.Value, WhereConditions.Equal));
+                        }
                         if (filter.LowerValue != null)
                         {
                             queriable = queriable.Where(filter.FieldName.GetExpression<TTable>(filter.LowerValue, WhereConditions.GreaterOrEqualThan));
-                        } 
+                        }
                         if (filter.UpperValue != null)
                         {
                             queriable = queriable.Where(filter.FieldName.GetExpression<TTable>(filter.UpperValue, WhereConditions.LessOrEqualThan));
@@ -116,7 +118,10 @@ namespace DataLayer
                     }
                     else
                     {
-                        queriable = queriable.Where(filter.FieldName.GetExpression<TTable>(filter.Value, WhereConditions.NotEqual));
+                        if (filter.LowerValue == null && filter.UpperValue == null)
+                        {
+                            queriable = queriable.Where(filter.FieldName.GetExpression<TTable>(filter.Value, WhereConditions.NotEqual));
+                        }
 
                         if (filter.LowerValue != null && filter.UpperValue != null)
                         {

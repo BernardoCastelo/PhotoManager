@@ -6,26 +6,12 @@ import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
 import styled from "styled-components";
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import Typography from '@material-ui/core/Typography';
-import Slider from '@material-ui/core/Slider';
-
-const MINISO = 64;
-const MAXISO = 50000;
-let isoMarks = [
-  { value: 1, label: MINISO },
-  { value: 2, label: 200 },
-  { value: 3, label: 400 },
-  { value: 4, label: 800 },
-  { value: 5, label: 1600 },
-  { value: 6, label: 3200 },
-  { value: 7, label: 6400 },
-  { value: 8, label: 12800 },
-  { value: 9, label: MAXISO }
-];
+import FilterSlider from './FilterSlider';
+import * as constants from '../../Constants/Constants';
 
 const useStyles = makeStyles({
   nameDivs: {
@@ -87,35 +73,28 @@ const IconButtonWrapper = styled.div`
 const SideDrawer = (props) => {
   const classes = useStyles();
   
-  const [isoState, setIsoState] = React.useState([1, 9]);
+  const [isoFilter, setIsoFilter] = React.useState(null);
+  const [exposureFilter, setExposureFilter] = React.useState(null);
+  const [fStopFilter, setFStopFilter] = React.useState(null);
+  const [FocalLengthFilter, setAppertureFilter] = React.useState(null);
+
   const [drawerState, setDrawerState] = React.useState({ drawer: false });
   const [OrderByState, setOrderByState] = React.useState({ orderByDescending: false, filter: '', name: 'hai' });
 
-  function valueLabelFormat(value) {
-    return isoMarks[value - 1].label;
-  }
-
-  const handleIsoSliderChange = (event, newValue) => {
-    setIsoState(newValue);
-  };
-
   const handleSearchBtnClick = (event) => {
     toggleDrawer(false)(event);
-    const isoValue = isoState.map(iso => valueLabelFormat(iso));
-    let filters = null;
-    if(isoValue){
-      filters = [
-        {
-          FieldName: "Iso",
-          LowerValue: isoValue[0],
-          UpperValue: isoValue[1]
-        }
-      ];
-    }
+    let appliedFilters = [];
+
+    if (isoFilter) appliedFilters.push(isoFilter);
+    if (exposureFilter) appliedFilters.push(exposureFilter);
+    if (fStopFilter) appliedFilters.push(fStopFilter);
+    if (FocalLengthFilter) appliedFilters.push(FocalLengthFilter);
+      
     props.searchClick({
       orderByDescending: OrderByState.orderByDescending,
       filter: OrderByState.filter,
-      filters});
+      filters: appliedFilters
+    });
   }
 
   const toggleDrawer = (open) => (event) => {
@@ -212,24 +191,10 @@ const SideDrawer = (props) => {
               </form>
             </div>
             <div className={classes.divider}>
-              {/* <form className={classes.container + ' ' + classes.root} noValidate autoComplete="off">
-                <TextField className={classes.textField + ' ' + classes.root} id="standard-basic" label="Exposure" type="number" InputLabelProps={{ shrink: true, }} />
-                <TextField className={classes.textField + ' ' + classes.root} id="standard-basic" label="Apperture" type="number" InputLabelProps={{ shrink: true, }} />
-                <TextField className={classes.textField + ' ' + classes.root} id="standard-basic" label="Focal Length" type="number" InputLabelProps={{ shrink: true, }} />
-              </form> */}
-              <Typography id="iso-slider" gutterBottom>ISO</Typography>
-              <Slider
-                value={isoState}
-                onChange={handleIsoSliderChange}
-                valueLabelDisplay="off"
-                step={null}
-                marks={isoMarks}
-                min={1}
-                max={9}
-                getAriaValueText={valueLabelFormat}
-                valueLabelFormat={valueLabelFormat}
-                aria-labelledby="iso-slider"
-              />
+              <FilterSlider type={constants.ISO} marks={constants.ISOMARKS} setValue={setIsoFilter} />
+              <FilterSlider type={constants.EXPOSURE} marks={constants.EXPOSUREMARKS} setValue={setExposureFilter} />
+              <FilterSlider type={constants.FSTOP} marks={constants.FSTOPMARKS} setValue={setFStopFilter} />
+              <FilterSlider type={constants.FOCALLENGTH} marks={constants.FOCALLENGTHMARKS} setValue={setAppertureFilter} />
             </div>
           </Paper>
 
