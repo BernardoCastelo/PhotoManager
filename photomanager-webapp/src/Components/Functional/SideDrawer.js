@@ -72,11 +72,13 @@ const IconButtonWrapper = styled.div`
 
 const SideDrawer = (props) => {
   const classes = useStyles();
-  
+
   const [isoFilter, setIsoFilter] = React.useState(null);
   const [exposureFilter, setExposureFilter] = React.useState(null);
   const [fStopFilter, setFStopFilter] = React.useState(null);
   const [focalLengthFilter, setFocalLengthFilter] = React.useState(null);
+  const [toDateFilter, setToDateFilter] = React.useState('');
+  const [fromDateFilter, setFromDateFilter] = React.useState('');
 
   const [drawerState, setDrawerState] = React.useState({ drawer: false });
   const [OrderByState, setOrderByState] = React.useState({ orderByDescending: false, filter: '', name: 'hai' });
@@ -89,7 +91,15 @@ const SideDrawer = (props) => {
     if (exposureFilter) appliedFilters.push(exposureFilter);
     if (fStopFilter) appliedFilters.push(fStopFilter);
     if (focalLengthFilter) appliedFilters.push(focalLengthFilter);
-      
+    if (toDateFilter || fromDateFilter) {
+      appliedFilters.push(
+        {
+          FieldName: constants.DATETAKEN,
+          LowerValue: new Date(fromDateFilter),
+          UpperValue: new Date(new Date(toDateFilter).setHours(23, 59, 59))
+        });
+    } 
+
     props.searchClick({
       orderByDescending: OrderByState.orderByDescending,
       filter: OrderByState.filter,
@@ -119,6 +129,14 @@ const SideDrawer = (props) => {
     });
   };
 
+  const handleToDateChange = (event) => {
+    setToDateFilter(event.target.value);
+  };
+
+  const handleFromDateChange = (event) => {
+    setFromDateFilter(event.target.value);
+  };
+
   return (
     <div>
       <Fab
@@ -144,14 +162,14 @@ const SideDrawer = (props) => {
                     id: 'order-by-select',
                   }}
                 >
-                  <option value={'exposure'}>Exposure</option>
-                  <option value={'dateTaken'}>Date Taken</option>
-                  <option value={'focalLength'}>Focal Length</option>
-                  <option value={'iso'}>ISO</option>
-                  <option value={'fStop'}>F-Stop</option>
+                  <option value={constants.EXPOSURE}>Exposure</option>
+                  <option value={constants.DATETAKEN}>Date Taken</option>
+                  <option value={constants.FOCALLENGTH}>Focal Length</option>
+                  <option value={constants.ISO}>ISO</option>
+                  <option value={constants.FSTOP}>F-Stop</option>
                 </Select>
               </FormControl>
-              <IconButtonWrapper rotate={OrderByState.orderByDescending? 1 : 0}>
+              <IconButtonWrapper rotate={OrderByState.orderByDescending ? 1 : 0}>
                 <Fab
                   className={classes['MuiFab-root']}
                   color="primary"
@@ -168,7 +186,9 @@ const SideDrawer = (props) => {
             <div style={{ display: 'ruby' }}>
               <form className={classes.container + ' ' + classes.root} noValidate>
                 <TextField
-                  id="date"
+                  id="dateFrom"
+                  value={fromDateFilter}
+                  onChange={handleFromDateChange}
                   label="From"
                   type="date"
                   className={classes.textField + ' ' + classes.root}
@@ -179,7 +199,9 @@ const SideDrawer = (props) => {
               </form>
               <form className={classes.container + ' ' + classes.root} noValidate>
                 <TextField
-                  id="date"
+                  id="dateTo"
+                  value={toDateFilter}
+                  onChange={handleToDateChange}
                   label="To"
                   type="date"
                   className={classes.textField + ' ' + classes.root}
@@ -190,10 +212,10 @@ const SideDrawer = (props) => {
               </form>
             </div>
             <div className={classes.divider}>
-              <FilterSlider type={constants.ISO} marks={constants.ISOMARKS} setValue={setIsoFilter} initialFilter={isoFilter}/>
-              <FilterSlider type={constants.EXPOSURE} marks={constants.EXPOSUREMARKS} setValue={setExposureFilter} initialFilter={exposureFilter}/>
-              <FilterSlider type={constants.FSTOP} marks={constants.FSTOPMARKS} setValue={setFStopFilter} initialFilter={fStopFilter}/>
-              <FilterSlider type={constants.FOCALLENGTH} marks={constants.FOCALLENGTHMARKS} setValue={setFocalLengthFilter} initialFilter={focalLengthFilter}/>
+              <FilterSlider type={constants.ISO} marks={constants.ISOMARKS} setValue={setIsoFilter} initialFilter={isoFilter} />
+              <FilterSlider type={constants.EXPOSURE} marks={constants.EXPOSUREMARKS} setValue={setExposureFilter} initialFilter={exposureFilter} />
+              <FilterSlider type={constants.FSTOP} marks={constants.FSTOPMARKS} setValue={setFStopFilter} initialFilter={fStopFilter} />
+              <FilterSlider type={constants.FOCALLENGTH} marks={constants.FOCALLENGTHMARKS} setValue={setFocalLengthFilter} initialFilter={focalLengthFilter} />
             </div>
           </Paper>
 

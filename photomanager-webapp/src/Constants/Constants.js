@@ -1,3 +1,4 @@
+export const DATETAKEN = "dateTaken";
 
 /* ISO */
 export const ISO = "Iso";

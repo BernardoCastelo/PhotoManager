@@ -47,6 +47,11 @@ namespace Common
                 t = Nullable.GetUnderlyingType(t);
             }
 
+            if (value is DateTime dateTime && t == typeof(DateTimeOffset))
+            {
+                return new DateTimeOffset(dateTime);
+            }
+
             return Convert.ChangeType(value, t);
         }
 
@@ -84,9 +89,9 @@ namespace Common
                     break;
                 default:
                     break;
-            }             
+            }
             return Expression.Lambda<Func<T, bool>>(exp, new[] { parameter });
-        }        
+        }
 
         public static Expression<Func<T, bool>> Or<T>(this Expression<Func<T, bool>> left, Expression<Func<T, bool>> right) where T : class
         {
