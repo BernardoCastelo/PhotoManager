@@ -137,7 +137,6 @@ const SideDrawer = (props) => {
               <FormControl className={classes.formControl + ' ' + classes.textField + ' ' + classes.root}>
                 <Select
                   native
-                  defaultValue="Exposure"
                   value={OrderByState.filter}
                   onChange={handleOrderByChange}
                   inputProps={{
@@ -152,7 +151,7 @@ const SideDrawer = (props) => {
                   <option value={'fStop'}>F-Stop</option>
                 </Select>
               </FormControl>
-              <IconButtonWrapper rotate={OrderByState.orderByDescending}>
+              <IconButtonWrapper rotate={OrderByState.orderByDescending? 1 : 0}>
                 <Fab
                   className={classes['MuiFab-root']}
                   color="primary"
