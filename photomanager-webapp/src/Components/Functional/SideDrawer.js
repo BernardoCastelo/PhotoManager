@@ -81,7 +81,7 @@ const SideDrawer = (props) => {
   const [fromDateFilter, setFromDateFilter] = React.useState('');
 
   const [drawerState, setDrawerState] = React.useState({ drawer: false });
-  const [OrderByState, setOrderByState] = React.useState({ orderByDescending: false, filter: '', name: 'hai' });
+  const [OrderByState, setOrderByState] = React.useState({ orderByDescending: true, filter: '', name: 'hai' });
 
   const handleSearchBtnClick = (event) => {
     toggleDrawer(false)(event);
@@ -162,8 +162,8 @@ const SideDrawer = (props) => {
                     id: 'order-by-select',
                   }}
                 >
-                  <option value={constants.EXPOSURE}>Exposure</option>
                   <option value={constants.DATETAKEN}>Date Taken</option>
+                  <option value={constants.EXPOSURE}>Exposure</option>
                   <option value={constants.FOCALLENGTH}>Focal Length</option>
                   <option value={constants.ISO}>ISO</option>
                   <option value={constants.FSTOP}>F-Stop</option>

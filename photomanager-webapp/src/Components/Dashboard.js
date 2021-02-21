@@ -9,14 +9,15 @@ import './Dashboard.css';
 import PhotoCard from './Functional/PhotoCard';
 import PhotoPopup from './Functional/PhotoPopup';
 import SideDrawer from './Functional/SideDrawer';
+import * as constants from '../Constants/Constants';
 
 const DIMMED = { filter: 'brightness(25%)' };
 const DIMMED_DEFAULT = { filter: 'brightness(100%)' }
 const SPINNER = <CircularProgress className="CustomCircularProgress" />;
 let TAKE = 250;
 const DEFAULTIMAGERATIO = 1.5;
-const ORDERBY = 'exposure';
-const ORDERBYDESCENDING = false;
+const ORDERBY = constants.DATETAKEN;
+const ORDERBYDESCENDING = true;
 
 class Dashboard extends Component {
   constructor(props) {
