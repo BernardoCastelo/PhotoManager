@@ -158,6 +158,10 @@ class Dashboard extends Component {
   //#region WebMethods
 
   async ResetList() {
+    this.setState({
+      photos: [],
+      isLoading: true
+    });
     this.skip = 0;
     this.FetchFreshData().then((response) => {
       if (response) {
