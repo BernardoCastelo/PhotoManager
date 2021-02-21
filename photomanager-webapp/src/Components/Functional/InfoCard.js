@@ -17,9 +17,7 @@ const InfoCard = (props) => {
   return (
     <Chip className={classes.card}
       variant='outlined'
-      size='large'
       label={props.label}
-      color='white'
     />
   )
 }

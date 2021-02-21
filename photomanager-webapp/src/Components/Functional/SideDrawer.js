@@ -76,7 +76,7 @@ const SideDrawer = (props) => {
   const [isoFilter, setIsoFilter] = React.useState(null);
   const [exposureFilter, setExposureFilter] = React.useState(null);
   const [fStopFilter, setFStopFilter] = React.useState(null);
-  const [FocalLengthFilter, setAppertureFilter] = React.useState(null);
+  const [focalLengthFilter, setFocalLengthFilter] = React.useState(null);
 
   const [drawerState, setDrawerState] = React.useState({ drawer: false });
   const [OrderByState, setOrderByState] = React.useState({ orderByDescending: false, filter: '', name: 'hai' });
@@ -88,7 +88,7 @@ const SideDrawer = (props) => {
     if (isoFilter) appliedFilters.push(isoFilter);
     if (exposureFilter) appliedFilters.push(exposureFilter);
     if (fStopFilter) appliedFilters.push(fStopFilter);
-    if (FocalLengthFilter) appliedFilters.push(FocalLengthFilter);
+    if (focalLengthFilter) appliedFilters.push(focalLengthFilter);
       
     props.searchClick({
       orderByDescending: OrderByState.orderByDescending,
@@ -191,10 +191,10 @@ const SideDrawer = (props) => {
               </form>
             </div>
             <div className={classes.divider}>
-              <FilterSlider type={constants.ISO} marks={constants.ISOMARKS} setValue={setIsoFilter} />
-              <FilterSlider type={constants.EXPOSURE} marks={constants.EXPOSUREMARKS} setValue={setExposureFilter} />
-              <FilterSlider type={constants.FSTOP} marks={constants.FSTOPMARKS} setValue={setFStopFilter} />
-              <FilterSlider type={constants.FOCALLENGTH} marks={constants.FOCALLENGTHMARKS} setValue={setAppertureFilter} />
+              <FilterSlider type={constants.ISO} marks={constants.ISOMARKS} setValue={setIsoFilter} initialFilter={isoFilter}/>
+              <FilterSlider type={constants.EXPOSURE} marks={constants.EXPOSUREMARKS} setValue={setExposureFilter} initialFilter={exposureFilter}/>
+              <FilterSlider type={constants.FSTOP} marks={constants.FSTOPMARKS} setValue={setFStopFilter} initialFilter={fStopFilter}/>
+              <FilterSlider type={constants.FOCALLENGTH} marks={constants.FOCALLENGTHMARKS} setValue={setFocalLengthFilter} initialFilter={focalLengthFilter}/>
             </div>
           </Paper>
 

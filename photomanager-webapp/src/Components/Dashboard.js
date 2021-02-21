@@ -25,67 +25,74 @@ class Dashboard extends Component {
 
     this.state = {
       photos: [],
-      isLoading: false,
+      isLoading: true,
       isPoppedUp: false,
       loadedFullRes: '',
       loadedFIle: ''
     };
-    this.FetchData();
-    TAKE = 100;
   }
 
+  componentDidMount() {
+    this.FetchData();
+    TAKE = 100;
+}
+
   render() {
-    let jsx = <SideDrawer searchClick={this.SearchClickHandler} />;
+    let photoGrid = null;
     const photos = this.state.photos;
+    const dimmer = this.state.isLoading ? DIMMED : DIMMED_DEFAULT;
 
     if (photos != null && photos.some(p => p)) {
-      const dimmer = this.state.isLoading ? DIMMED : DIMMED_DEFAULT;
-      jsx = (
-        <div id="di" onScroll={this.ScrollHandler} className="OverflowingDiv">
-          {/* Side Drawer */}
-          <SideDrawer searchClick={this.SearchClickHandler} />
-
-          {/* Loading Spinner */}
-          {this.state.isLoading ? SPINNER : null}
-
-          {/* Full resolution image popup */}
-          <Popper
-            id='popper'
-            open={this.state.isPoppedUp}
-            transition
-            style={{ position: 'absolute', bottom: '50%', right: '50%', width: '90vw' }}
-            anchorEl={document.getElementById('di')}
-            onClick={this.PopperClickHandler}>
-            {({ TransitionProps }) => (
-              <Fade {...TransitionProps} timeout={350}>
-                <PhotoPopup fullResolutionData={this.state.loadedFullRes} file={this.state.loadedFIle} />
-              </Fade>
-            )}
-          </Popper>
-
-          {/* Image Tiles */}
-          <GridList cellHeight={120} cols={24} style={dimmer}>
-            {photos.map((image) => (
-              <GridListTile key={image.id} cols={this.GetImageColumnSize(image)}>
-                <PhotoCard
-                  file={image}
-                  clicked={() => this.PhotoClickHandler(image.id)}
-                />
-              </GridListTile>
-            ))}
-          </GridList>
-
-        </div>
+      photoGrid = (
+        <GridList cellHeight={120} cols={24} style={dimmer}>
+          {photos.map((image) => (
+            <GridListTile key={image.id} cols={this.GetImageColumnSize(image)}>
+              <PhotoCard
+                file={image}
+                clicked={() => this.PhotoClickHandler(image.id)}
+              />
+            </GridListTile>
+          ))}
+        </GridList>
       );
     }
+    return (
+      <div id="di" onScroll={this.ScrollHandler} className="OverflowingDiv">
+        {/* Side Drawer */}
+        <SideDrawer searchClick={this.SearchClickHandler} />
 
-    return jsx;
+        {/* Loading Spinner */}
+        {this.state.isLoading ? SPINNER : null}
+
+        {/* Full resolution image popup */}
+        <Popper
+          id='popper'
+          open={this.state.isPoppedUp}
+          transition
+          style={{ position: 'absolute', bottom: '50%', right: '50%', width: '90vw' }}
+          anchorEl={document.getElementById('di')}
+          onClick={this.PopperClickHandler}>
+          {({ TransitionProps }) => (
+            <Fade {...TransitionProps} timeout={350}>
+              <PhotoPopup fullResolutionData={this.state.loadedFullRes} file={this.state.loadedFIle} />
+            </Fade>
+          )}
+        </Popper>
+
+        {/* Image Tiles */}
+        {photoGrid}
+
+      </div>
+    );
   }
 
   //#region Generic Methods
 
   GetImageColumnSize(image) {
     const ratio = image.width / image.height;
+    if (ratio <= 1) { 
+      return 1;
+    }
     if (ratio <= DEFAULTIMAGERATIO) {
       return 2;
     }
@@ -134,7 +141,6 @@ class Dashboard extends Component {
       .then(response => {
         if (response) {
           const img = this.state.photos.find(p => p.id === id);
-
           this.setState({
             loadedFullRes: response.data,
             isLoading: false,

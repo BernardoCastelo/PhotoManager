@@ -13,7 +13,10 @@ const FilterSlider = (props) => {
     
   });
 
-  const [state, setState] = React.useState([1, max]);
+  const [state, setState] = React.useState([
+    props.initialFilter?.LowerValue != null? indexFromValue(props.initialFilter.LowerValue) : 1, 
+    props.initialFilter?.UpperValue != null? indexFromValue(props.initialFilter.UpperValue) : max
+  ]);
 
   const handleSliderChange = (event, newIndex) => {
     setState(newIndex);
@@ -27,6 +30,10 @@ const FilterSlider = (props) => {
 
   function valueFormat(index) {
     return props.marks[index - 1].value;
+  }
+
+  function indexFromValue(value) {
+    return props.marks.find(m => m.value === value)?.index;
   }
 
   function makeFilter() {
