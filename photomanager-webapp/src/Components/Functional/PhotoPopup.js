@@ -1,6 +1,7 @@
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import InfoCard from './InfoCard';
+import CategoryList from './CategoryList';
 
 const useStyles = makeStyles({
   image: {
@@ -41,6 +42,7 @@ const PhotoPopup = (props) => {
   const isoCard = props.file.iso ? <InfoCard label={"ISO: " + props.file.iso} /> : null;
   const exposureCard = props.file.exposure ? <InfoCard label={"Exposure: " + props.file.exposure} /> : null;
   const fstopCard = props.file.fStop ? <InfoCard label={"FStop: " + props.file.fStop} /> : null;
+ 
 
   return (
     <div>
@@ -59,6 +61,7 @@ const PhotoPopup = (props) => {
         {exposureCard}
         {fstopCard}
       </div>
+      <CategoryList/>
     </div>
   );
 };

@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles({
   card: {
     color: "white",
-    background: 'cadetblue',
     opacity: '75%',
     fontSize: 'small',
     marginLeft: '10px'
@@ -13,9 +12,13 @@ const useStyles = makeStyles({
 });
 
 const InfoCard = (props) => {
+
+  const background = props.background ? { background: props.background } : { background: "darkcyan" };
+
   const classes = useStyles();
+
   return (
-    <Chip className={classes.card}
+    <Chip className={classes.card} style={background}
       variant='outlined'
       label={props.label}
     />
