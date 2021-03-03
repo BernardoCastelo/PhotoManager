@@ -72,10 +72,10 @@ class Dashboard extends Component {
           transition
           style={{ position: 'absolute', bottom: '50%', right: '50%', width: '90vw' }}
           anchorEl={document.getElementById('di')}
-          onClick={this.PopperClickHandler}>
+          >
           {({ TransitionProps }) => (
             <Fade {...TransitionProps} timeout={350}>
-              <PhotoPopup fullResolutionData={this.state.loadedFullRes} file={this.state.loadedFIle} />
+              <PhotoPopup onImgClick={this.PopperClickHandler} fullResolutionData={this.state.loadedFullRes} file={this.state.loadedFIle} />
             </Fade>
           )}
         </Popper>

@@ -14,12 +14,11 @@ const useStyles = makeStyles({
     boxShadow: '20px 50px 100px #000',
     marginTop: '-5vh',
   },
-  infoCard: {
+  infoCards: {
     marginTop: '-5vh',
     marginLeft: 'auto',
     marginRight: 'auto',
-    display: 'block',
-    maxWidth: 'max-content'
+    display: 'flex'
   },
   nameCard: {
     marginTop: '5vh',
@@ -42,26 +41,29 @@ const PhotoPopup = (props) => {
   const isoCard = props.file.iso ? <InfoCard label={"ISO: " + props.file.iso} /> : null;
   const exposureCard = props.file.exposure ? <InfoCard label={"Exposure: " + props.file.exposure} /> : null;
   const fstopCard = props.file.fStop ? <InfoCard label={"FStop: " + props.file.fStop} /> : null;
- 
+
 
   return (
-    <div>
+    <div >
       <div className={classes.nameCard}>
         <InfoCard label={props.file.name} />
       </div>
       <img
         className={classes.image}
         src={`data:image/jpeg;base64,${props.fullResolutionData}`}
-        alt={props.file.name} />
-      <div className={classes.infoCard}>
-        {datetimeCard}
-        {focalLength}
-        {dimentionsCard}
-        {isoCard}
-        {exposureCard}
-        {fstopCard}
+        alt={props.file.name}
+        onClick={props.onImgClick}/>
+      <div className={classes.infoCards}>
+        <div style={{ display: 'flex', margin: 'auto' }}>
+          {datetimeCard}
+          {focalLength}
+          {dimentionsCard}
+          {isoCard}
+          {exposureCard}
+          {fstopCard}
+          <CategoryList style={{ float: 'right' }} />
+        </div>
       </div>
-      <CategoryList/>
     </div>
   );
 };
