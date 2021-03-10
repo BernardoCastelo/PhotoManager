@@ -1,23 +1,32 @@
 import React from 'react'
 import Chip from '@material-ui/core/Chip';
 import { makeStyles } from '@material-ui/core/styles';
+import * as constants from '../../Constants/Constants';
 
 const useStyles = makeStyles({
   card: {
-    color: "white",
-    background: 'cadetblue',
+    color: "wheat",
     opacity: '75%',
     fontSize: 'small',
-    marginLeft: '10px'
+    marginLeft: '10px',
+    width: '100%'
   }
 });
 
 const InfoCard = (props) => {
+
+  const background = props.background ? { background: props.background } : { background: constants.DARKSLATEGREY };
+
   const classes = useStyles();
+
   return (
     <Chip className={classes.card}
-      variant='outlined'
+      color="primary"
+      style={background}
+      variant='default'
       label={props.label}
+      avatar={props.avatar}
+      icon={props.icon}
     />
   )
 }
