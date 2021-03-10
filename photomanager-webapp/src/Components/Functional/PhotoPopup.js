@@ -2,6 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import InfoCard from './InfoCard';
 import CategoryList from './CategoryList';
+import * as constants from '../../Constants/Constants';
 
 const useStyles = makeStyles({
   image: {
@@ -12,20 +13,19 @@ const useStyles = makeStyles({
     border: '2px solid white',
     borderRadius: '0.5%',
     boxShadow: '20px 50px 100px #000',
-    marginTop: '-5vh',
+    marginTop: '5vh',
   },
   infoCards: {
     marginTop: '-5vh',
     marginLeft: 'auto',
     marginRight: 'auto',
+    maxWidth: 'max-content',
     display: 'flex'
   },
-  nameCard: {
-    marginTop: '5vh',
-    marginLeft: 'auto',
-    marginRight: 'auto',
+  categoryCard: {
+    top: '7vh',
+    position: 'absolute',
     display: 'block',
-    maxWidth: 'max-content'
   }
 });
 
@@ -41,29 +41,28 @@ const PhotoPopup = (props) => {
   const isoCard = props.file.iso ? <InfoCard label={"ISO: " + props.file.iso} /> : null;
   const exposureCard = props.file.exposure ? <InfoCard label={"Exposure: " + props.file.exposure} /> : null;
   const fstopCard = props.file.fStop ? <InfoCard label={"FStop: " + props.file.fStop} /> : null;
-
+  const nameCard = props.file.name ? <InfoCard label={props.file.name} background={constants.DARKCYAN} /> : null;
 
   return (
     <div >
-      <div className={classes.nameCard}>
-        <InfoCard label={props.file.name} />
-      </div>
       <img
         className={classes.image}
         src={`data:image/jpeg;base64,${props.fullResolutionData}`}
         alt={props.file.name}
-        onClick={props.onImgClick}/>
+        onClick={props.onImgClick} />
       <div className={classes.infoCards}>
-        <div style={{ display: 'flex', margin: 'auto' }}>
-          {datetimeCard}
-          {focalLength}
-          {dimentionsCard}
-          {isoCard}
-          {exposureCard}
-          {fstopCard}
-          <CategoryList style={{ float: 'right' }} />
-        </div>
+        {nameCard}
+        {datetimeCard}
+        {focalLength}
+        {dimentionsCard}
+        {isoCard}
+        {exposureCard}
+        {fstopCard}
       </div>
+      <div className={classes.categoryCard}>
+        <CategoryList />
+      </div>
+
     </div>
   );
 };
