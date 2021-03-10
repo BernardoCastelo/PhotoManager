@@ -1,8 +1,10 @@
-import React from 'react'
-import InfoCard from './InfoCard'
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import { withStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
+import Collapse from '@material-ui/core/Collapse';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import React from 'react';
+import InfoCard from './InfoCard';
+import * as constants from '../../Constants/Constants';
 
 const CategorylistMock = [
   "Abstract",
@@ -23,53 +25,31 @@ const CategorylistMock = [
   "Vehicle"
 ];
 
-const StyledMenu = withStyles({
-  paper: {
-    border: '1px solid #d3d4d5',
-  },
-})((props) => (
-  <Menu
-    elevation={0}
-    getContentAnchorEl={null}
-    style={{ background: 'transparent' }}
-    anchorOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
-    }}
-    {...props}
-  />
-));
 
 const CategoryList = (props) => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleClick = () => {
+    setOpen(!open);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const infoCards = CategorylistMock.map(cat => <MenuItem key={cat}><InfoCard label={cat} background="orangered" /></MenuItem>)
+  const infoCards = CategorylistMock.map(cat =>
+  (
+    <ListItem key={cat}>
+      <InfoCard label={cat} background={constants.DARKSLATEGREY} />
+    </ListItem>
+  ))
 
   return (
     <div>
-      <StyledMenu
-        id="simple-menu"
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        {infoCards}
-      </StyledMenu>
-      <div onClick={handleClick}>
-        <InfoCard label="Categories" background="orangered" />
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          {infoCards}
+        </List>
+      </Collapse>
+
+      <div style={{paddingLeft: '16px', paddingRight: '26px', paddingTop: '8px'}}onClick={handleClick}>
+        <InfoCard label="Categories" background={constants.DARKCYAN} />
       </div>
     </div>
 
