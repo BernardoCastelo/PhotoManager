@@ -5,7 +5,7 @@ namespace PhotoLoader
 {
     public class DbConnector
     {
-        private DbContainer container;
+        private readonly DbContainer container;
         public DbContainer Container => container;
         public DbConnector()
         {

@@ -13,6 +13,7 @@ namespace BusinessLayer
         private readonly IPhotoRepository photoRepository;
         private readonly ICameraRepository cameraRepository;
         private readonly IFileRepository fileRepository;
+
         public Photos(IPhotoRepository photoRepository, ICameraRepository cameraRepository, IFileRepository fileRepository)
         {
             this.photoRepository = photoRepository ?? throw new ArgumentNullException(nameof(photoRepository));
@@ -53,7 +54,7 @@ namespace BusinessLayer
                     Maker = cameraMaker,
                     Model = cameraModel
                 };
-                cameraRepository.Insert(camera);
+                cameraRepository.Add(camera);
             }
 
             var file = fileRepository.Select(filepath);

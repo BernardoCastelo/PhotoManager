@@ -6,7 +6,7 @@ namespace DataLayer
     public class Binder<T>: IBinder
         where T: class, IBaseModel
     {
-        private ModelBuilder modelBuilder;
+        private readonly ModelBuilder modelBuilder;
 
         public Binder(ModelBuilder modelBuilder)
         {

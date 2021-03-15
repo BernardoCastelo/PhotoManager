@@ -15,18 +15,24 @@ namespace PhotoLoader
     {
         static List<FileType> FileTypes;
         static PhotoRepository photoRep;
+        static FileTypeRepository fileTypeRep;
+        static FileRepository fileRep;
         static Photos photos;
         static async Task Main()
         {
-            var container = new DbConnector();
-            photoRep = new PhotoRepository(container.Container);
-            photos = new Photos(photoRep, new CameraRepository(container.Container), new FileRepository(container.Container));
+            var connector = new DbConnector();
 
-            FileTypes = container.Container.SelectAll<FileType>().ToList();
+            photoRep = new PhotoRepository(connector.Container);
+            fileRep = new FileRepository(connector.Container);
+            fileTypeRep = new FileTypeRepository(connector.Container);
+
+            photos = new Photos(photoRep, new CameraRepository(connector.Container), fileRep);
+
+            FileTypes = fileTypeRep.SelectAll().ToList();
             try
             {
 
-                UpdateExposureAndFNumberValues(container.Container);
+                // UpdateExposureAndFNumberValues(connector.Container);
 
                 //long timeTaken = 0;
                 //timeTaken = LoadFolders(container.Container, new DirectoryInfo(Constants.Folders.Main));
@@ -106,7 +112,7 @@ namespace PhotoLoader
                                 image.Dispose();
                                 thumb.Dispose();
                             }
-                            photoRep.Insert(photo);
+                            photoRep.Add(photo);
                         }
                     }
                     else
@@ -240,7 +246,7 @@ namespace PhotoLoader
 
         private static void UpdateExposureAndFNumberValues(DbContainer container)
         {
-            var photos = container.SelectAll<Photo>();
+            var photos = photoRep.SelectAll();
             foreach (var photo in photos)
             {
                 var exposureString = photo.Exposure;

@@ -5,12 +5,10 @@ using System.Linq;
 
 namespace DataLayer
 {
-    public class PhotoRepository : BaseGenericRepository<Photo>, IPhotoRepository
+    public class PhotoRepository : BaseRepository<Photo>, IPhotoRepository
     {
         public PhotoRepository(IDbContainer dbContainer) : base(dbContainer)
-        {
-            this.DbContainer = dbContainer ?? throw new ArgumentNullException(nameof(dbContainer));
-        }
+        { }
 
         public IEnumerable<Photo> SelectThumbnails(int skip, int take, string orderBy = null, bool orderByDescending = false)
         {
