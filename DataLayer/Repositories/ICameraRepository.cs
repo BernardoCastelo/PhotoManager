@@ -2,7 +2,7 @@
 
 namespace DataLayer
 {
-    public interface ICameraRepository: IBaseGenericRepository<Camera>
+    public interface ICameraRepository: IBaseRepository<Camera>
     {
         IEnumerable<Camera> Get(string maker, string model);
 

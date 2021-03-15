@@ -1,6 +1,6 @@
 ﻿namespace DataLayer
 {
-    public interface IFileRepository: IBaseGenericRepository<File>
+    public interface IFileRepository: IBaseRepository<File>
     {
         File Select(string fullpath);
     }

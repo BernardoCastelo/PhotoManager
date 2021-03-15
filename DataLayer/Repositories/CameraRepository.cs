@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace DataLayer
 {
-    public class CameraRepository : BaseGenericRepository<Camera>, ICameraRepository
+    public class CameraRepository : BaseRepository<Camera>, ICameraRepository
     {
         public CameraRepository(IDbContainer dbContainer) : base(dbContainer)
         {
