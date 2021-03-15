@@ -24,6 +24,7 @@ namespace PhotoLoader
 
             photoRep = new PhotoRepository(connector.Container);
             fileRep = new FileRepository(connector.Container);
+            fileTypeRep = new FileTypeRepository(connector.Container);
 
             photos = new Photos(photoRep, new CameraRepository(connector.Container), fileRep);
 
