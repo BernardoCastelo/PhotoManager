@@ -3,10 +3,9 @@ using System.Collections.Generic;
 
 namespace DataLayer
 {
-    public interface IBaseGenericRepository<T> where T : class
+    public interface IBaseRepository<T> 
+        where T : class, IBaseModel, new()
     {
-        IDbContainer DbContainer { get; set; }
-
         T Delete(T entity);
         T Insert(T entity);
         T Select(int id);

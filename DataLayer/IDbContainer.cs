@@ -6,16 +6,9 @@ using System.Collections.Generic;
 
 namespace DataLayer
 {
-    public interface IDbContainer
+    public interface IDbContainer<TTable>
+        where TTable : class, IBaseModel, new()
     {
-        #region DB Sets
-        DbSet<Camera> CameraSet { get; set; }
-        DbSet<Category> CategorySet { get; set; }
-        DbSet<File> FileSet { get; set; }
-        DbSet<FileType> FileTypeSet { get; set; }
-        DbSet<Folder> FolderSet { get; set; }
-        DbSet<Photo> PhotoSet { get; set; }
-        #endregion
 
         #region DBContainer overrides
         int SaveChanges();
@@ -24,23 +17,22 @@ namespace DataLayer
         #region DB Operations
 
         #region Selects
-        TTable Select<TTable>(int id) where TTable : class;
-        IEnumerable<TTable> Select<TTable, TProp>(string property, TProp value)
-            where TTable : class
+        TTable Select(int id);
+        IEnumerable<TTable> Select(IEnumerable<int> ids);
+        IEnumerable<TTable> Select<TProp>(string property, TProp value)
             where TProp : class;
 
-        IEnumerable<TTable> SelectAll<TTable>() where TTable : class;
-        IEnumerable<TTable> Select<TTable>(int skip, int take, string orderByPropName = Constants.DbConstants.Id, bool descending = false) where TTable : class;
-        IEnumerable<TTable> Select<TTable>(int skip, int take, string orderByPropName = Constants.DbConstants.Id, bool descending = false, IEnumerable<Filter> filters = null) where TTable : class;
-        IEnumerable<TTable> Select<TTable, TProp>(int skip, int take, string filterPropertyName, TProp value, string orderByPropName = Constants.DbConstants.Id, bool descending = false)
-            where TTable : class
+        IEnumerable<TTable> SelectAll();
+        IEnumerable<TTable> Select(int skip, int take, string orderByPropName = Constants.DbConstants.Id, bool descending = false);
+        IEnumerable<TTable> Select(int skip, int take, string orderByPropName = Constants.DbConstants.Id, bool descending = false, IEnumerable<Filter> filters = null);
+        IEnumerable<TTable> Select<TProp>(int skip, int take, string filterPropertyName, TProp value, string orderByPropName = Constants.DbConstants.Id, bool descending = false)
             where TProp : class;
         #endregion
 
         #region OCM
-        EntityEntry<TTable> Add<TTable>(TTable entity) where TTable : class;
-        EntityEntry<TTable> Remove<TTable>(TTable entity) where TTable : class;
-        EntityEntry<TTable> Update<TTable>(TTable entity) where TTable : class;
+        EntityEntry<TTable> Add(TTable entity);
+        EntityEntry<TTable> Remove(TTable entity);
+        EntityEntry<TTable> Update(TTable entity);
         #endregion
 
         #endregion

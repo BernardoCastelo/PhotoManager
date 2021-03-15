@@ -10,19 +10,22 @@ using static Common.Constants;
 namespace DataLayer
 {
 
-    public class DbContainer : DbContext, IDbContainer
+    public class DbContainer<TTable> : DbContext, IDbContainer<TTable>
+        where TTable : class, IBaseModel, new()
     {
-        public DbSet<Photo> PhotoSet { get; set; }
-        public DbSet<Folder> FolderSet { get; set; }
-        public DbSet<File> FileSet { get; set; }
-        public DbSet<FileType> FileTypeSet { get; set; }
-        public DbSet<Category> CategorySet { get; set; }
-        public DbSet<Camera> CameraSet { get; set; }
-        public DbContainer(DbContextOptions<DbContainer> options) : base(options)
+        protected DbSet<Photo> PhotoSet { get; set; }
+        protected DbSet<Folder> FolderSet { get; set; }
+        protected DbSet<File> FileSet { get; set; }
+        protected DbSet<FileType> FileTypeSet { get; set; }
+        protected DbSet<Category> CategorySet { get; set; }
+        protected DbSet<Camera> CameraSet { get; set; }
+
+        public DbContainer(DbContextOptions<DbContainer<TTable>> options) 
+            : base(options)
         {
         }
 
-        public TTable Select<TTable>(int id) where TTable : class
+        public TTable Select(int id)
         {
             try
             {
@@ -35,10 +38,22 @@ namespace DataLayer
             }
         }
 
+        public IEnumerable<TTable> Select(IEnumerable<int> ids)
+        {
+            try
+            {
+                var dbset = Helper.GetDbSet<TTable>(this);
+                return dbset.Where(table => ids.Contains(table.Id));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
 
         // Select with Filter
-        public IEnumerable<TTable> Select<TTable, TProp>(string property, TProp value)
-            where TTable : class
+        public IEnumerable<TTable> Select<TProp>(string property, TProp value)
             where TProp : class
         {
             try
@@ -53,7 +68,7 @@ namespace DataLayer
         }
 
         // Select with OrderBy
-        public IEnumerable<TTable> Select<TTable>(int skip, int take, string orderByPropName, bool descending = false) where TTable : class
+        public IEnumerable<TTable> Select(int skip, int take, string orderByPropName, bool descending = false) 
         {
             try
             {
@@ -72,13 +87,12 @@ namespace DataLayer
         }
 
         // Select with OrderBy
-        public IEnumerable<TTable> Select<TTable, TProp>(int skip, int take, string filterPropertyName, TProp value, string orderByPropName = Constants.DbConstants.Id, bool descending = false)
-            where TTable : class
+        public IEnumerable<TTable> Select<TProp>(int skip, int take, string filterPropertyName, TProp value, string orderByPropName = Constants.DbConstants.Id, bool descending = false)
             where TProp : class
         {
             try
             {
-                var queriable = Select<TTable, TProp>(filterPropertyName, value).AsQueryable();
+                var queriable = Select<TProp>(filterPropertyName, value).AsQueryable();
 
                 var sortExpression = orderByPropName.GetKeySelected<TTable>();
 
@@ -93,7 +107,7 @@ namespace DataLayer
         }
 
         // Select with OrderBy and filters
-        public IEnumerable<TTable> Select<TTable>(int skip, int take, string orderByPropName, bool descending, IEnumerable<Filter> filters) where TTable : class
+        public IEnumerable<TTable> Select(int skip, int take, string orderByPropName, bool descending, IEnumerable<Filter> filters) 
         {
             try
             {
@@ -154,7 +168,7 @@ namespace DataLayer
             }
         }
 
-        public IEnumerable<TTable> SelectAll<TTable>() where TTable : class
+        public IEnumerable<TTable> SelectAll() 
         {
             try
             {
@@ -167,7 +181,7 @@ namespace DataLayer
             }
         }
 
-        public override EntityEntry<TTable> Add<TTable>(TTable entity) where TTable : class
+        public EntityEntry<TTable> Add(TTable entity) 
         {
             try
             {
@@ -183,7 +197,7 @@ namespace DataLayer
             }
         }
 
-        public override EntityEntry<TTable> Update<TTable>(TTable entity) where TTable : class
+        public EntityEntry<TTable> Update(TTable entity) 
         {
             try
             {
@@ -199,7 +213,7 @@ namespace DataLayer
             }
         }
 
-        public override EntityEntry<TTable> Remove<TTable>(TTable entity) where TTable : class
+        public EntityEntry<TTable> Remove(TTable entity) 
         {
             try
             {
