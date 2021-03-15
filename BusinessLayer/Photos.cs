@@ -54,7 +54,7 @@ namespace BusinessLayer
                     Maker = cameraMaker,
                     Model = cameraModel
                 };
-                cameraRepository.Insert(camera);
+                cameraRepository.Add(camera);
             }
 
             var file = fileRepository.Select(filepath);

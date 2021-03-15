@@ -2,7 +2,7 @@
 {
     public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
     {
-        public CategoryRepository(IDbContainer<Category> dbContainer) : base(dbContainer)
+        public CategoryRepository(IDbContainer dbContainer) : base(dbContainer)
         { }
     }
 }

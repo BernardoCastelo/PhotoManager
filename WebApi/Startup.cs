@@ -1,12 +1,12 @@
+using BusinessLayer;
 using DataLayer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Microsoft.EntityFrameworkCore;
-using BusinessLayer;
 
 namespace WebApi
 {
@@ -31,7 +31,7 @@ namespace WebApi
 
             #region Database
             string connectionString = Configuration.GetConnectionString("PhotoManager");
-            services.AddDbContext<DbContainer>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<IDbContainer, DbContainer>(options => options.UseSqlServer(connectionString));
             #endregion
 
             #region DataLayer
@@ -39,10 +39,12 @@ namespace WebApi
             services.AddTransient(typeof(ICameraRepository), typeof(CameraRepository));
             services.AddTransient(typeof(IFileRepository), typeof(FileRepository));
             services.AddTransient(typeof(IPhotoRepository), typeof(PhotoRepository));
+            services.AddTransient(typeof(ICategoryRepository), typeof(CategoryRepository));
             #endregion
 
             #region BusinessLayer
             services.AddTransient(typeof(IPhotos), typeof(Photos));
+            services.AddTransient(typeof(ICategories), typeof(Categories));
             #endregion
 
             /* ToDo */
