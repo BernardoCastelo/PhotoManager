@@ -48,5 +48,17 @@ export default class HttpService {
     }
   }
 
+  async GetCategories() {
+    try {
+      return this.instance.get('/Category/GetAll/')
+        .catch(function (error) {
+          HandleError(error);
+        });
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
   instance = null;
 }

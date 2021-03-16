@@ -11,10 +11,11 @@ import PhotoPopup from './Functional/PhotoPopup';
 import SideDrawer from './Functional/SideDrawer';
 import * as constants from '../Constants/Constants';
 
+const TAKE = 200;
+
 const DIMMED = { filter: 'brightness(25%)' };
 const DIMMED_DEFAULT = { filter: 'brightness(100%)' }
 const SPINNER = <CircularProgress className="CustomCircularProgress" />;
-let TAKE = 250;
 const DEFAULTIMAGERATIO = 1.5;
 const ORDERBY = constants.DATETAKEN;
 const ORDERBYDESCENDING = true;
@@ -26,6 +27,7 @@ class Dashboard extends Component {
 
     this.state = {
       photos: [],
+      categories: [],
       isLoading: true,
       isPoppedUp: false,
       loadedFullRes: '',
@@ -35,8 +37,8 @@ class Dashboard extends Component {
 
   componentDidMount() {
     this.FetchData();
-    TAKE = 100;
-}
+    this.GetAllCategories();
+  }
 
   render() {
     let photoGrid = null;
@@ -72,10 +74,15 @@ class Dashboard extends Component {
           transition
           style={{ position: 'absolute', bottom: '50%', right: '50%', width: '90vw' }}
           anchorEl={document.getElementById('di')}
-          >
+        >
           {({ TransitionProps }) => (
             <Fade {...TransitionProps} timeout={350}>
-              <PhotoPopup onImgClick={this.PopperClickHandler} fullResolutionData={this.state.loadedFullRes} file={this.state.loadedFIle} />
+              <PhotoPopup
+                onImgClick={this.PopperClickHandler}
+                fullResolutionData={this.state.loadedFullRes}
+                file={this.state.loadedFIle}
+                categories={this.state.categories}
+              />
             </Fade>
           )}
         </Popper>
@@ -91,7 +98,7 @@ class Dashboard extends Component {
 
   GetImageColumnSize(image) {
     const ratio = image.width / image.height;
-    if (ratio <= 1) { 
+    if (ratio <= 1) {
       return 1;
     }
     if (ratio <= DEFAULTIMAGERATIO) {
@@ -198,6 +205,18 @@ class Dashboard extends Component {
         }
       }
     });
+  }
+
+  async GetAllCategories(){
+    this.httpService
+        .GetCategories()
+        .then(response => {
+          if (response) {
+            this.setState({
+              categories: response.data
+            });
+          }
+        });
   }
 
   //#endRegion WebMethods

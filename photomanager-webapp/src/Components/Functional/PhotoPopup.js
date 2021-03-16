@@ -60,7 +60,7 @@ const PhotoPopup = (props) => {
         {fstopCard}
       </div>
       <div className={classes.categoryCard}>
-        <CategoryList />
+        <CategoryList categories={props.categories}/>
       </div>
 
     </div>
