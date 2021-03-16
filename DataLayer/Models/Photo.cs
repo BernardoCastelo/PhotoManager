@@ -7,7 +7,6 @@ namespace DataLayer
         public int Id { get; set; }
         public DateTimeOffset? DateTaken { get; set; }
         public int? CameraId { get; set; }
-        public int? CategoryId { get; set; }
         public int? FileId { get; set; }
         public int? FocalLength { get; set; }
         public int? Height { get; set; }
