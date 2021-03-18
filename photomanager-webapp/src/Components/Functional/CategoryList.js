@@ -4,9 +4,25 @@ import ListItem from '@material-ui/core/ListItem';
 import React from 'react';
 import * as constants from '../../Constants/Constants';
 import InfoCard from './InfoCard';
+import CategoryCard from './CategoryCard';
 
 const CategoryList = (props) => {
   const [open, setOpen] = React.useState(false);
+
+  const changedCategoryCard = (categoryId, value) => {
+    if (value) {
+      const category = props.selectedCategories.find(element => element === categoryId);
+      if (!props.selectedCategories.find(element => element === categoryId) && !!category) {
+        props.selectedCategories.push(category);
+      }
+    }
+    else {
+      const category = props.selectedCategories.find(element => element === categoryId);
+      if (!!category) {
+        props.selectedCategories.splice(1, 0, category);
+      }
+    }
+  }
 
   const handleClick = () => {
     setOpen(!open);
@@ -15,7 +31,7 @@ const CategoryList = (props) => {
   const infoCards = props.categories.map(cat =>
   (
     <ListItem key={cat.id}>
-      <InfoCard label={cat.name} background={constants.DARKSLATEGREY} />
+      <CategoryCard id={cat.id} value={!!props.selectedCategories.find(element => element === cat.id)} label={cat.name} changed={changedCategoryCard} />
     </ListItem>
   ))
 

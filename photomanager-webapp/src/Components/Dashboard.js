@@ -28,6 +28,7 @@ class Dashboard extends Component {
     this.state = {
       photos: [],
       categories: [],
+      selectedCategories: [],
       isLoading: true,
       isPoppedUp: false,
       loadedFullRes: '',
@@ -82,6 +83,7 @@ class Dashboard extends Component {
                 fullResolutionData={this.state.loadedFullRes}
                 file={this.state.loadedFIle}
                 categories={this.state.categories}
+                selectedCategories={this.state.selectedCategories}
               />
             </Fade>
           )}
@@ -154,6 +156,16 @@ class Dashboard extends Component {
             isLoading: false,
             isPoppedUp: true,
             loadedFIle: img
+          });
+        }
+      });
+
+      this.httpService
+      .GetPhotoCategories(id)
+      .then(response => {
+        if (response) {
+          this.setState({
+            selectedCategories: response.data
           });
         }
       });

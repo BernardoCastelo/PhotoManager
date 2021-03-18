@@ -60,5 +60,20 @@ export default class HttpService {
     }
   }
 
+  async GetPhotoCategories(photoId) {
+    try {
+      return this.instance.get('/Photo/GetCategories/', {
+        params: {
+          Id: photoId
+        }
+      }).catch(function (error) {
+          HandleError(error);
+        });
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
   instance = null;
 }
