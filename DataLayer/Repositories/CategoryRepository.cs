@@ -10,7 +10,7 @@ namespace DataLayer
             : base(dbContainer)
         { }
 
-        public IEnumerable<Category> GetCategories(int photoId)
+        public IEnumerable<Category> GetByPhotoId(int photoId)
         {
             try
             {
