@@ -8,8 +8,7 @@ const useStyles = makeStyles({
     color: "wheat",
     opacity: '75%',
     fontSize: 'small',
-    marginLeft: '10px',
-    width: '100%'
+    marginLeft: '10px'
   }
 });
 

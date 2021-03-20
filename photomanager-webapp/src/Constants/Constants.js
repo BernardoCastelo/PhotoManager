@@ -1,5 +1,6 @@
 export const DARKCYAN = "rgba(0, 139, 139, 0.5)"
 export const DARKSLATEGREY = "rgba(47, 79, 79, 0.5)"
+export const TRANSPARENTGREY = "rgba(0, 0, 0, 0.1)"
 
 export const DATETAKEN = "dateTaken";
 

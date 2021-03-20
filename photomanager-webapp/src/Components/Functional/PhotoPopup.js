@@ -24,6 +24,7 @@ const useStyles = makeStyles({
   },
   categoryCard: {
     top: '7vh',
+    left: '12vw',
     position: 'absolute',
     display: 'block',
   }

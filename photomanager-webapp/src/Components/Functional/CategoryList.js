@@ -1,12 +1,24 @@
 import Collapse from '@material-ui/core/Collapse';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import * as constants from '../../Constants/Constants';
-import InfoCard from './InfoCard';
 import CategoryCard from './CategoryCard';
+import InfoCard from './InfoCard';
+
+const useStyles = makeStyles({
+  paper: {
+    paddingLeft: '10%',
+    marginBottom: '5%',
+    minWidth: 'max-content',
+    backgroundColor: constants.TRANSPARENTGREY
+  }
+});
 
 const CategoryList = (props) => {
+
+  const classes = useStyles();
+
   const [open, setOpen] = React.useState(false);
 
   const changedCategoryCard = (categoryId, value) => {
@@ -28,19 +40,17 @@ const CategoryList = (props) => {
     setOpen(!open);
   };
 
-  const infoCards = props.categories.map(cat =>
+  const categories = props.categories.map(cat =>
   (
-    <ListItem key={cat.id}>
-      <CategoryCard id={cat.id} value={!!props.selectedCategories.find(element => element === cat.id)} label={cat.name} changed={changedCategoryCard} />
-    </ListItem>
+    <Paper className={classes.paper}>
+      <CategoryCard id={cat.id} value={!!props.selectedCategories.find(element => element.id === cat.id)} label={cat.name} changed={changedCategoryCard} />
+    </Paper>
   ))
 
   return (
     <div>
       <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          {infoCards}
-        </List>
+        {categories}
       </Collapse>
 
       <div style={{ paddingLeft: '16px', paddingRight: '26px', paddingTop: '8px' }} onClick={handleClick}>
