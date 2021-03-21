@@ -36,10 +36,6 @@ const CategoryList = (props) => {
     }
   }
 
-  const handleClick = () => {
-    setOpen(!open);
-  };
-
   const categories = props.categories.map(cat =>
   (
     <Paper className={classes.paper}>
@@ -53,7 +49,7 @@ const CategoryList = (props) => {
         {categories}
       </Collapse>
 
-      <div style={{ paddingLeft: '16px', paddingRight: '26px', paddingTop: '8px' }} onClick={handleClick}>
+      <div style={{ paddingLeft: '16px', paddingRight: '26px', paddingTop: '8px' }} onClick={() => setOpen(!open)}>
         <InfoCard label="Categories" background={constants.DARKCYAN} />
       </div>
     </div>

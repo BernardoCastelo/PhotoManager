@@ -29,7 +29,7 @@ const CategoryCard = (props) => {
             <Switch
               checked={state}
               onChange={handleChange}
-              color="primary"
+              color="default"
               name={props.label}
               inputProps={{ 'aria-label': 'primary checkbox' }}
             />
