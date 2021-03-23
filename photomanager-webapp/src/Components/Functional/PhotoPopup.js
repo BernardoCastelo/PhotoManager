@@ -22,12 +22,6 @@ const useStyles = makeStyles({
     maxWidth: 'max-content',
     display: 'flex'
   },
-  categoryCard: {
-    top: '7vh',
-    left: '12vw',
-    position: 'absolute',
-    display: 'block',
-  }
 });
 
 const PhotoPopup = (props) => {
@@ -36,16 +30,17 @@ const PhotoPopup = (props) => {
 
   const datetime = new Date(props.file.dateTaken);
 
-  const datetimeCard = props.file.dateTaken ? <InfoCard label={"Date: " + datetime.toLocaleString('pt-pt')} /> : null;
-  const focalLength = props.file.focalLength ? <InfoCard label={"FLength: " + props.file.focalLength} /> : null;
+  const datetimeCard = props.file.dateTaken ? <InfoCard label={datetime.toLocaleString('pt-pt')} /> : null;
+  const focalLength = props.file.focalLength ? <InfoCard label={"Focal Length: " + props.file.focalLength + "mm"} /> : null;
   const dimentionsCard = props.file.width && props.file.height ? <InfoCard label={"Size: " + props.file.width + ":" + props.file.height} /> : null;
   const isoCard = props.file.iso ? <InfoCard label={"ISO: " + props.file.iso} /> : null;
   const exposureCard = props.file.exposure ? <InfoCard label={"Exposure: " + props.file.exposure} /> : null;
   const fstopCard = props.file.fStop ? <InfoCard label={"FStop: " + props.file.fStop} /> : null;
   const nameCard = props.file.name ? <InfoCard label={props.file.name} background={constants.DARKCYAN} /> : null;
+  const cateogyList = props.categories?.some(cat => !!cat) ? <CategoryList selectedCategories={props.selectedCategories} categories={props.categories} /> : null;
 
   return (
-    <div >
+    <div>
       <img
         className={classes.image}
         src={`data:image/jpeg;base64,${props.fullResolutionData}`}
@@ -59,11 +54,8 @@ const PhotoPopup = (props) => {
         {isoCard}
         {exposureCard}
         {fstopCard}
+        {cateogyList}
       </div>
-      <div className={classes.categoryCard}>
-        <CategoryList selectedCategories={props.selectedCategories} categories={props.categories}/>
-      </div>
-
     </div>
   );
 };

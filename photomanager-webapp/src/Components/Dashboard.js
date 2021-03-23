@@ -158,7 +158,6 @@ class Dashboard extends Component {
 
   //#endregion
 
-
   //#region WebMethods
 
   async ResetList() {
