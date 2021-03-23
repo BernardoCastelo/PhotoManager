@@ -12,6 +12,8 @@ namespace DataLayer
         DbSet<Category> CategorySet { get; set; }
         DbSet<Camera> CameraSet { get; set; }
 
+        DbSet<PhotoCategory> PhotoCategorySet { get; set; }
+
         #region DBContainer overrides
         int SaveChanges();
         EntityEntry Entry(object entity);

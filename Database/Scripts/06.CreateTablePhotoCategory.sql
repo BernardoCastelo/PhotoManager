@@ -3,32 +3,20 @@
     SET ANSI_NULLS ON
     SET QUOTED_IDENTIFIER ON
 
-    IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Photo]'))
+    IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[PhotoCategory]'))
     BEGIN
-        CREATE TABLE [dbo].[Photo]
+        CREATE TABLE [dbo].[PhotoCategory]
         (
 			[Id] [int] IDENTITY(1,1) NOT NULL,
-            [DateTaken] Datetimeoffset NULL,
-            [CameraId] [int] NULL FOREIGN KEY REFERENCES Camera(Id),
-            [FileId] [int] NULL FOREIGN KEY REFERENCES [File](Id),
-            [FocalLength] [int] NULL,
-            [Height] [int] NULL,
-            [Iso] [int] NULL,
-            [Order] [int] NULL,
-            [Width] [int] NULL,
-            [Exposure] NVARCHAR(1024) NULL,
-            [ExposureAsNumber] NUMERIC(9, 4) NULL,
-            [FStopAsNumber] NUMERIC(5, 2) NULL,
-            [FStop] NVARCHAR(1024) NULL,
-            [Name] NVARCHAR(1024) NOT NULL,
-            [Thumbnail] VARBINARY(MAX) NULL,
-            CONSTRAINT [PK_Photo] PRIMARY KEY CLUSTERED ([Id] ASC)
+            [PhotoId] [int] NOT NULL FOREIGN KEY REFERENCES Photo(Id),
+            [CategoryId] [int] NOT NULL FOREIGN KEY REFERENCES Category(Id),
+            CONSTRAINT [PK_PhotoCategory] PRIMARY KEY CLUSTERED ([Id] ASC)
             WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
         ) ON [PRIMARY]
     END
-	IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[Photo]') AND name = N'IX_Photo_Id')
+	IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[PhotoCategory]') AND name = N'IX_File_Id')
 	BEGIN
-		CREATE UNIQUE INDEX IX_Photo_Id ON [Photo] ([Id])
+		CREATE UNIQUE INDEX IX_File_Id ON [PhotoCategory] ([Id])
 	END
 
     IF @@TRANCOUNT > 0

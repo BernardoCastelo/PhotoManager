@@ -10,15 +10,17 @@ namespace BusinessLayer
 {
     public class Photos : IPhotos
     {
-        private readonly IPhotoRepository photoRepository;
         private readonly ICameraRepository cameraRepository;
+        private readonly ICategoryRepository categoryRepository;
         private readonly IFileRepository fileRepository;
+        private readonly IPhotoRepository photoRepository;
 
-        public Photos(IPhotoRepository photoRepository, ICameraRepository cameraRepository, IFileRepository fileRepository)
+        public Photos(IPhotoRepository photoRepository, ICameraRepository cameraRepository, IFileRepository fileRepository, ICategoryRepository categoryRepository)
         {
-            this.photoRepository = photoRepository ?? throw new ArgumentNullException(nameof(photoRepository));
             this.cameraRepository = cameraRepository ?? throw new ArgumentNullException(nameof(cameraRepository));
+            this.categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository));
             this.fileRepository = fileRepository ?? throw new ArgumentNullException(nameof(fileRepository));
+            this.photoRepository = photoRepository ?? throw new ArgumentNullException(nameof(photoRepository));
         }
 
         public Photo Load(string filepath)
@@ -65,7 +67,6 @@ namespace BusinessLayer
             var photo = new Photo()
             {
                 CameraId = string.IsNullOrEmpty(cameraMaker) && string.IsNullOrEmpty(cameraModel) ? null : camera.Id,
-                CategoryId = null,
                 Name = file.Name,
                 Order = 0,
                 FileId = file.Id,
@@ -180,6 +181,17 @@ namespace BusinessLayer
             }
         }
 
+        public IEnumerable<Category> GetCategories(int id)
+        {
+            try
+            {
+                return categoryRepository.GetByPhotoId(id);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
         private static string GetOrderBy(string orderBy)
         {

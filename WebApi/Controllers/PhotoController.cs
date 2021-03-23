@@ -50,6 +50,20 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
+        public ActionResult<IEnumerable<Photo>> GetCategories(int id)
+        {
+            try
+            {
+                return Ok(photos.GetCategories(id));
+            }
+            catch (Exception exception)
+            {
+                logger.LogError(exception.Message);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet]
         public ActionResult<string> GetBytes(int id)
         {
             try

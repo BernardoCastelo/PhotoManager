@@ -68,4 +68,7 @@
     <None Include="Scripts\01.CreateTableFolder.sql" />
     <None Include="Scripts\02.CreateTableFile.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\06.CreateTablePhotoCategory.sql" />
+  </ItemGroup>
 </Project>

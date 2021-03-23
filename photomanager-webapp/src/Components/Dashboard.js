@@ -1,20 +1,18 @@
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Fade from '@material-ui/core/Fade';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import Popper from '@material-ui/core/Popper';
 import React, { Component } from 'react';
+import * as constants from '../Constants/Constants';
 import HttpService from '../Services/HttpService';
 import './Dashboard.css';
+import LoadingBackdrop from './Functional/LoadingBackdrop';
 import PhotoCard from './Functional/PhotoCard';
 import PhotoPopup from './Functional/PhotoPopup';
 import SideDrawer from './Functional/SideDrawer';
-import * as constants from '../Constants/Constants';
 
-const DIMMED = { filter: 'brightness(25%)' };
-const DIMMED_DEFAULT = { filter: 'brightness(100%)' }
-const SPINNER = <CircularProgress className="CustomCircularProgress" />;
-let TAKE = 250;
+const TAKE = 200;
+
 const DEFAULTIMAGERATIO = 1.5;
 const ORDERBY = constants.DATETAKEN;
 const ORDERBYDESCENDING = true;
@@ -26,6 +24,8 @@ class Dashboard extends Component {
 
     this.state = {
       photos: [],
+      categories: [],
+      selectedCategories: [],
       isLoading: true,
       isPoppedUp: false,
       loadedFullRes: '',
@@ -35,17 +35,16 @@ class Dashboard extends Component {
 
   componentDidMount() {
     this.FetchData();
-    TAKE = 100;
-}
+    this.GetAllCategories();
+  }
 
   render() {
     let photoGrid = null;
     const photos = this.state.photos;
-    const dimmer = this.state.isLoading ? DIMMED : DIMMED_DEFAULT;
 
     if (photos != null && photos.some(p => p)) {
       photoGrid = (
-        <GridList cellHeight={120} cols={24} style={dimmer}>
+        <GridList cellHeight={120} cols={24}>
           {photos.map((image) => (
             <GridListTile key={image.id} cols={this.GetImageColumnSize(image)}>
               <PhotoCard
@@ -63,7 +62,7 @@ class Dashboard extends Component {
         <SideDrawer searchClick={this.SearchClickHandler} />
 
         {/* Loading Spinner */}
-        {this.state.isLoading ? SPINNER : null}
+        <LoadingBackdrop opened={this.state.isLoading} />
 
         {/* Full resolution image popup */}
         <Popper
@@ -72,10 +71,16 @@ class Dashboard extends Component {
           transition
           style={{ position: 'absolute', bottom: '50%', right: '50%', width: '90vw' }}
           anchorEl={document.getElementById('di')}
-          >
+        >
           {({ TransitionProps }) => (
             <Fade {...TransitionProps} timeout={350}>
-              <PhotoPopup onImgClick={this.PopperClickHandler} fullResolutionData={this.state.loadedFullRes} file={this.state.loadedFIle} />
+              <PhotoPopup
+                onImgClick={this.PopperClickHandler}
+                fullResolutionData={this.state.loadedFullRes}
+                file={this.state.loadedFIle}
+                categories={this.state.categories}
+                selectedCategories={this.state.selectedCategories}
+              />
             </Fade>
           )}
         </Popper>
@@ -91,7 +96,7 @@ class Dashboard extends Component {
 
   GetImageColumnSize(image) {
     const ratio = image.width / image.height;
-    if (ratio <= 1) { 
+    if (ratio <= 1) {
       return 1;
     }
     if (ratio <= DEFAULTIMAGERATIO) {
@@ -129,7 +134,7 @@ class Dashboard extends Component {
     this.ResetList();
   }
 
-  async PhotoClickHandler(id) {
+  PhotoClickHandler(id) {
     this.setState({
       loadedFullRes: '',
       isLoading: true,
@@ -137,23 +142,21 @@ class Dashboard extends Component {
       loadedFIle: ''
     });
 
-    this.httpService
-      .GetFullResolutution(id)
-      .then(response => {
-        if (response) {
-          const img = this.state.photos.find(p => p.id === id);
-          this.setState({
-            loadedFullRes: response.data,
-            isLoading: false,
-            isPoppedUp: true,
-            loadedFIle: img
-          });
-        }
-      });
+    Promise.all([this.httpService.GetFullResolutution(id), this.httpService.GetPhotoCategories(id)])
+    .then(responses => {
+      if (!!responses && !!responses[0] && !!responses[1]) {
+        this.setState({
+          loadedFullRes: responses[0].data,
+          isLoading: false,
+          isPoppedUp: true,
+          loadedFIle: this.state.photos.find(p => p.id === id),
+          selectedCategories: responses[1].data
+        });
+      }
+    });
   }
 
   //#endregion
-
 
   //#region WebMethods
 
@@ -198,6 +201,18 @@ class Dashboard extends Component {
         }
       }
     });
+  }
+
+  async GetAllCategories() {
+    this.httpService
+      .GetCategories()
+      .then(response => {
+        if (response) {
+          this.setState({
+            categories: response.data
+          });
+        }
+      });
   }
 
   //#endRegion WebMethods

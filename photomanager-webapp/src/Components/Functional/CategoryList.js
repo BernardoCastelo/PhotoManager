@@ -1,54 +1,72 @@
-import Avatar from '@material-ui/core/Avatar';
-import Collapse from '@material-ui/core/Collapse';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
+import Paper from '@material-ui/core/Paper';
+import Popper from '@material-ui/core/Popper';
+import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import InfoCard from './InfoCard';
 import * as constants from '../../Constants/Constants';
+import CategoryCard from './CategoryCard';
+import InfoCard from './InfoCard';
+import Divider from '@material-ui/core/Divider';
 
-const CategorylistMock = [
-  "Abstract",
-  "Animal",
-  "Architecture",
-  "Astrophotography",
-  "B&W",
-  "Cityscape",
-  "Landscape",
-  "Macro",
-  "Nature",
-  "Panorama",
-  "Portrait",
-  "Random",
-  "Rural",
-  "Sea and Sand",
-  "Travel",
-  "Vehicle"
-];
-
+const useStyles = makeStyles({
+  paper: {
+    paddingLeft: '10%',
+    paddingRight: '10%',
+    marginBottom: '5%',
+    minWidth: 'max-content',
+    backgroundColor: constants.TRANSPARENTGREY
+  }
+});
 
 const CategoryList = (props) => {
-  const [open, setOpen] = React.useState(false);
+  const classes = useStyles();
 
-  const handleClick = () => {
-    setOpen(!open);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
-  const infoCards = CategorylistMock.map(cat =>
+  const open = Boolean(anchorEl);
+
+  const id = open ? 'spring-popper' : undefined;
+
+  const changedCategoryCard = (categoryId, value) => {
+    if (value) {
+      const category = props.selectedCategories.find(element => element === categoryId);
+      if (!props.selectedCategories.find(element => element === categoryId) && !!category) {
+        props.selectedCategories.push(category);
+      }
+    }
+    else {
+      const category = props.selectedCategories.find(element => element === categoryId);
+      if (!!category) {
+        props.selectedCategories.splice(1, 0, category);
+      }
+    }
+  }
+
+  const categories = props.categories.map(cat =>
   (
-    <ListItem key={cat}>
-      <InfoCard label={cat} background={constants.DARKSLATEGREY} />
-    </ListItem>
+    <div key={cat.id}>
+      <CategoryCard value={!!props.selectedCategories.find(element => element.id === cat.id)} label={cat.name} changed={changedCategoryCard} />
+      <Divider />
+    </div>
   ))
 
   return (
     <div>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          {infoCards}
-        </List>
-      </Collapse>
+      <Popper
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        placement="top"
+      >
+        <Paper className={classes.paper}>
+          {categories}
+        </Paper>
+      </Popper>
 
-      <div style={{paddingLeft: '16px', paddingRight: '26px', paddingTop: '8px'}}onClick={handleClick}>
+      <div onClick={handleClick}>
         <InfoCard label="Categories" background={constants.DARKCYAN} />
       </div>
     </div>

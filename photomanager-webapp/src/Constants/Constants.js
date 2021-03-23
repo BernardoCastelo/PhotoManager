@@ -1,5 +1,6 @@
-export const DARKCYAN = "rgba(0, 139, 139, 0.5)"
-export const DARKSLATEGREY = "rgba(47, 79, 79, 0.5)"
+export const DARKCYAN = "rgba(0, 100, 100, 0.75)"
+export const DARKSLATEGREY = "rgba(27, 49, 49, 0.75)"
+export const TRANSPARENTGREY = "rgba(0, 0, 0, 0.3)"
 
 export const DATETAKEN = "dateTaken";
 
@@ -19,7 +20,7 @@ export const ISOMARKS = [
 ];
 
 /* Exposure */
-export const EXPOSURE = "Exposure";
+export const EXPOSURE = "Exposure (seconds)";
 export const EXPOSUREMARKS = [
   { index: 1, label: '1/4000', value: 0.00025 },
   { index: 2, label: '1/1000', value: 0.001 },
@@ -49,7 +50,7 @@ export const FSTOPMARKS = [
 ];
 
 /* Apperture */
-export const FOCALLENGTH = "FocalLength";
+export const FOCALLENGTH = "Focal Length (millimeters)";
 export const FOCALLENGTHMARKS = [
   { index: 1, label: '10', value: 10 },
   { index: 2, label: '20', value: 20 },
