@@ -47,8 +47,8 @@ const CategoryList = (props) => {
 
   const categories = props.categories.map(cat =>
   (
-    <div>
-      <CategoryCard key={cat.id} value={!!props.selectedCategories.find(element => element.id === cat.id)} label={cat.name} changed={changedCategoryCard} />
+    <div key={cat.id}>
+      <CategoryCard value={!!props.selectedCategories.find(element => element.id === cat.id)} label={cat.name} changed={changedCategoryCard} />
       <Divider />
     </div>
   ))
