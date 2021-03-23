@@ -20,7 +20,7 @@ export const ISOMARKS = [
 ];
 
 /* Exposure */
-export const EXPOSURE = "Exposure";
+export const EXPOSURE = "Exposure (seconds)";
 export const EXPOSUREMARKS = [
   { index: 1, label: '1/4000', value: 0.00025 },
   { index: 2, label: '1/1000', value: 0.001 },
@@ -50,7 +50,7 @@ export const FSTOPMARKS = [
 ];
 
 /* Apperture */
-export const FOCALLENGTH = "FocalLength";
+export const FOCALLENGTH = "Focal Length (millimeters)";
 export const FOCALLENGTHMARKS = [
   { index: 1, label: '10', value: 10 },
   { index: 2, label: '20', value: 20 },
