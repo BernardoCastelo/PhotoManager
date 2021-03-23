@@ -149,6 +149,7 @@ const SideDrawer = (props) => {
       <Drawer anchor={'right'} open={drawerState['drawer']} onClose={toggleDrawer(false)}>
         <div className={classes.sideDrawer}>
 
+         {/* SORTING */}
           <Paper className={classes.paper} elevation={3}>
             <div className={classes.nameDivs}>Order By</div>
             <div>
@@ -181,6 +182,7 @@ const SideDrawer = (props) => {
             </div>
           </Paper>
 
+          {/* FILTERING */}
           <Paper className={classes.paper} elevation={3}>
             <div className={classes.nameDivs}>Filters</div>
             <div style={{ display: 'ruby' }}>
@@ -219,6 +221,7 @@ const SideDrawer = (props) => {
             </div>
           </Paper>
 
+          {/* SEARCH */}
           <Fab
             className={classes.bottomFab}
             color="primary"
