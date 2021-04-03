@@ -5,13 +5,12 @@ import Paper from '@material-ui/core/Paper';
 import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import ArrowBackIosRoundedIcon from '@material-ui/icons/ArrowBackIosRounded';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
 import styled from "styled-components";
-import FilterSlider from './FilterSlider';
 import * as constants from '../../Constants/Constants';
+import FilterSlider from './FilterSlider';
 
 const useStyles = makeStyles({
   nameDivs: {

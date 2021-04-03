@@ -61,7 +61,7 @@ class Dashboard extends Component {
     return (
       <div id="di" onScroll={this.ScrollHandler} className="OverflowingDiv">
         {/* Top AppBar */}
-        <TopBar clicked={this.SetSideDrawer} />
+        <TopBar clicked={this.SetSideDrawer} inputTextChanged={this.SearchChangeHandler}/>
 
         {/* Side Drawer */}
         <SideDrawer opened={this.state.sideDrawerOpen} changed={this.SetSideDrawer} searchClick={this.SearchClickHandler} />
@@ -105,7 +105,7 @@ class Dashboard extends Component {
       return 1;
     }
     if (ratio <= DEFAULTIMAGERATIO) {
-      return 2.4;
+      return 2;
     }
     return (Math.round((ratio / DEFAULTIMAGERATIO) + 0.5) * 2);
   }
@@ -116,6 +116,14 @@ class Dashboard extends Component {
     this.setState({
       sideDrawerOpen: open != null && open !== undefined ? open : !current
     });
+  }
+
+  SearchChangeHandler = (text) => {
+    this.searchFilter = {
+      FieldName: constants.FOLDERFILTER,
+      Value: text
+    };
+    console.log(text);
   }
 
   //#endregion
@@ -238,6 +246,8 @@ class Dashboard extends Component {
   orderByField = ORDERBY;
   orderByDescending = ORDERBYDESCENDING;
   filters = [];
+  searchField = '';
+  searchFilter = null;
 
   //#endRegion Vars
 }

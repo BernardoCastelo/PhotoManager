@@ -1,4 +1,4 @@
 .OverflowingDiv {
   overflow-y: scroll;
-  background: black;
+  width: 100%;
 }

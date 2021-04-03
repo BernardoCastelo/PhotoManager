@@ -7,6 +7,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import React from 'react';
 
+let timer = 0;
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -49,6 +51,19 @@ const useStyles = makeStyles((theme) => ({
 
 const TopBar = (props) => {
   const classes = useStyles();
+  
+  const [searchText, setsearchText] = React.useState('');
+
+  const handleChange = (event) => {
+    const text = event.target.value;
+    setsearchText(text);
+
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+      props.inputTextChanged(text);
+    }, 250);
+  };
 
   return (
     <div className={classes.root}>
@@ -74,6 +89,8 @@ const TopBar = (props) => {
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
+              value={searchText}
+              onChange={handleChange}
             />
           </div>
         </Toolbar>

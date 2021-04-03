@@ -14,7 +14,7 @@ const CategoryCard = (props) => {
 
   const classes = useStyles();
 
-  const [state, setState] = React.useState(props.value);
+  const [state] = React.useState(props.value);
 
   const handleChange = (event) => {
     // setState(event.target.checked);

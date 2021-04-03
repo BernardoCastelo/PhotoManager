@@ -4,6 +4,8 @@ export const TRANSPARENTGREY = "rgba(0, 0, 0, 0.3)"
 
 export const DATETAKEN = "dateTaken";
 
+export const FOLDERFILTER = "folderName";
+
 /* ISO */
 export const ISO = "Iso";
 export const ISOMARKS = [
