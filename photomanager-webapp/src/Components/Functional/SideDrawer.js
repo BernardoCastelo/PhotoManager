@@ -79,8 +79,6 @@ const SideDrawer = (props) => {
   const [focalLengthFilter, setFocalLengthFilter] = React.useState(null);
   const [toDateFilter, setToDateFilter] = React.useState('');
   const [fromDateFilter, setFromDateFilter] = React.useState('');
-
-  const [drawerState, setDrawerState] = React.useState({ drawer: false });
   const [OrderByState, setOrderByState] = React.useState({ orderByDescending: true, filter: '', name: 'hai' });
 
   const handleSearchBtnClick = (event) => {
@@ -111,7 +109,8 @@ const SideDrawer = (props) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
-    setDrawerState({ ...drawerState, 'drawer': open });
+
+    props.changed(open);
   };
 
   const handleOrderByChange = (event) => {
@@ -139,14 +138,7 @@ const SideDrawer = (props) => {
 
   return (
     <div>
-      <Fab
-        className={classes.fab}
-        color="primary"
-        aria-label="add"
-        onClick={toggleDrawer(true)}>
-        <ArrowBackIosRoundedIcon fontSize="large" />
-      </Fab>
-      <Drawer anchor={'right'} open={drawerState['drawer']} onClose={toggleDrawer(false)}>
+      <Drawer anchor={'left'} open={props.opened} onClose={toggleDrawer(false)}>
         <div className={classes.sideDrawer}>
 
          {/* SORTING */}

@@ -10,6 +10,7 @@ import LoadingBackdrop from './Functional/LoadingBackdrop';
 import PhotoCard from './Functional/PhotoCard';
 import PhotoPopup from './Functional/PhotoPopup';
 import SideDrawer from './Functional/SideDrawer';
+import TopBar from './Functional/TopBar';
 
 const TAKE = 200;
 
@@ -29,7 +30,8 @@ class Dashboard extends Component {
       isLoading: true,
       isPoppedUp: false,
       loadedFullRes: '',
-      loadedFIle: ''
+      loadedFIle: '',
+      sideDrawerOpen: false
     };
   }
 
@@ -58,8 +60,11 @@ class Dashboard extends Component {
     }
     return (
       <div id="di" onScroll={this.ScrollHandler} className="OverflowingDiv">
+        {/* Top AppBar */}
+        <TopBar clicked={this.SetSideDrawer} />
+
         {/* Side Drawer */}
-        <SideDrawer searchClick={this.SearchClickHandler} />
+        <SideDrawer opened={this.state.sideDrawerOpen} changed={this.SetSideDrawer} searchClick={this.SearchClickHandler} />
 
         {/* Loading Spinner */}
         <LoadingBackdrop opened={this.state.isLoading} />
@@ -102,7 +107,15 @@ class Dashboard extends Component {
     if (ratio <= DEFAULTIMAGERATIO) {
       return 2;
     }
-    return Math.round((ratio / DEFAULTIMAGERATIO) + 1.5);
+    return Math.round((ratio / DEFAULTIMAGERATIO) + 2);
+  }
+
+  SetSideDrawer = (open) => {
+    const current = this.state.sideDrawerOpen;
+
+    this.setState({
+      sideDrawerOpen: open != null && open !== undefined ? open : !current
+    });
   }
 
   //#endregion
@@ -132,6 +145,7 @@ class Dashboard extends Component {
     this.orderByField = prop.filter;
     this.filters = prop.filters;
     this.ResetList();
+    this.SetSideDrawer();
   }
 
   PhotoClickHandler(id) {
@@ -143,17 +157,17 @@ class Dashboard extends Component {
     });
 
     Promise.all([this.httpService.GetFullResolutution(id), this.httpService.GetPhotoCategories(id)])
-    .then(responses => {
-      if (!!responses && !!responses[0] && !!responses[1]) {
-        this.setState({
-          loadedFullRes: responses[0].data,
-          isLoading: false,
-          isPoppedUp: true,
-          loadedFIle: this.state.photos.find(p => p.id === id),
-          selectedCategories: responses[1].data
-        });
-      }
-    });
+      .then(responses => {
+        if (!!responses && !!responses[0] && !!responses[1]) {
+          this.setState({
+            loadedFullRes: responses[0].data,
+            isLoading: false,
+            isPoppedUp: true,
+            loadedFIle: this.state.photos.find(p => p.id === id),
+            selectedCategories: responses[1].data
+          });
+        }
+      });
   }
 
   //#endregion
