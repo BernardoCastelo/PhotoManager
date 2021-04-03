@@ -105,9 +105,9 @@ class Dashboard extends Component {
       return 1;
     }
     if (ratio <= DEFAULTIMAGERATIO) {
-      return 2;
+      return 2.4;
     }
-    return Math.round((ratio / DEFAULTIMAGERATIO) + 2);
+    return (Math.round((ratio / DEFAULTIMAGERATIO) + 0.5) * 2);
   }
 
   SetSideDrawer = (open) => {
