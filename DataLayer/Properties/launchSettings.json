@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "02.DataLayer": {
+      "commandName": "Project",
+      "sqlDebugging": true
+    }
+  }
+}
