@@ -132,18 +132,25 @@ namespace BusinessLayer
         {
             try
             {
-                if(filters?.Any() ?? false)
+                if (filters?.Any() ?? false)
                 {
-                    filters.Add(new Filter 
+                    filters.Add(new Filter
                     {
                         Negate = true,
                         FieldName = nameof(Photo.Thumbnail),
                         Value = null
                     });
 
+                    var folderNameFilter = filters.FirstOrDefault(filter => filter.FieldName == Constants.Filters.folderName);
+
+                    if (folderNameFilter != null)
+                    {
+                        filters.Remove(folderNameFilter);
+                    }
+
                     filters.ForEach(filter =>
                     {
-                        if(filter.FieldName.ToLower() == nameof(Photo.Exposure).ToLower())
+                        if (filter.FieldName.ToLower() == nameof(Photo.Exposure).ToLower())
                         {
                             filter.FieldName = nameof(Photo.ExposureAsNumber);
                         }
@@ -153,7 +160,26 @@ namespace BusinessLayer
                         }
                     });
 
-                    return photoRepository.Select(skip, take, GetOrderBy(orderBy), orderByDescending, filters);
+                    if (folderNameFilter != null)
+                    {
+                        var validFileIds = fileRepository.SelectFullpathContainsText(folderNameFilter.Value as string).Select(file => file.Id);
+                        return photoRepository
+                            .Select(skip, take, GetOrderBy(orderBy), orderByDescending, filters)
+                            .Join(validFileIds,
+                                photo => photo.FileId,
+                                fileId => fileId,
+                                (photo, fileId) => photo)
+                            .Skip(skip)
+                            .Take(take)
+                            .ToList();
+                    }
+                    else
+                    {
+                        return photoRepository.Select(skip, take, GetOrderBy(orderBy), orderByDescending, filters)
+                            .Skip(skip)
+                            .Take(take)
+                            .ToList();
+                    }
                 }
 
                 return photoRepository.SelectThumbnails(skip, take, GetOrderBy(orderBy), orderByDescending);

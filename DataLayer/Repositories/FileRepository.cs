@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DataLayer
@@ -13,6 +14,19 @@ namespace DataLayer
             try
             {
                 return DbContainer.FileSet.Where(file => file.Fullpath == fullpath).FirstOrDefault();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public IEnumerable<File> SelectFullpathContainsText(string text)
+        {
+            try
+            {
+                return DbContainer.FileSet.Where(file => file.Fullpath.Contains(text));
             }
             catch (Exception)
             {

@@ -155,7 +155,7 @@ namespace DataLayer
 
                 queriable = descending ? queriable.OrderByDescending(sortExpression) : queriable.OrderBy(sortExpression);
 
-                return queriable.Skip(skip).Take(take);
+                return queriable;
             }
             catch (Exception)
             {

@@ -6,11 +6,18 @@
         {
             public const string Id = nameof(Id);
         }
+
+        public static class Filters
+        {
+            public const string folderName = "folderName";
+        }
+
         public static class Folders
         {
             public const string Main = @"D:\Photos";
             public const string Thumbnails = @"C:\PhotoThumbnails";
         }
+
         public static class ImageProperties
         {
             public const string ImageHeight = "Image Height";
