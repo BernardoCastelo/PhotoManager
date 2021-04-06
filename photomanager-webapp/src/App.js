@@ -17,9 +17,11 @@ const theme = createMuiTheme({
 
 function App() {
   return (
-    <MuiThemeProvider theme={theme} className="App">
-      <Dashboard/>
-    </MuiThemeProvider>
+    <div className="App">
+      <MuiThemeProvider theme={theme} >
+        <Dashboard />
+      </MuiThemeProvider>
+    </div>
   );
 }
 

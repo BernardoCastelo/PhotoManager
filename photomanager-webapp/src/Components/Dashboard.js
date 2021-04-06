@@ -61,7 +61,7 @@ class Dashboard extends Component {
     return (
       <div id="di" onScroll={this.ScrollHandler} className="OverflowingDiv">
         {/* Top AppBar */}
-        <TopBar clicked={this.SetSideDrawer} inputTextChanged={this.SearchChangeHandler}/>
+        <TopBar clicked={this.SetSideDrawer} inputTextChanged={this.SearchChangeHandler} />
 
         {/* Side Drawer */}
         <SideDrawer opened={this.state.sideDrawerOpen} changed={this.SetSideDrawer} searchClick={this.SearchClickHandler} />
@@ -119,11 +119,17 @@ class Dashboard extends Component {
   }
 
   SearchChangeHandler = (text) => {
-    this.searchFilter = {
-      FieldName: constants.FOLDERFILTER,
-      Value: text
-    };
-    console.log(text);
+    if (text) {
+      this.searchFilter = {
+        FieldName: constants.FOLDERFILTER,
+        Value: text
+      };
+      this.SetSideDrawer(false);
+      this.ResetList();
+    }
+    else {
+      this.searchFilter = null;
+    }
   }
 
   //#endregion
@@ -205,7 +211,8 @@ class Dashboard extends Component {
     this.setState({
       isLoading: true
     });
-    const newFiles = await this.httpService.GetImages(this.skip, TAKE, this.orderByField, this.orderByDescending, this.filters);
+    const allFilters = this.searchFilter ? this.filters.concat(this.searchFilter) : this.filters;
+    const newFiles = await this.httpService.GetImages(this.skip, TAKE, this.orderByField, this.orderByDescending, allFilters);
     this.skip += TAKE;
     return newFiles;
   }

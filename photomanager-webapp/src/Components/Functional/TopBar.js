@@ -62,7 +62,7 @@ const TopBar = (props) => {
 
     timer = setTimeout(() => {
       props.inputTextChanged(text);
-    }, 250);
+    }, 500);
   };
 
   return (
