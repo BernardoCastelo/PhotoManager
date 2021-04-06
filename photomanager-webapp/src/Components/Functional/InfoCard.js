@@ -6,7 +6,6 @@ import * as constants from '../../Constants/Constants';
 const useStyles = makeStyles({
   card: {
     color: "wheat",
-    opacity: '75%',
     fontSize: 'small',
     marginLeft: '10px'
   }
