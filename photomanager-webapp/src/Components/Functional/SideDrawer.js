@@ -205,10 +205,10 @@ const SideDrawer = (props) => {
               </form>
             </div>
             <div className={classes.divider}>
-              <FilterSlider type={constants.ISO} marks={constants.ISOMARKS} setValue={setIsoFilter} initialFilter={isoFilter} />
-              <FilterSlider type={constants.EXPOSURE} marks={constants.EXPOSUREMARKS} setValue={setExposureFilter} initialFilter={exposureFilter} />
-              <FilterSlider type={constants.FSTOP} marks={constants.FSTOPMARKS} setValue={setFStopFilter} initialFilter={fStopFilter} />
-              <FilterSlider type={constants.FOCALLENGTH} marks={constants.FOCALLENGTHMARKS} setValue={setFocalLengthFilter} initialFilter={focalLengthFilter} />
+              <FilterSlider label={constants.ISOLABEL} type={constants.ISO} marks={constants.ISOMARKS} setValue={setIsoFilter} initialFilter={isoFilter} />
+              <FilterSlider label={constants.EXPOSURELABEL} type={constants.EXPOSURE} marks={constants.EXPOSUREMARKS} setValue={setExposureFilter} initialFilter={exposureFilter} />
+              <FilterSlider label={constants.FSTOPLABEL} type={constants.FSTOP} marks={constants.FSTOPMARKS} setValue={setFStopFilter} initialFilter={fStopFilter} />
+              <FilterSlider label={constants.FOCALLENGTHLABEL} type={constants.FOCALLENGTH} marks={constants.FOCALLENGTHMARKS} setValue={setFocalLengthFilter} initialFilter={focalLengthFilter} />
             </div>
           </Paper>
 

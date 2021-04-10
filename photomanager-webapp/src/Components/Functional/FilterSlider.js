@@ -55,7 +55,7 @@ const FilterSlider = (props) => {
 
   return (
     <div>
-      <Typography id="slider" gutterBottom>{props.type}</Typography>
+      <Typography id="slider" gutterBottom>{props.label}</Typography>
       <Slider
         value={state}
         onChange={handleSliderChange}

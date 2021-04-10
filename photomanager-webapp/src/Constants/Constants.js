@@ -8,6 +8,7 @@ export const FOLDERFILTER = "folderName";
 
 /* ISO */
 export const ISO = "Iso";
+export const ISOLABEL = "Iso";
 export const ISOMARKS = [
   { index: 1, label: 100, value: 100 },
   { index: 2, label: 200, value: 200 },
@@ -22,7 +23,8 @@ export const ISOMARKS = [
 ];
 
 /* Exposure */
-export const EXPOSURE = "Exposure (seconds)";
+export const EXPOSURE = "Exposure";
+export const EXPOSURELABEL = "Exposure (seconds)";
 export const EXPOSUREMARKS = [
   { index: 1, label: '1/4000', value: 0.00025 },
   { index: 2, label: '1/1000', value: 0.001 },
@@ -38,6 +40,7 @@ export const EXPOSUREMARKS = [
 
 /* FStop */
 export const FSTOP = "FStop";
+export const FSTOPLABEL = "FStop";
 export const FSTOPMARKS = [
   { index: 1, label: 'F/1', value: 1 },
   { index: 2, label: 'F/2', value: 2 },
@@ -52,7 +55,8 @@ export const FSTOPMARKS = [
 ];
 
 /* Apperture */
-export const FOCALLENGTH = "Focal Length (millimeters)";
+export const FOCALLENGTH = "FocalLength";
+export const FOCALLENGTHLABEL = "Focal Length (millimeters)";
 export const FOCALLENGTHMARKS = [
   { index: 1, label: '10', value: 10 },
   { index: 2, label: '20', value: 20 },
