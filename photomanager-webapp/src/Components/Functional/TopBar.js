@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
   inputRoot: {
     width: '100%',
     color: 'inherit',
+    fontSize: 'medium',
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
@@ -51,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TopBar = (props) => {
   const classes = useStyles();
-  
+
   const [searchText, setsearchText] = React.useState('');
 
   const handleChange = (event) => {
@@ -80,7 +81,7 @@ const TopBar = (props) => {
           </IconButton>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
-              <SearchIcon />
+              <SearchIcon fontSize="large"/>
             </div>
             <InputBase
               placeholder="Folder Search…"
