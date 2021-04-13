@@ -1,6 +1,8 @@
 export const DARKCYAN = "rgba(0, 100, 100, 0.75)"
 export const DARKSLATEGREY = "rgba(27, 49, 49, 0.75)"
 export const TRANSPARENTGREY = "rgba(0, 0, 0, 0.3)"
+export const PRIMARY = 'rgb(100,149,237)'
+export const SECUNDARY = 'rgb(237,188,100)'
 
 export const DATETAKEN = "dateTaken";
 

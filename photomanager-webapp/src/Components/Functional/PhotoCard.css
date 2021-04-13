@@ -1,0 +1,11 @@
+.photocard {
+  width: 100%;
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: fill-available;
+  max-height: 100px;
+  border-radius: 3%;
+} 
+.photocard:hover {
+    cursor: pointer;
+}

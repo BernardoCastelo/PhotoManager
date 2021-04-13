@@ -1,22 +1,11 @@
-import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-
-const useStyles = makeStyles({
-  media: {
-    height: 120,
-    borderRadius: '3%',
-    '&:hover': {
-      cursor: 'pointer'
-   },
-  }
-});
+import './PhotoCard.css';
 
 const PhotoCard = (props) => {
-  const classes = useStyles();
   return (
     <div>
       <img 
-        className={classes.media} 
+        className="photocard"
         src={`data:image/jpeg;base64,${props.file.thumbnail}`} 
         alt={props.file.name}
         onClick={props.clicked}/>

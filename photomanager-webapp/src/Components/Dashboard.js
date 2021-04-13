@@ -46,7 +46,7 @@ class Dashboard extends Component {
 
     if (photos != null && photos.some(p => p)) {
       photoGrid = (
-        <GridList cellHeight={120} cols={24}>
+        <GridList cellHeight={100} cols={24}>
           {photos.map((image) => (
             <GridListTile key={image.id} cols={this.GetImageColumnSize(image)}>
               <PhotoCard
