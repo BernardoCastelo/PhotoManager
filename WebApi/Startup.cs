@@ -1,5 +1,6 @@
 using BusinessLayer;
 using DataLayer;
+using DataLayer.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,8 @@ namespace WebApi
 {
     public class Startup
     {
+        public const string CookieScheme = "YourSchemeName";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -47,15 +50,15 @@ namespace WebApi
             services.AddTransient(typeof(ICategories), typeof(Categories));
             #endregion
 
-            /* ToDo */
-            #region Logging
+            #region Authentication
+            services.AddAuthentication(CookieScheme) // Sets the default scheme to cookies
+                .AddCookie(CookieScheme, options =>
+                {
+                    options.AccessDeniedPath = "/account/denied";
+                    options.LoginPath = "/account/login";
+                });
             #endregion
 
-            /* ToDo */
-            #region Authentication
-            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //    .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAdB2C"));
-            #endregion
             services.AddControllers().AddNewtonsoftJson();
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -77,6 +80,10 @@ namespace WebApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseAuthentication();
+
+            app.UseIdentityServer();
 
             app.UseAuthorization();
 

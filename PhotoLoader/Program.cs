@@ -26,7 +26,7 @@ namespace PhotoLoader
             fileRep = new FileRepository(connector.Container);
             fileTypeRep = new FileTypeRepository(connector.Container);
 
-            photos = new Photos(photoRep, new CameraRepository(connector.Container), fileRep);
+            photos = new Photos(photoRep, new CameraRepository(connector.Container), fileRep, new CategoryRepository(connector.Container));
 
             FileTypes = fileTypeRep.SelectAll().ToList();
             try
