@@ -1,12 +1,13 @@
 ﻿namespace WebApi.Controllers
 {
+    using BusinessLayer;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
     using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
+    using static Common.Constants;
 
     [Route("[controller]")]
     [ApiController]
@@ -14,66 +15,56 @@
     public class AuthController : ControllerBase
     {
         private readonly ILogger logger;
+        private readonly IUsers users;
 
-        public AuthController(ILogger<AuthController> logger)
+        public AuthController(ILogger<AuthController> logger, IUsers users)
         {
             this.logger = logger;
+            this.users = users;
         }
 
-        public class AccountController : Controller
+        private bool ValidateLogin(string userName, string password)
         {
-            [HttpGet]
-            public IActionResult Login(string returnUrl = null)
+            // For this sample, all logins are successful.
+            return users.Validate(userName, password) != null;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(string userName, string password, string returnUrl = null)
+        {
+            // Normally Identity handles sign in, but you can do it directly
+            if (ValidateLogin(userName, password))
             {
-                ViewData["ReturnUrl"] = returnUrl;
-                return View();
-            }
-
-            private bool ValidateLogin(string userName, string password)
-            {
-                // For this sample, all logins are successful.
-                return true;
-            }
-
-            [HttpPost]
-            public async Task<IActionResult> Login(string userName, string password, string returnUrl = null)
-            {
-                ViewData["ReturnUrl"] = returnUrl;
-
-                // Normally Identity handles sign in, but you can do it directly
-                if (ValidateLogin(userName, password))
-                {
-                    var claims = new List<Claim>
-                {
-                    new Claim("user", userName),
-                    new Claim("role", "Member")
-                };
-
-                    await HttpContext.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", "user", "role")));
-
-                    if (Url.IsLocalUrl(returnUrl))
+                var claims = new List<Claim>
                     {
-                        return Redirect(returnUrl);
-                    }
-                    else
-                    {
-                        return Redirect("/");
-                    }
+                        new Claim(Auth.UserClaim, userName),
+                        new Claim(Auth.RoleClaim, "Member")
+                    };
+
+                await HttpContext.SignInAsync(new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies", Auth.UserClaim, Auth.RoleClaim)));
+
+                if (Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
                 }
-
-                return View();
+                else
+                {
+                    return Redirect("/");
+                }
             }
 
-            public IActionResult AccessDenied(string returnUrl = null)
-            {
-                return View();
-            }
+            return AccessDenied(returnUrl);
+        }
 
-            public async Task<IActionResult> Logout()
-            {
-                await HttpContext.SignOutAsync();
-                return Redirect("/");
-            }
+        public IActionResult AccessDenied(string returnUrl = null)
+        {
+            return StatusCode(401);
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return Redirect("/");
         }
     }
 }

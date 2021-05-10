@@ -1,6 +1,5 @@
 using BusinessLayer;
 using DataLayer;
-using DataLayer.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -43,11 +42,13 @@ namespace WebApi
             services.AddTransient(typeof(IFileRepository), typeof(FileRepository));
             services.AddTransient(typeof(IPhotoRepository), typeof(PhotoRepository));
             services.AddTransient(typeof(ICategoryRepository), typeof(CategoryRepository));
+            services.AddTransient(typeof(IUserRepository), typeof(UserRepository));
             #endregion
 
             #region BusinessLayer
             services.AddTransient(typeof(IPhotos), typeof(Photos));
             services.AddTransient(typeof(ICategories), typeof(Categories));
+            services.AddTransient(typeof(IUsers), typeof(Users));
             #endregion
 
             #region Authentication

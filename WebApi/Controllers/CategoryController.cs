@@ -1,6 +1,5 @@
 ﻿using BusinessLayer;
 using DataLayer;
-using DataLayer.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
