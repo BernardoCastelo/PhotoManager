@@ -2,6 +2,14 @@
 {
     public static class Constants
     {
+        public static class Auth
+        {
+            public const string UserClaim = "user";
+            public const string RoleClaim = "role";
+
+            public const int HashIterations = 10;
+        }
+
         public static class DbConstants
         {
             public const string Id = nameof(Id);
