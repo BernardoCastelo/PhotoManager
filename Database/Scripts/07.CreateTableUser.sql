@@ -15,6 +15,7 @@
             [ConcurrencyStamp] NVARCHAR(1024),
             [SecurityStamp] NVARCHAR(1024),
             [PasswordHash] NVARCHAR(1024),
+            [PasswordSalt] NVARCHAR(1024),
             [EmailConfirmed] BIT,
             [NormalizedEmail] NVARCHAR(1024),
             [Email] NVARCHAR(1024),
