@@ -12,7 +12,7 @@ namespace WebApi
 {
     public class Startup
     {
-        public const string CookieScheme = "YourSchemeName";
+        public const string CookieScheme = "SameSite=Strict";
 
         public Startup(IConfiguration configuration)
         {
@@ -83,8 +83,6 @@ namespace WebApi
             app.UseRouting();
 
             app.UseAuthentication();
-
-            app.UseIdentityServer();
 
             app.UseAuthorization();
 
