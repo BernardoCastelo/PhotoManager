@@ -9,8 +9,8 @@
     using System.Threading.Tasks;
     using static Common.Constants;
 
-    [Route("[controller]")]
     [ApiController]
+    [Route("[controller]/[action]")]
 
     public class AuthController : ControllerBase
     {

@@ -9,6 +9,7 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
+
     public class CategoryController : ControllerBase
     {
         private readonly ILogger<CategoryController> logger;
