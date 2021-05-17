@@ -7,11 +7,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System.Linq;
 
 namespace WebApi
 {
     public class Startup
     {
+        public const string CookieScheme = "SameSite=Strict";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -40,27 +43,30 @@ namespace WebApi
             services.AddTransient(typeof(IFileRepository), typeof(FileRepository));
             services.AddTransient(typeof(IPhotoRepository), typeof(PhotoRepository));
             services.AddTransient(typeof(ICategoryRepository), typeof(CategoryRepository));
+            services.AddTransient(typeof(IUserRepository), typeof(UserRepository));
             #endregion
 
             #region BusinessLayer
             services.AddTransient(typeof(IPhotos), typeof(Photos));
             services.AddTransient(typeof(ICategories), typeof(Categories));
+            services.AddTransient(typeof(IUsers), typeof(Users));
             #endregion
 
-            /* ToDo */
-            #region Logging
-            #endregion
-
-            /* ToDo */
             #region Authentication
-            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //    .AddMicrosoftIdentityWebApi(Configuration.GetSection("AzureAdB2C"));
+            services.AddAuthentication(CookieScheme) // Sets the default scheme to cookies
+                .AddCookie(CookieScheme, options =>
+                {
+                    options.AccessDeniedPath = "/account/denied";
+                    options.LoginPath = "/account/login";
+                });
             #endregion
+
             services.AddControllers().AddNewtonsoftJson();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi", Version = "v1" });
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
             });
         }
 
@@ -78,11 +84,13 @@ namespace WebApi
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(name: "default", pattern: "[controller]/[action]");
             });
         }
     }

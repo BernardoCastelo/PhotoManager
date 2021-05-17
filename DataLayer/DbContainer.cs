@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace DataLayer
 {
@@ -13,6 +12,7 @@ namespace DataLayer
         public DbSet<Category> CategorySet { get; set; }
         public DbSet<Camera> CameraSet { get; set; }
         public DbSet<PhotoCategory> PhotoCategorySet { get; set; }
+        public DbSet<User> UserSet { get; set; }
 
         public DbContainer(DbContextOptions<DbContainer> options)
             : base(options)
@@ -28,6 +28,7 @@ namespace DataLayer
             new Binder<Category>(modelBuilder).Bind();
             new Binder<Camera>(modelBuilder).Bind();
             new Binder<PhotoCategory>(modelBuilder).Bind();
+            new Binder<User>(modelBuilder).Bind();
         }
     }
 }
