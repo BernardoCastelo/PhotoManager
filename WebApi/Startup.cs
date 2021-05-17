@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System.Linq;
 
 namespace WebApi
 {
@@ -65,6 +66,7 @@ namespace WebApi
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi", Version = "v1" });
+                c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
             });
         }
 
@@ -88,7 +90,7 @@ namespace WebApi
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllerRoute(name: "default", pattern: "[controller]/[action]");
             });
         }
     }
