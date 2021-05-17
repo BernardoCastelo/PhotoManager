@@ -53,8 +53,7 @@ namespace DataLayer
         {
             try
             {
-                var dbset = Helper.GetDbSet<TTable>(this.DbContainer);
-                return dbset.Where(t => (TProp)t.GetProperty(property, null) == value);
+                return Select(0, 1, property, value);
             }
             catch (Exception)
             {
