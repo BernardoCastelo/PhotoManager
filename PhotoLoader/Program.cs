@@ -31,18 +31,17 @@ namespace PhotoLoader
             FileTypes = fileTypeRep.SelectAll().ToList();
             try
             {
+               // UpdateExposureAndFNumberValues(connector.Container);
 
-                // UpdateExposureAndFNumberValues(connector.Container);
-
-                //long timeTaken = 0;
-                //timeTaken = LoadFolders(container.Container, new DirectoryInfo(Constants.Folders.Main));
+                long timeTaken = 0;
+                //timeTaken = LoadFolders(connector.Container, new DirectoryInfo(Constants.Folders.Main));
                 //Console.WriteLine($"{nameof(LoadFolders)}: {timeTaken}ms");
 
-                //timeTaken = LoadFiles(container.Container, new DirectoryInfo(Constants.Folders.Main), true);
-                //Console.WriteLine($"{nameof(LoadFiles)}: {timeTaken}ms");
+                timeTaken = LoadFiles(connector.Container, new DirectoryInfo(Constants.Folders.Main), false);
+                Console.WriteLine($"{nameof(LoadFiles)}: {timeTaken}ms");
 
-                //var jpg = container.Container.FileTypeSet.First(f => f.Name == FileTypeEnum.JPG.ToString());
-                //timeTaken = await CreateThumbnails(container.Container, Constants.Folders.Thumbnails, jpg);
+                //var jpg = connector.Container.FileTypeSet.First(f => f.Name == FileTypeEnum.JPG.ToString());
+                //timeTaken = await CreateThumbnails(connector.Container, Constants.Folders.Thumbnails, jpg);
                 //Console.WriteLine($"{nameof(CreateThumbnails)}: {timeTaken}ms");
             }
             catch (Exception e)
@@ -91,10 +90,11 @@ namespace PhotoLoader
                     {
                         file = GetFile(folderFile, originFolder.Id, type.Id);
                         container.Add(file);
+                        container.SaveChanges();
                     }
 
                     var photo = container.PhotoSet.FirstOrDefault(f => f.FileId == file.Id);
-                    if (photo == null && !update)
+                    if (photo == null)
                     {
                         added++;
                         photo = photos.Load(file.Fullpath);
@@ -113,11 +113,13 @@ namespace PhotoLoader
                                 thumb.Dispose();
                             }
                             photoRep.Add(photo);
+                            container.SaveChanges();
                         }
                     }
                     else
                     {
                         var newPhoto = photos.Load(file.Fullpath);
+                        photo ??= new Photo();
                         photo.Iso = newPhoto.Iso;
                         photo.Height = newPhoto.Height;
                         photo.Width = newPhoto.Width;
@@ -126,6 +128,7 @@ namespace PhotoLoader
                         photo.DateTaken = newPhoto.DateTaken;
 
                         photoRep.Update(photo);
+                        container.SaveChanges();
                         updated++;
                     }
                 }
