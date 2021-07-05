@@ -75,5 +75,22 @@ export default class HttpService {
     }
   }
 
+  async Login(userName, password, returnUrl) {
+    try {
+      return this.instance.get('/Auth/Login/', {
+        params: {
+          userName: userName,
+          password: password,
+          returnUrl: returnUrl
+        }
+      }).catch(function (error) {
+          HandleError(error);
+        });
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
   instance = null;
 }

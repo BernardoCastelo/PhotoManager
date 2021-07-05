@@ -1,7 +1,11 @@
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {
+  BrowserRouter as Router, Redirect, Route, Switch
+} from "react-router-dom";
 import './App.css';
-import Dashboard from './Components/Dashboard'
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import Dashboard from './Components/Dashboard';
+import Login from './Components/Login';
 import * as constants from './Constants/Constants';
 
 const theme = createMuiTheme({
@@ -17,11 +21,27 @@ const theme = createMuiTheme({
 
 function App() {
   return (
-    <div className="App">
-      <MuiThemeProvider theme={theme} >
-        <Dashboard />
-      </MuiThemeProvider>
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          <Login />
+        </Route>
+        <Route path="/dashboard">
+          <div className="App">
+            <MuiThemeProvider theme={theme} >
+              <Dashboard />
+            </MuiThemeProvider>
+          </div>
+        </Route>
+        <Route path="*">
+        <Redirect
+            to={{
+              pathname: "/"
+            }}
+          />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 
