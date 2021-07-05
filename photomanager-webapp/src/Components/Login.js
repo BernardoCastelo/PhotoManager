@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import HttpService from '../Services/HttpService';
-import './Dashboard.css';
+import './Login.css';
 
 class Login extends Component {
   constructor(props) {
@@ -18,9 +18,7 @@ class Login extends Component {
 
   render() {
     return (
-      <div>
-        LOGIN
-      </div>
+      <div className="parallax"></div>
     );
   }
 
