@@ -54,7 +54,7 @@ class Login extends Component {
             onChange={handlePasswordChange}
           />
           <div className="buttonDiv">
-            <Button className="button" variant="outlined" onClick={Login}>Login</Button>
+            <Button className="button" variant="outlined" onClick={this.Login}>Login</Button>
           </div>
         </div>
       </div>
