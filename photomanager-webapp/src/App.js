@@ -10,13 +10,21 @@ import * as constants from './Constants/Constants';
 
 const theme = createMuiTheme({
   palette: {
-    primary: {
-      main: constants.DARKSLATEGREY
-    },
-    secondary: {
-      main: constants.DARKCYAN
-    }
+    primary: constants.PRIMARY,
+    secondary: constants.SECONDARY,
+    type: 'dark',
   }
+});
+
+const theme2 = createMuiTheme({
+  palette: {
+    primary: constants.PRIMARY,
+    secondary: constants.SECONDARY,
+    type: 'dark',
+  },
+  typography: {
+    fontSize: 24,
+  },
 });
 
 function App() {
@@ -24,17 +32,19 @@ function App() {
     <Router>
       <Switch>
         <Route exact path="/">
-          <Login />
+          <MuiThemeProvider theme={theme2}>
+            <Login />
+          </MuiThemeProvider>
         </Route>
         <Route path="/dashboard">
           <div className="App">
-            <MuiThemeProvider theme={theme} >
+            <MuiThemeProvider theme={theme}>
               <Dashboard />
             </MuiThemeProvider>
           </div>
         </Route>
         <Route path="*">
-        <Redirect
+          <Redirect
             to={{
               pathname: "/"
             }}

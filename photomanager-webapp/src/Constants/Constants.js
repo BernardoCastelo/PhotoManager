@@ -1,8 +1,18 @@
 export const DARKCYAN = "rgba(0, 100, 100, 0.75)"
 export const DARKSLATEGREY = "rgba(27, 49, 49, 0.75)"
 export const TRANSPARENTGREY = "rgba(0, 0, 0, 0.3)"
-export const PRIMARY = 'rgb(100,149,237)'
-export const SECUNDARY = 'rgb(237,188,100)'
+export const PRIMARY = {
+  light: '#819ca9',
+  main: '#546e7a',
+  dark: '#29434e',
+  contrastText: '#ffffff',
+}
+export const SECONDARY = {
+  light: '#4fb3bf',
+  main: '#00838f',
+  dark: '#005662',
+  contrastText: '#ffffff',
+}
 
 export const DATETAKEN = "dateTaken";
 

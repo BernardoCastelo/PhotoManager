@@ -1,10 +1,34 @@
 .parallax {
   background-image: url("/src/Assets/background.jpg");
   min-height: 100vh;
-  filter: blur(2px);
 
   background-attachment: fixed;
-  background-position:center;
+  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.loginDiv {
+  background-color: rgba(0, 0, 0, 0.61);
+  position: absolute;
+  border-radius: 10%;
+  width: 20%;
+  height: 40%;
+  top: 30%;
+  left: 40%;
+  padding: 30px;
+  padding-top: 10px;
+}
+
+.textField {
+  margin-top: 25px !important;
+  width: 100%;
+}
+
+.button {
+  margin: 50% auto !important;
+}
+
+.buttonDiv {
+  text-align: center;
 }
