@@ -61,7 +61,7 @@ class Login extends Component {
     );
   }
 
-  async Login() {
+  Login() {
     this.httpService
       .Login(this.state.userName, this.state.password, this.dashboardURL)
       .then(response => {
@@ -78,6 +78,7 @@ class Login extends Component {
 
   //#region Vars
 
+  httpService = null;
   dashboardURL = ""
 
   //#endRegion Vars
