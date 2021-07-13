@@ -71,4 +71,7 @@
   <ItemGroup>
     <None Include="Scripts\06.CreateTablePhotoCategory.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <Build Include="Scripts\07.CreateTableUser.sql" />
+  </ItemGroup>
 </Project>
