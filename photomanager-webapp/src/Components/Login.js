@@ -15,6 +15,8 @@ class Login extends Component {
       userName: "",
       password: ""
     };
+
+    this.LoginUser = this.LoginUser.bind(this);
   }
 
   componentDidMount() {
@@ -54,18 +56,18 @@ class Login extends Component {
             onChange={handlePasswordChange}
           />
           <div className="buttonDiv">
-            <Button className="button" variant="outlined" onClick={this.Login}>Login</Button>
+            <Button className="button" variant="outlined" onClick={this.LoginUser}>Login</Button>
           </div>
         </div>
       </div>
     );
   }
 
-  Login() {
+  LoginUser() {
     this.httpService
       .Login(this.state.userName, this.state.password, this.dashboardURL)
       .then(response => {
-        console.log(response);
+        // console.log(response);
         if (response) {
           this.setState({
             categories: response.data
