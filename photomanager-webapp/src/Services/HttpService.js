@@ -1,6 +1,7 @@
 const axios = require('axios').default;
 
 function HandleError(error) {
+  return error;
 }
 
 
@@ -24,11 +25,10 @@ export default class HttpService {
           orderByDescending: orderByDescending
         }
       }).catch(function (error) {
-        HandleError(error);
+        return HandleError(error);
       });
 
     } catch (error) {
-      console.error(error);
       return null;
     }
   }
@@ -40,10 +40,9 @@ export default class HttpService {
           id: id
         }
       }).catch(function (error) {
-        HandleError(error);
+        return HandleError(error);
       });
     } catch (error) {
-      console.error(error);
       return null;
     }
   }
@@ -52,10 +51,9 @@ export default class HttpService {
     try {
       return this.instance.get('/Category/GetAll/')
         .catch(function (error) {
-          HandleError(error);
+          return HandleError(error);
         });
     } catch (error) {
-      console.error(error);
       return null;
     }
   }
@@ -67,28 +65,26 @@ export default class HttpService {
           Id: photoId
         }
       }).catch(function (error) {
-          HandleError(error);
-        });
+        return HandleError(error);
+      });
     } catch (error) {
-      console.error(error);
       return null;
     }
   }
 
   async Login(userName, password, returnUrl) {
     try {
-      return this.instance.get('/Auth/Login/', {
+      return this.instance.post('/Auth/Login/', null, {
         params: {
           userName: userName,
           password: password,
           returnUrl: returnUrl
         }
       }).catch(function (error) {
-          HandleError(error);
-        });
+        return HandleError(error);
+      });
     } catch (error) {
-      console.error(error);
-      return null;
+      return error;
     }
   }
 
