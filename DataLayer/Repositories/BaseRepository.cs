@@ -53,7 +53,8 @@ namespace DataLayer
         {
             try
             {
-                return Select(0, 1, property, value);
+                return Helper.GetDbSet<TTable>(this.DbContainer)
+                    .Where(property.GetExpression<TTable>(value, WhereConditions.Equal));
             }
             catch (Exception)
             {
@@ -181,8 +182,11 @@ namespace DataLayer
             {
                 var dbset = Helper.GetDbSet<TTable>(this.DbContainer);
                 dbset.Add(entity);
-                var entry = DbContainer.Entry(entity);
+                var entry = this.DbContainer.Entry(entity);
                 entry.State = EntityState.Added;
+
+                this.DbContainer.SaveChanges();
+
                 return entry;
             }
             catch (Exception)
@@ -199,6 +203,9 @@ namespace DataLayer
                 dbset.Attach(entity);
                 var entry = DbContainer.Entry(entity);
                 entry.State = EntityState.Modified;
+
+                this.DbContainer.SaveChanges();
+
                 return entry;
             }
             catch (Exception)
@@ -215,6 +222,9 @@ namespace DataLayer
                 dbset.Attach(entity);
                 var entry = DbContainer.Entry(entity);
                 entry.State = EntityState.Deleted;
+
+                this.DbContainer.SaveChanges();
+
                 return entry;
             }
             catch (Exception)

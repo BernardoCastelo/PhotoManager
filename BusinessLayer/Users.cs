@@ -31,6 +31,11 @@ namespace BusinessLayer
         {
             try
             {
+                if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password))
+                {
+                    return null;
+                }
+
                 var user = userRepository.Select(nameof(User.UserName), userName).First();
 
                 var isValid = AuthUtilities.Validate(password, user);
